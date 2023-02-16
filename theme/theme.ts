@@ -20,7 +20,16 @@ export const theme = createTheme({
   },
   typography: {
     allVariants: {
-      color: "#0066FF",
+      color: "#778DFF",
+    },
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#FFF",
+        },
+      },
     },
   },
 });
