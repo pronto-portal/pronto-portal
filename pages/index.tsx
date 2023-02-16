@@ -1,7 +1,17 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import { Stack, Typography } from "@mui/material";
 
 export default function Home() {
-  return <></>;
+  return (
+    <Stack
+      direction="column"
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      sx={{ width: "100%", height: "100%", backgroundColor: "primary.light" }}
+    >
+      <Typography textAlign="center" variant="h2">
+        Home
+      </Typography>
+    </Stack>
+  );
 }

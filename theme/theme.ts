@@ -18,4 +18,9 @@ export const theme = createTheme({
       dark: "#e65100",
     },
   },
+  typography: {
+    allVariants: {
+      color: "#0066FF",
+    },
+  },
 });
