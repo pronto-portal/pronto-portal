@@ -1,28 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Wrapper } from "../../types/Wrapper";
-import { Grid } from "@mui/material";
-import { NavBar } from "../NavBar/NavBar";
+import { Stack } from "@mui/material";
+import { NavBar } from "../NavBar";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
-  const session = useSession();
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) router.push("/login");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
   return (
-    <Grid
-      container
+    <Stack
       sx={{
         width: "100%",
         height: "100%",
         backgroundColor: "primary.light",
       }}
     >
-      {session && (
-        <Grid item xs={12}>
-          <NavBar />
-        </Grid>
-      )}
-      <Grid item xs={12}>
-        {children}
-      </Grid>
-    </Grid>
+      {session && <NavBar />}
+      {children}
+    </Stack>
   );
 };

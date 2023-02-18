@@ -13,8 +13,12 @@ import {
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useSession } from "next-auth/react";
-import { JWT } from "next-auth/jwt";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import { IconLabel } from "../IconLabel/IconLabel";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const navItems = [
   {
@@ -28,8 +32,6 @@ const navItems = [
     to: "/",
   },
 ];
-
-const userSettings = ["profile", "signout"];
 
 export const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -93,11 +95,20 @@ export const NavBar: React.FC = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {userSettings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <IconLabel
+                  text="Sign Out"
+                  onClick={() => signOut()}
+                  icon={<LogoutIcon />}
+                />
+              </MenuItem>
+              <MenuItem>
+                <IconLabel
+                  text="Profile"
+                  icon={<AccountCircle />}
+                  to="/profile"
+                />
+              </MenuItem>
             </Menu>
           </Box>
         </Stack>

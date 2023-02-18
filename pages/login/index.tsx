@@ -1,21 +1,36 @@
 import { Stack, Paper, Typography } from "@mui/material";
-import { GoogleLoginButton } from "../../components/GoogleLoginButton/GoogleLoginButton";
-import { signIn } from "next-auth/react";
+import { GoogleLoginButton } from "../../components/GoogleLoginButton";
+import { signIn, useSession } from "next-auth/react";
 import { Sacramento } from "@next/font/google";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const sacramento = Sacramento({
   weight: "400",
   subsets: ["latin"],
 });
 
-export default function Home() {
+export default function Login() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) router.push("/");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
   return (
     <Stack
       direction="column"
       spacing={2}
       justifyContent="center"
       alignItems="center"
-      sx={{ width: "100%", height: "100%", backgroundColor: "primary.light" }}
+      sx={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "primary.light",
+      }}
     >
       <Typography
         textAlign="center"
