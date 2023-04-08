@@ -45,6 +45,8 @@ export const NavBar: React.FC = () => {
     setAnchorElUser(event.currentTarget);
   };
 
+  if (!session) return null;
+
   return (
     <AppBar position="static">
       <Toolbar>

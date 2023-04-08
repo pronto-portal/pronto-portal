@@ -6,16 +6,17 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme/theme";
 import { Roboto } from "@next/font/google";
 import { AuthorizedGridLayout } from "../components/AuthorizedGridLayout";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from "@apollo/client";
+import { client } from "../apollo/client";
 
 const roboto = Roboto({
   weight: "400",
   subsets: ["latin"],
-});
-
-const client = new ApolloClient({
-  uri: process.env.API_URL,
-  cache: new InMemoryCache(),
 });
 
 export default function App({
