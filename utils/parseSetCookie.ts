@@ -3,7 +3,6 @@ export const parseSetCookie = (setCookie: string[]): Record<string, string> => {
 
   setCookie.forEach((cookie) => {
     const index = cookie.indexOf("=");
-    console.log("COOKIE STRING", cookie);
 
     if (index !== -1) {
       const key = cookie.substring(0, index);

@@ -8,10 +8,6 @@ export default function Profile() {
   const { data: session } = useSession();
   const { data } = useQuery(getUser, { fetchPolicy: "no-cache" });
 
-  console.log("QUERY DATA", data);
-
-  console.log("API URL", process.env.API_URL);
-
   return (
     <Stack
       width="100%"

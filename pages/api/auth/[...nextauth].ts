@@ -71,10 +71,14 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                     res,
                   });
 
-                  setCookie("x-refresh-token", cookies["x-refresh-token"], {
-                    req,
-                    res,
-                  });
+                  setCookie(
+                    "x-refresh-token",
+                    encodeURIComponent(cookies["x-refresh-token"]),
+                    {
+                      req,
+                      res,
+                    }
+                  );
 
                   return cookies;
                 }
