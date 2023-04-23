@@ -32,8 +32,8 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       signIn: "/login",
     },
     callbacks: {
-      async redirect({ baseUrl }) {
-        return baseUrl;
+      async redirect({ baseUrl, url }) {
+        return url;
       },
       async signIn({ user, account, profile, email, credentials }) {
         // From here I can send an api call to my api's login endpoint where I would check if the user exists in the system
@@ -54,7 +54,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               },
             };
 
-            const tokens = await axios
+            let tokens;
+
+            const existingUser = await axios
               .post("http://localhost:4000/graphql", requestBody, {
                 headers: {
                   Authorization: `Bearer ${account.id_token}`,
@@ -64,24 +66,24 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                 const resCookies = dataRes.headers["set-cookie"];
 
                 if (resCookies) {
-                  const cookies = parseSetCookie(resCookies);
+                  tokens = parseSetCookie(resCookies);
 
-                  setCookie("x-access-token", cookies["x-access-token"], {
+                  setCookie("x-access-token", tokens["x-access-token"], {
                     req,
                     res,
                   });
 
                   setCookie(
                     "x-refresh-token",
-                    encodeURIComponent(cookies["x-refresh-token"]),
+                    encodeURIComponent(tokens["x-refresh-token"]),
                     {
                       req,
                       res,
                     }
                   );
-
-                  return cookies;
                 }
+
+                return dataRes.data.data.login;
               });
 
             if (
@@ -89,24 +91,24 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               (tokens && !Object.keys(tokens).includes("x-access-token"))
             )
               return false;
+
+            user = { ...user, ...existingUser };
+
+            return true;
           }
         }
 
-        return true;
+        return "/";
       },
 
       async session({ session, user, token }) {
-        if (token && token.id_token) {
-          session.id_token = token.id_token;
+        if (token) {
+          if (session && session.user && token.sub) session.user.id = token.sub;
         }
 
         return session;
       },
       async jwt({ token, user, account, profile, isNewUser }) {
-        if (account) {
-          token.id_token = account.id_token;
-        }
-
         return token;
       },
     },

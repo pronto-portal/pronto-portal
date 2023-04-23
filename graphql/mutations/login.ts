@@ -19,6 +19,7 @@ export const login = gql`
       phone
       firstName
       lastName
+      isProfileComplete
     }
   }
 `;
