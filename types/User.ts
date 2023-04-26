@@ -11,4 +11,6 @@ export interface User {
   isTranslator: boolean;
   isBanned: boolean;
   isProfileComplete: boolean;
+  city: string;
+  state: string;
 }

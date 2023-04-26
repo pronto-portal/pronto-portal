@@ -14,6 +14,8 @@ export const getUser = gql`
       isTranslator
       isBanned
       isProfileComplete
+      city
+      state
     }
   }
 `;
