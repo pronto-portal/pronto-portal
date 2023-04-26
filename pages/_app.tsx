@@ -13,6 +13,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { client } from "../apollo/client";
+import { LanguagesProvider } from "../providers/LanguagesProvider";
 
 const roboto = Roboto({
   weight: "400",
@@ -30,7 +31,9 @@ export default function App({
           <ThemeProvider theme={theme}>
             <PageWrapper>
               <AuthorizedGridLayout>
-                <Component {...pageProps} />
+                <LanguagesProvider>
+                  <Component {...pageProps} />
+                </LanguagesProvider>
               </AuthorizedGridLayout>
             </PageWrapper>
           </ThemeProvider>

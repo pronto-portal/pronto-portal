@@ -13,4 +13,5 @@ export interface User {
   isProfileComplete: boolean;
   city: string;
   state: string;
+  languages: string[];
 }

@@ -13,15 +13,15 @@ import {
   RadioGroup,
   Radio,
 } from "@mui/material";
-import { useSession } from "next-auth/react";
 import { getUser } from "../../graphql/queries";
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { PhoneResult, phone } from "phone";
 import { User } from "../../types/User";
-import { Country, State, City, ICity, IState } from "country-state-city";
+import { State, City } from "country-state-city";
+import { useLanguages } from "../../providers/LanguagesProvider";
 
 export default function CompleteProfile() {
-  const { data, error, loading } = useQuery(getUser);
+  const { data } = useQuery(getUser);
 
   const [phoneNumber, setPhoneNumber] = useState<PhoneResult>({
     phoneNumber: "",
@@ -38,12 +38,15 @@ export default function CompleteProfile() {
   const [state, setState] = useState<string>("");
   const [isTranslator, setIsTranslator] = useState<boolean>();
   const [isManager, setIsManager] = useState<boolean>();
+  const [languages, setLanguages] = useState<string[]>([]);
   const states = State.getStatesOfCountry("US");
   const stateISOCodes: string[] = ["", ...states.map((s) => s.isoCode)];
 
   const cities: string[] = state
     ? City.getCitiesOfState("US", state).map((city) => city.name)
     : [];
+
+  const { languages: langs } = useLanguages();
 
   useEffect(() => {
     if (data) {
@@ -55,6 +58,7 @@ export default function CompleteProfile() {
       setState(user.state);
       setIsTranslator(user.isTranslator);
       setIsManager(user.isManager);
+      setLanguages(user.languages);
     }
   }, [data, states]);
 
@@ -103,7 +107,7 @@ export default function CompleteProfile() {
                 fullWidth
                 onChange={(e) => setPhoneNumber(phone(e.target.value))}
                 error={!isPhoneNumberValid}
-                helperText={!isPhoneNumberValid ? "Invalid phonenumber" : " "}
+                helperText={!isPhoneNumberValid ? "Invalid Phone Number" : " "}
               />
             </Grid>
             <Grid item xs={6}>
@@ -143,6 +147,7 @@ export default function CompleteProfile() {
                 <Autocomplete
                   value={state}
                   options={stateISOCodes}
+                  fullWidth
                   autoHighlight
                   renderInput={(params) => (
                     <TextField
@@ -160,6 +165,7 @@ export default function CompleteProfile() {
                   <Autocomplete
                     value={city}
                     options={cities}
+                    fullWidth
                     autoHighlight
                     onChange={(_e, newValue) => setCity(newValue ?? "")}
                     renderInput={(params) => (
@@ -210,6 +216,16 @@ export default function CompleteProfile() {
                   <FormControlLabel value="no" label="No" control={<Radio />} />
                 </RadioGroup>
               </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <Autocomplete
+                multiple
+                onChange={(_e, newValue) => setLanguages(newValue)}
+                options={langs}
+                renderInput={(params) => (
+                  <TextField {...params} label="Spoken Languages" />
+                )}
+              />
             </Grid>
           </Grid>
           <Grid item xs={1}>

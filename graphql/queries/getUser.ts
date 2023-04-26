@@ -16,6 +16,7 @@ export const getUser = gql`
       isProfileComplete
       city
       state
+      languages
     }
   }
 `;
