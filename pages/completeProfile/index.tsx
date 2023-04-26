@@ -39,6 +39,8 @@ export default function CompleteProfile() {
   const [isTranslator, setIsTranslator] = useState<boolean>();
   const [isManager, setIsManager] = useState<boolean>();
   const [languages, setLanguages] = useState<string[]>([]);
+
+  // todo: Convert states, statesISOCodes, and cities into a location context provider
   const states = State.getStatesOfCountry("US");
   const stateISOCodes: string[] = ["", ...states.map((s) => s.isoCode)];
 
