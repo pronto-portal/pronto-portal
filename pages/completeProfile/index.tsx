@@ -14,11 +14,13 @@ import {
   Radio,
 } from "@mui/material";
 import { getUser } from "../../graphql/queries";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { PhoneResult, phone } from "phone";
 import { User } from "../../types/User";
 import { State, City } from "country-state-city";
 import { useLanguages } from "../../providers/LanguagesProvider";
+import { completeProfile } from "../../graphql/mutations/completeProfile";
+import { useRouter } from "next/router";
 
 export default function CompleteProfile() {
   const { data } = useQuery(getUser);
@@ -36,8 +38,8 @@ export default function CompleteProfile() {
   // todo: get city and state from browser geolocation
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
-  const [isTranslator, setIsTranslator] = useState<boolean>();
-  const [isManager, setIsManager] = useState<boolean>();
+  const [isTranslator, setIsTranslator] = useState<boolean>(false);
+  const [isManager, setIsManager] = useState<boolean>(false);
   const [languages, setLanguages] = useState<string[]>([]);
 
   // todo: Convert states, statesISOCodes, and cities into a location context provider
@@ -49,6 +51,8 @@ export default function CompleteProfile() {
     : [];
 
   const { languages: langs } = useLanguages();
+
+  const [saveChanges] = useMutation(completeProfile);
 
   useEffect(() => {
     if (data) {
@@ -62,12 +66,15 @@ export default function CompleteProfile() {
       setIsManager(user.isManager);
       setLanguages(user.languages);
     }
-  }, [data, states]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isPhoneNumberValid = phone(phoneNumber.phoneNumber ?? "").isValid;
 
   const isInputValid =
     firstName && lastName && city && state && isPhoneNumberValid;
+
+  const router = useRouter();
 
   return (
     <Stack
@@ -76,7 +83,7 @@ export default function CompleteProfile() {
       justifyContent="center"
       alignItems="center"
     >
-      <Paper sx={{ p: 2, width: "60%", height: "80%" }}>
+      <Paper sx={{ p: 2, width: "auto", height: "80%", maxWidth: "60%" }}>
         <Grid
           container
           width="100%"
@@ -84,6 +91,8 @@ export default function CompleteProfile() {
           alignItems="center"
           justifyContent="center"
           direction="column"
+          flexWrap="nowrap"
+          rowGap={1}
         >
           <Grid item xs={2}>
             <Typography variant="h5" textAlign="center">
@@ -100,7 +109,7 @@ export default function CompleteProfile() {
             spacing={2}
             justifyItems="center"
             alignItems="center"
-            justifyContent="center"
+            justifyContent="start"
           >
             <Grid item xs={6}>
               <TextField
@@ -231,7 +240,26 @@ export default function CompleteProfile() {
             </Grid>
           </Grid>
           <Grid item xs={1}>
-            <Button onClick={() => {}} disabled={!isInputValid}>
+            <Button
+              onClick={() => {
+                saveChanges({
+                  variables: {
+                    input: {
+                      firstName,
+                      lastName,
+                      phone: phoneNumber.phoneNumber,
+                      isManager,
+                      isTranslator,
+                      languages,
+                    },
+                    refetchQueries: [getUser],
+                  },
+                }).then(() => {
+                  router.push("/");
+                });
+              }}
+              disabled={!isInputValid}
+            >
               Submit
             </Button>
           </Grid>
