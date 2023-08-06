@@ -56,13 +56,17 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
             let tokens;
 
+            // console.log("API URL", process.env.NEXT_PUBLIC_API_URL);
+
+            // console.log("Logging in");
             const existingUser = await axios
-              .post("http://localhost:4000/graphql", requestBody, {
+              .post(process.env.NEXT_PUBLIC_API_URL!, requestBody, {
                 headers: {
                   Authorization: `Bearer ${account.id_token}`,
                 },
               })
               .then((dataRes) => {
+                console.log("SUCCESSFULLY LOGGED IN");
                 const resCookies = dataRes.headers["set-cookie"];
 
                 if (resCookies) {
@@ -71,19 +75,27 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                   setCookie("x-access-token", tokens["x-access-token"], {
                     req,
                     res,
+                    sameSite: false,
+                    secure: true,
                   });
 
-                  setCookie(
-                    "x-refresh-token",
-                    encodeURIComponent(tokens["x-refresh-token"]),
-                    {
-                      req,
-                      res,
-                    }
-                  );
+                  // setCookie(
+                  //   "x-refresh-token",
+                  //   encodeURIComponent(tokens["x-refresh-token"]),
+                  //   {
+                  //     req,
+                  //     res,
+                  //     sameSite: false,
+                  //     secure: true,
+                  //   }
+                  // );
                 }
 
                 return dataRes.data.data.login;
+              })
+              .catch((err) => {
+                // console.log("Error", err);
+                return err;
               });
 
             if (
