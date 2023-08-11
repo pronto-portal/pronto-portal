@@ -6,6 +6,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { Collapsable } from "../components/Collapsable";
+import { TranslatorDirectory } from "../components/TranslatorDirectory";
 
 export default function Home() {
   return (
@@ -14,27 +16,10 @@ export default function Home() {
       width="100%"
       height="100%"
       alignItems="center"
-      justifyContent="center"
+      justifyContent="flex-start"
       p={2}
     >
-      <Accordion sx={{ width: "100%" }}>
-        <AccordionSummary>
-          <Typography variant="h5">Translators</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid container width="100%" height="100%">
-            <Grid
-              item
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-              xs={2}
-            ></Grid>
-            <Grid item xs={10}></Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+      <TranslatorDirectory />
     </Stack>
   );
 }
