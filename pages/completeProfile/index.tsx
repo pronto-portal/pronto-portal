@@ -13,17 +13,18 @@ import {
   RadioGroup,
   Radio,
 } from "@mui/material";
-import { getUser } from "../../graphql/queries";
-import { useMutation, useQuery } from "@apollo/client";
 import { PhoneResult, phone } from "phone";
 import { User } from "../../types/User";
 import { State, City } from "country-state-city";
 import { useLanguages } from "../../providers/LanguagesProvider";
-import { completeProfile } from "../../graphql/mutations/completeProfile";
 import { useRouter } from "next/router";
+import {
+  useCompleteProfileMutation,
+  useGetUserQuery,
+} from "../../redux/reducers/apiReducer";
 
 export default function CompleteProfile() {
-  const { data } = useQuery(getUser);
+  const { data } = useGetUserQuery();
 
   const [phoneNumber, setPhoneNumber] = useState<PhoneResult>({
     phoneNumber: "",
@@ -52,11 +53,11 @@ export default function CompleteProfile() {
 
   const { languages: langs } = useLanguages();
 
-  const [saveChanges] = useMutation(completeProfile);
+  const [saveChanges] = useCompleteProfileMutation();
 
   useEffect(() => {
     if (data) {
-      const user: User = data.getUser;
+      const user: User = data;
       setPhoneNumber(phone(user.phone || ""));
       setFirstName(user.firstName);
       setLastName(user.lastName);
@@ -243,17 +244,12 @@ export default function CompleteProfile() {
             <Button
               onClick={() => {
                 saveChanges({
-                  variables: {
-                    input: {
-                      firstName,
-                      lastName,
-                      phone: phoneNumber.phoneNumber,
-                      isManager,
-                      isTranslator,
-                      languages,
-                    },
-                    refetchQueries: [getUser],
-                  },
+                  firstName,
+                  lastName,
+                  phone: phoneNumber.phoneNumber,
+                  isManager,
+                  isTranslator,
+                  languages,
                 }).then(() => {
                   router.push("/");
                 });
