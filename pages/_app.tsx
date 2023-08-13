@@ -6,13 +6,6 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme/theme";
 import { Roboto } from "@next/font/google";
 import { AuthorizedGridLayout } from "../components/AuthorizedGridLayout";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
-} from "@apollo/client";
-import { client } from "../apollo/client";
 import { LanguagesProvider } from "../providers/LanguagesProvider";
 import { wrapper } from "../redux/store";
 import { Provider } from "react-redux";
@@ -32,17 +25,15 @@ function App({ Component, ...rest }: AppProps) {
     <Provider store={store}>
       <main className={roboto.className}>
         <SessionProvider session={session}>
-          <ApolloProvider client={client}>
-            <ThemeProvider theme={theme}>
-              <PageWrapper>
-                <AuthorizedGridLayout>
-                  <LanguagesProvider>
-                    <Component {...pageProps} />
-                  </LanguagesProvider>
-                </AuthorizedGridLayout>
-              </PageWrapper>
-            </ThemeProvider>
-          </ApolloProvider>
+          <ThemeProvider theme={theme}>
+            <PageWrapper>
+              <AuthorizedGridLayout>
+                <LanguagesProvider>
+                  <Component {...pageProps} />
+                </LanguagesProvider>
+              </AuthorizedGridLayout>
+            </PageWrapper>
+          </ThemeProvider>
         </SessionProvider>
       </main>
     </Provider>

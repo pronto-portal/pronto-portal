@@ -4,6 +4,8 @@ import { User } from "../../types/User";
 import { completeProfile } from "../graphql/mutations/completeProfile";
 import { getCookie } from "cookies-next";
 import { getUser } from "../graphql/queries";
+import { PaginatedInput } from "../../types/inputTypes";
+import { getTranslators } from "../graphql/queries/getTranslators";
 
 export const api = createApi({
   baseQuery: graphqlRequestBaseQuery({
@@ -11,15 +13,15 @@ export const api = createApi({
     prepareHeaders: (headers) => {
       const token = getCookie("x-access-token");
       if (token) {
-        headers.set("Authorization", token.toString());
+        headers.set("authorization", `Bearer ${token.toString()}`);
       }
       return headers;
     },
   }),
-  tagTypes: ["User"],
+  tagTypes: ["User", "Translators"],
   endpoints: (builder) => ({
     completeProfile: builder.mutation<
-      User,
+      { completeProfile: User },
       {
         firstName: string;
         lastName: string;
@@ -35,15 +37,28 @@ export const api = createApi({
           input,
         },
       }),
-      invalidatesTags: [{ type: "User", id: "CURRENT" }],
+      invalidatesTags: [{ type: "User", id: "current" }],
     }),
-    getUser: builder.query<User, void>({
+    getUser: builder.query<{ getUser: User }, void>({
       query: () => ({
         document: getUser,
       }),
-      providesTags: [{ type: "User", id: "CURRENT" }],
+      providesTags: [{ type: "User", id: "current" }],
+    }),
+    getTranslators: builder.query<{ getTranslators: User }, PaginatedInput>({
+      query: (input) => ({
+        document: getTranslators,
+        variables: {
+          input,
+        },
+      }),
+      providesTags: [{ type: "Translators", id: "current" }],
     }),
   }),
 });
 
-export const { useCompleteProfileMutation, useGetUserQuery } = api;
+export const {
+  useCompleteProfileMutation,
+  useGetUserQuery,
+  useGetTranslatorsQuery,
+} = api;
