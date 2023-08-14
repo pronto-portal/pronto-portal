@@ -6,6 +6,7 @@ import { getCookie } from "cookies-next";
 import { getUser } from "../graphql/queries";
 import { PaginatedInput } from "../../types/inputTypes";
 import { getTranslators } from "../graphql/queries/getTranslators";
+import { GetTranslators } from "../../types/responseTypes";
 
 export const api = createApi({
   baseQuery: graphqlRequestBaseQuery({
@@ -45,7 +46,7 @@ export const api = createApi({
       }),
       providesTags: [{ type: "User", id: "current" }],
     }),
-    getTranslators: builder.query<{ getTranslators: User }, PaginatedInput>({
+    getTranslators: builder.query<GetTranslators, PaginatedInput>({
       query: (input) => ({
         document: getTranslators,
         variables: {
