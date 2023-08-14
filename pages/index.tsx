@@ -59,7 +59,7 @@ export default function Home() {
     >
       <Accordion 
     sx={{ 
-        width: "66%", //auto?
+        width: "75%", //auto?
         borderRadius: "2.5rem !important", 
         overflow: "hidden",
         alignItems: "left"}}
