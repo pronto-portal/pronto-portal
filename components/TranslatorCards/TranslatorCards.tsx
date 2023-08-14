@@ -8,7 +8,7 @@ interface TranslatorCardsProps {
 }
 
 export const TranslatorCards: React.FC<TranslatorCardsProps> = ({users}) => {
-    return <Stack direction="column" justifyContent="flex-start" spacing={1} alignItems="center">
+    return <Stack direction="column" justifyContent="flex-start" spacing={1} alignItems="flex-start">
         {
             users.map((user) => (<TranslatorCard user={user} key={`translator${user.id}card`} />))
         }

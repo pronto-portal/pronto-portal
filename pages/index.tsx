@@ -11,39 +11,39 @@ import { TranslatorCards } from "../components/TranslatorCards";
 
 const users: User[] = [
   {
-      id: "f4e7daa1-a2f8-4142-8c3a-4b6e830e38a6",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isManager: false,
-      isTranslator: true,
-      isBanned: false,
-      email: "example1@email.com",
-      phone: "123-456-7890",
-      firstName: "John",
-      lastName: "Doe",
-      profilePic: "",
-      isProfileComplete: false,
-      city: "Los Angeles",
-      state: "CA",
-      languages: ["English", "Spanish"]
-  },
-  {
-      id: "1c5b8a12-e5f5-4b6c-b8bf-45d9051d9885",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      email: "example2@email.com",
-      isManager: false,
-      isTranslator: true,
-      isBanned: false,
-      phone: "123-456-7890",
-      firstName: "Jane",
-      lastName: "Smith",
-      profilePic: "https://path-to-image.jpg",
-      isProfileComplete: true,
-      city: "New York",
-      state: "NY",
-      languages: ["English"]
-  }
+    id: "f4e7daa1-a2f8-4142-8c3a-4b6e830e38a6",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isManager: false,
+    isTranslator: true,
+    isBanned: false,
+    email: "example1@email.com",
+    phone: "123-456-7890",
+    firstName: "John",
+    lastName: "Doe",
+    profilePic: "",
+    isProfileComplete: false,
+    city: "Los Angeles",
+    state: "CA",
+    languages: ["English", "Spanish"]
+},
+{
+    id: "1c5b8a12-e5f5-4b6c-b8bf-45d9051d9885",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    email: "example2@email.com",
+    isManager: false,
+    isTranslator: true,
+    isBanned: false,
+    phone: "123-456-7890",
+    firstName: "Jane",
+    lastName: "Smith",
+    profilePic: "https://path-to-image.jpg",
+    isProfileComplete: true,
+    city: "New York",
+    state: "NY",
+    languages: ["English"]
+}
 ];
 
 export default function Home() {
@@ -52,12 +52,19 @@ export default function Home() {
       direction="column"
       width="100%"
       height="100%"
-      alignItems="center"
+      alignItems="flex-start"
       justifyContent="center"
       p={2}
+      sx={{ borderRadius: "50px" }}
     >
-      <Accordion sx={{ width: "100%" }}>
-        <AccordionSummary>
+      <Accordion 
+    sx={{ 
+        width: "66%", //auto?
+        borderRadius: "2.5rem !important", 
+        overflow: "hidden",
+        alignItems: "left"}}
+>
+        <AccordionSummary style={{ paddingLeft: "1.5rem" }}>
           <Typography variant="h5">Translators</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -70,7 +77,7 @@ export default function Home() {
               alignItems="center"
               xs={2}
             ></Grid>
-            <Grid item xs={10} sx={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", rowGap: 1}}>
+            <Grid item xs={12} sx={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start", rowGap: 1}}>
               <TranslatorCards users={users} />
             </Grid>
           </Grid>
