@@ -5,6 +5,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { TranslatorDirectorySearch } from "./TranslatorDirectorySearch";
 import { useGetTranslatorsQuery } from "../../redux/reducers/apiReducer";
 import Pagination from "@mui/material/Pagination";
+import { TranslatorsTable } from "../TranslatorsTable";
 
 export const TranslatorDirectory: React.FC = () => {
   const [page, setPage] = useState<number>(1);
@@ -27,11 +28,7 @@ export const TranslatorDirectory: React.FC = () => {
             {" "}
           </Grid>
           <Grid item sx={{ width: "100%" }} xs={1}>
-            <Pagination
-              page={page}
-              onChange={(_, page) => setPage(page)}
-              count={data.getTranslators.totalRowCount / countPerPage}
-            />
+            <TranslatorsTable data={data.getTranslators.translators} />
           </Grid>
         </Grid>
       ) : (
