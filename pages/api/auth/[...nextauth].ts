@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { setCookie } from "cookies-next";
-import { login } from "../../../graphql/mutations/login";
+import { login } from "../../../redux/graphql/mutations/login";
 import { print } from "graphql/language/printer";
 import axios from "axios";
 import { parseSetCookie } from "../../../utils/parseSetCookie";
@@ -46,7 +46,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             const lastName = name[1];
 
             const requestBody = {
-              query: print(login),
+              query: login,
               variables: {
                 email: user.email,
                 firstName,

@@ -47,6 +47,7 @@ const users: User[] = [
 ];
 
 export default function Home() {
+  // Gets the current user and caches it for other components to use
   return (
     <Stack
       direction="column"

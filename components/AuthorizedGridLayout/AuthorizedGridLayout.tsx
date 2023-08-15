@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { Wrapper } from "../../types/Wrapper";
 import { Stack } from "@mui/material";
 import { NavBar } from "../NavBar";
-import { getUser } from "../../graphql/queries";
 import Router, { useRouter } from "next/router";
 import { User } from "../../types/User";
-import { useQuery } from "@apollo/client";
+import { useGetUserQuery } from "../../redux/reducers/apiReducer";
 
 export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
-  const { data } = useQuery(getUser);
+  const { data } = useGetUserQuery();
   const router = useRouter();
 
   useEffect(() => {

@@ -1,8 +1,8 @@
-import { gql } from "@apollo/client";
+import { gql } from "graphql-request";
 
-export const updateUser = gql`
-  mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
+export const getUser = gql`
+  query GetUser {
+    getUser {
       id
       createdAt
       updatedAt
