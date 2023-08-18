@@ -26,7 +26,7 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
 }) => {
   const [filter, setFilter] = useState<string>();
   const [filterValue, setFilterValue] = useState<string>();
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [countPerPage, setCountPerPage] = useState<number>(20);
 
   const { data, isLoading, error } = useGetTranslatorsQuery(
