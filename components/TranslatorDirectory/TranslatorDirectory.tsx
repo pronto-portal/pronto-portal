@@ -1,36 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
 import { Collapsable } from "../Collapsable";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TranslatorDirectorySearch } from "./TranslatorDirectorySearch";
-import { useGetTranslatorsQuery } from "../../redux/reducers/apiReducer";
-import Pagination from "@mui/material/Pagination";
+import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
+import TablePagination from "@mui/material/TablePagination";
 
 export const TranslatorDirectory: React.FC = () => {
-  const [page, setPage] = useState<number>(1);
-  const countPerPage = 10;
-  const { data } = useGetTranslatorsQuery({
-    page: 1,
+  const {
+    translators,
+    isLoading,
+    page,
+    setPage,
+    totalRowCount,
     countPerPage,
-  });
+    setCountPerPage,
+  } = useFilteredTranslators();
 
+  console.log(isLoading);
+  console.log(translators);
   return (
     <Collapsable title="Translators" sx={{ width: "100%" }}>
-      {data && data.getTranslators ? (
+      {!isLoading && translators ? (
         <Grid container direction="column" sx={{ width: "100%" }}>
           <Grid item sx={{ width: "100%" }} xs={2}>
-            <TranslatorDirectorySearch
-              translators={data.getTranslators.translators}
-            />
+            <TranslatorDirectorySearch translators={translators} />
           </Grid>
           <Grid item sx={{ width: "100%" }} xs={9}>
             {" "}
           </Grid>
           <Grid item sx={{ width: "100%" }} xs={1}>
-            <Pagination
+            <TablePagination
+              component="div"
               page={page}
-              onChange={(_, page) => setPage(page)}
-              count={data.getTranslators.totalRowCount / countPerPage}
+              onPageChange={(_, page) => setPage(page)}
+              count={totalRowCount}
+              rowsPerPage={countPerPage}
+              onRowsPerPageChange={(e) =>
+                setCountPerPage(parseInt(e.target.value, 10))
+              }
             />
           </Grid>
         </Grid>

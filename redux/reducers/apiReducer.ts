@@ -4,9 +4,9 @@ import { User } from "../../types/User";
 import { completeProfile } from "../graphql/mutations/completeProfile";
 import { getCookie } from "cookies-next";
 import { getUser } from "../graphql/queries";
-import { PaginatedInput } from "../../types/inputTypes";
+import { GetTranslatorsInput, PaginatedInput } from "../../types/inputTypes";
 import { getTranslators } from "../graphql/queries/getTranslators";
-import { GetTranslators } from "../../types/responseTypes";
+import { GetTranslatorsResponse } from "../../types/responseTypes";
 
 export const api = createApi({
   baseQuery: graphqlRequestBaseQuery({
@@ -46,11 +46,11 @@ export const api = createApi({
       }),
       providesTags: [{ type: "User", id: "current" }],
     }),
-    getTranslators: builder.query<GetTranslators, PaginatedInput>({
-      query: (input) => ({
+    getTranslators: builder.query<GetTranslatorsResponse, GetTranslatorsInput>({
+      query: (vars) => ({
         document: getTranslators,
         variables: {
-          input,
+          ...vars,
         },
       }),
       providesTags: [{ type: "Translators", id: "current" }],
