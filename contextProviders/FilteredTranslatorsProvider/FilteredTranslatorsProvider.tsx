@@ -3,12 +3,11 @@ import { Wrapper } from "../../types/Wrapper";
 import { User } from "../../types/User";
 import { useGetTranslatorsQuery } from "../../redux/reducers/apiReducer";
 import { GetTranslators } from "../../types/responseTypes";
+import { GetTranslatorsFilters } from "../../types/inputTypes";
 
 interface FilteredTranslatorsContextProps extends GetTranslators {
-  filter: string | undefined;
-  setFilter: React.Dispatch<React.SetStateAction<string | undefined>>;
-  filterValue: string | undefined;
-  setFilterValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+  filters: GetTranslatorsFilters;
+  setFilters: React.Dispatch<React.SetStateAction<GetTranslatorsFilters>>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   countPerPage: number;
@@ -24,8 +23,7 @@ const FilteredTranslatorsContext = createContext(
 export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
   children,
 }) => {
-  const [filter, setFilter] = useState<string>();
-  const [filterValue, setFilterValue] = useState<string>();
+  const [filters, setFilters] = useState<GetTranslatorsFilters>({});
   const [page, setPage] = useState<number>(0);
   const [countPerPage, setCountPerPage] = useState<number>(20);
 
@@ -35,13 +33,8 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
         page,
         countPerPage,
       },
-      ...(filter
-        ? {
-            where: {
-              [filter]: filterValue,
-            },
-          }
-        : {}),
+
+      where: filters,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -54,10 +47,8 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
   return (
     <FilteredTranslatorsContext.Provider
       value={{
-        filter,
-        setFilter,
-        filterValue,
-        setFilterValue,
+        filters,
+        setFilters,
         page,
         setPage,
         countPerPage,

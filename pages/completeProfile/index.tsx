@@ -16,12 +16,13 @@ import {
 import { PhoneResult, phone } from "phone";
 import { User } from "../../types/User";
 import { State, City } from "country-state-city";
-import { useLanguages } from "../../providers/LanguagesProvider";
+import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { useRouter } from "next/router";
 import {
   useCompleteProfileMutation,
   useGetUserQuery,
 } from "../../redux/reducers/apiReducer";
+import { useSelectCityState } from "../../hooks/useSelectCityState";
 
 export default function CompleteProfile() {
   const { data } = useGetUserQuery();
@@ -37,19 +38,12 @@ export default function CompleteProfile() {
   const [lastName, setLastName] = useState<string>("");
 
   // todo: get city and state from browser geolocation
-  const [city, setCity] = useState<string>("");
-  const [state, setState] = useState<string>("");
   const [isTranslator, setIsTranslator] = useState<boolean>(false);
   const [isManager, setIsManager] = useState<boolean>(false);
   const [languages, setLanguages] = useState<string[]>([]);
 
-  // todo: Convert states, statesISOCodes, and cities into a location context provider
-  const states = State.getStatesOfCountry("US");
-  const stateISOCodes: string[] = ["", ...states.map((s) => s.isoCode)];
-
-  const cities: string[] = state
-    ? City.getCitiesOfState("US", state).map((city) => city.name)
-    : [];
+  const { city, setCity, state, setState, states, stateISOCodes, cities } =
+    useSelectCityState();
 
   const { languages: langs } = useLanguages();
 

@@ -17,14 +17,12 @@ export const TranslatorDirectory: React.FC = () => {
     setCountPerPage,
   } = useFilteredTranslators();
 
-  console.log(isLoading);
-  console.log(translators);
   return (
     <Collapsable title="Translators" sx={{ width: "100%" }}>
       {!isLoading && translators ? (
         <Grid container direction="column" sx={{ width: "100%" }}>
           <Grid item sx={{ width: "100%" }} xs={2}>
-            <TranslatorDirectorySearch translators={translators} />
+            <TranslatorDirectorySearch />
           </Grid>
           <Grid item sx={{ width: "100%" }} xs={9}>
             {" "}

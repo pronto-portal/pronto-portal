@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme/theme";
 import { Roboto } from "@next/font/google";
 import { AuthorizedGridLayout } from "../components/AuthorizedGridLayout";
-import { LanguagesProvider } from "../providers/LanguagesProvider";
+import { LanguagesProvider } from "../contextProviders/LanguagesProvider/LanguagesProvider";
 import { wrapper } from "../redux/store";
 import { Provider } from "react-redux";
 
