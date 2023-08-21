@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
+import MenuItem from "@mui/material/MenuItem";
 import { User } from "../../types/User";
 import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Typography } from "@mui/material";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { GetTranslatorsFilters } from "../../types/inputTypes";
+import { Box } from "@mui/material";
+import { TranslatorSearchByOption } from "./TranslatorSearchByOption";
+
+interface SearchableTranslator extends User {
+  label: string;
+}
+
+type SearchableTranslatorKey = keyof GetTranslatorsFilters;
+const searchableFields: SearchableTranslatorKey[] = ["phone", "email", "id"];
 
 export const TranslatorDirectorySearch: React.FC = () => {
   const {
@@ -19,10 +27,9 @@ export const TranslatorDirectorySearch: React.FC = () => {
   } = useFilteredTranslators();
 
   // I want to be able to have multiple filters and send them back
-  const translatorFilters = ["firstName", "lastName"];
 
-  const [filter, setFilter] = useState<string>("language");
-  const [filterValue, setFilterValue] = useState<string>("");
+  const [searchBy, setSearchBy] = useState<SearchableTranslatorKey>("id");
+  const [searchByValue, setSearchByValue] = useState<string>("");
 
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>();
   const { city, setCity, state, setState, stateISOCodes, cities } =
@@ -34,16 +41,16 @@ export const TranslatorDirectorySearch: React.FC = () => {
     if (ctxFilter.state) setState(ctxFilter.state);
 
     if (ctxFilter.city) setCity(ctxFilter.city);
+
+    searchableFields.forEach((field) => {
+      if (ctxFilter[field]) {
+        setSearchBy(field);
+        setSearchByValue(ctxFilter[field] as string);
+      }
+    });
   }, [ctxFilter, setCity, setState]);
 
   const { languages } = useLanguages();
-
-  const filteredTranslators = translators.filter((translator) => {
-    if (filter === "language")
-      return translator.languages.includes(filterValue);
-
-    return translator[filter as keyof User] === filterValue;
-  });
 
   const handleApplyFilters = () => {
     let newFilters: GetTranslatorsFilters = {};
@@ -55,64 +62,121 @@ export const TranslatorDirectorySearch: React.FC = () => {
 
     if (state) newFilters.state = state;
 
+    if (searchBy && searchByValue) {
+      newFilters[searchBy] = searchByValue as string & string[];
+    } else {
+      delete newFilters[searchBy];
+    }
+
     ctxSetFilter(newFilters);
   };
 
+  const searchableTranslators: SearchableTranslator[] = translators.map(
+    (translator) => ({
+      label: `${translator.id} - ${translator.lastName}, ${translator.firstName} - ${translator.phone} - ${translator.email}`,
+      ...translator,
+    })
+  );
   return (
     <Stack
-      direction="row"
+      direction="column"
       justifyContent="space-between"
       spacing={1}
-      alignItems="center"
+      flexWrap={"nowrap"}
     >
-      <Autocomplete
-        multiple
-        sx={{ flex: 1 }}
-        defaultValue={ctxFilter.languages}
-        onChange={(_e, newValue) => setSelectedLanguages(newValue)}
-        options={languages}
-        renderInput={(params) => <TextField {...params} label="Languages" />}
-      />
-      <Autocomplete
-        value={state}
-        defaultValue={ctxFilter.state}
-        sx={{ flex: 1 }}
-        options={stateISOCodes}
-        autoHighlight
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="State *"
-            inputProps={{ ...params.inputProps, maxLength: 10 }}
-          />
-        )}
-        onChange={(_e, newValue) => setState(newValue ?? "")}
-      />
-
-      <Autocomplete
-        value={city}
-        sx={{ flex: 1 }}
-        defaultValue={ctxFilter.city}
-        disabled={!state}
-        options={cities}
-        autoHighlight
-        onChange={(_e, newValue) => setCity(newValue ?? "")}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="City *"
-            inputProps={{ ...params.inputProps, maxLength: 85 }}
-          />
-        )}
-      />
-
-      <Button
-        variant="contained"
-        sx={{ height: "100%" }}
-        onClick={handleApplyFilters}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        spacing={1}
+        alignItems="center"
       >
-        Filter
-      </Button>
+        <Autocomplete
+          sx={{ flex: 1 }}
+          onChange={(_e, newValue) => {
+            setSearchByValue(newValue ? newValue[searchBy].toString() : "");
+          }}
+          options={searchableTranslators}
+          getOptionLabel={(option) =>
+            option[searchBy] ? option[searchBy].toString() : ""
+          }
+          renderInput={(params) => (
+            <TextField {...params} label={`Search by ${searchBy}`} />
+          )}
+          renderOption={(props, option) => (
+            <Box component="li" {...props}>
+              <TranslatorSearchByOption translator={option} />
+            </Box>
+          )}
+        />
+        <TextField
+          sx={{ flex: 0.25 }}
+          select
+          defaultValue={searchBy}
+          onChange={(e) =>
+            setSearchBy(e.target.value as SearchableTranslatorKey)
+          }
+          label="Search by"
+        >
+          {searchableFields.map((field) => (
+            <MenuItem key={`searchableTranslatorField${field}`} value={field}>
+              {field}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Stack>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        spacing={1}
+        alignItems="center"
+      >
+        <Autocomplete
+          multiple
+          sx={{ flex: 1 }}
+          defaultValue={ctxFilter.languages}
+          onChange={(_e, newValue) => setSelectedLanguages(newValue)}
+          options={languages}
+          renderInput={(params) => <TextField {...params} label="Languages" />}
+        />
+        <Autocomplete
+          value={state}
+          defaultValue={ctxFilter.state}
+          sx={{ flex: 1 }}
+          options={stateISOCodes}
+          autoHighlight
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="State *"
+              inputProps={{ ...params.inputProps, maxLength: 10 }}
+            />
+          )}
+          onChange={(_e, newValue) => setState(newValue ?? "")}
+        />
+        <Autocomplete
+          value={city}
+          sx={{ flex: 1 }}
+          defaultValue={ctxFilter.city}
+          disabled={!state}
+          options={cities}
+          autoHighlight
+          onChange={(_e, newValue) => setCity(newValue ?? "")}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="City *"
+              inputProps={{ ...params.inputProps, maxLength: 85 }}
+            />
+          )}
+        />
+        <Button
+          variant="contained"
+          sx={{ height: "100%" }}
+          onClick={handleApplyFilters}
+        >
+          Filter
+        </Button>
+      </Stack>
     </Stack>
   );
 };

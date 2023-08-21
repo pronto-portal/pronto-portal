@@ -4,6 +4,9 @@ export interface PaginatedInput {
 }
 
 export interface GetTranslatorsFilters {
+  id?: string;
+  email?: string;
+  phone?: string;
   languages?: string[];
   city?: string;
   state?: string;
