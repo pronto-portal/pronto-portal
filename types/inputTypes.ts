@@ -16,3 +16,15 @@ export interface GetTranslatorsInput {
   input: PaginatedInput;
   where?: GetTranslatorsFilters;
 }
+
+export interface AddAndCreateTranslatorInput {
+  input: {
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName?: string;
+    languages: string[];
+    city?: string;
+    state?: string;
+  };
+}

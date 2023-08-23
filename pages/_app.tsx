@@ -9,6 +9,7 @@ import { AuthorizedGridLayout } from "../components/AuthorizedGridLayout";
 import { LanguagesProvider } from "../contextProviders/LanguagesProvider/LanguagesProvider";
 import { wrapper } from "../redux/store";
 import { Provider } from "react-redux";
+import { SnackbarProvider } from "../contextProviders/SnackbarProvider";
 
 const roboto = Roboto({
   weight: "400",
@@ -23,19 +24,21 @@ function App({ Component, ...rest }: AppProps) {
 
   return (
     <Provider store={store}>
-      <main className={roboto.className}>
-        <SessionProvider session={session}>
-          <ThemeProvider theme={theme}>
-            <PageWrapper>
-              <AuthorizedGridLayout>
-                <LanguagesProvider>
-                  <Component {...pageProps} />
-                </LanguagesProvider>
-              </AuthorizedGridLayout>
-            </PageWrapper>
-          </ThemeProvider>
-        </SessionProvider>
-      </main>
+      <SnackbarProvider>
+        <main className={roboto.className}>
+          <SessionProvider session={session}>
+            <ThemeProvider theme={theme}>
+              <PageWrapper>
+                <AuthorizedGridLayout>
+                  <LanguagesProvider>
+                    <Component {...pageProps} />
+                  </LanguagesProvider>
+                </AuthorizedGridLayout>
+              </PageWrapper>
+            </ThemeProvider>
+          </SessionProvider>
+        </main>
+      </SnackbarProvider>
     </Provider>
   );
 }

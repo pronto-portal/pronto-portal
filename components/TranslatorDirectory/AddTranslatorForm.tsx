@@ -11,6 +11,10 @@ import Button from "@mui/material/Button";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { User } from "../../types/User";
+import { useAddAndCreateTranslatorMutation } from "../../redux/reducers/apiReducer";
+import phone from "phone";
+import { useSnackbar } from "../../contextProviders/SnackbarProvider";
+import { AddAndCreateTranslatorResponse } from "../../types/responseTypes";
 
 interface AddTranslatorFormProps {
   open: boolean;
@@ -24,6 +28,7 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -41,8 +46,34 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
     useSelectCityState();
 
   const { languages } = useLanguages();
+  const [addAndCreateTranslator] = useAddAndCreateTranslatorMutation();
 
-  const submit: SubmitHandler<Partial<User>> = (data) => {};
+  const { setOpen, setSeverity, setMessage } = useSnackbar();
+
+  const submit: SubmitHandler<Partial<User>> = (data) => {
+    addAndCreateTranslator({
+      input: {
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        city: data.city,
+        state: data.state,
+        languages: data.languages || [],
+      },
+    }).then((res) => {
+      handleClose();
+      if ("data" in res) {
+        setMessage("Succesfully added translator");
+        setSeverity("success");
+        setOpen(true);
+      } else {
+        setMessage("Unable to add or create translator");
+        setSeverity("error");
+        setOpen(true);
+      }
+    });
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
@@ -52,7 +83,7 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
 
       <DialogContent>
         <form onSubmit={handleSubmit(submit)}>
-          <Grid container direction="column" width="100%">
+          <Grid container direction="column" width="100%" gap={1} p={1}>
             <Grid item>
               <Controller
                 name="firstName"
@@ -106,15 +137,33 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
             <Grid item>
               <Controller
                 name="phone"
-                rules={{ required: true }}
+                rules={{
+                  required: true,
+                  validate: (value) => {
+                    const phoneNumber = phone(value);
+
+                    return phoneNumber.isValid || "Invalid phone number";
+                  },
+                }}
                 control={control}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Phone"
                     fullWidth
+                    onChange={(e) => {
+                      const newPhone = phone(e.target.value).phoneNumber;
+
+                      if (newPhone) setValue("phone", newPhone);
+
+                      field.onChange(e);
+                    }}
                     error={!!errors.phone}
-                    helperText={!!errors.phone ? "Phone required" : " "}
+                    helperText={
+                      !!errors.phone
+                        ? errors.phone.message || "Phone is required"
+                        : " "
+                    }
                   />
                 )}
               />
@@ -151,7 +200,7 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
                     )}
                     onChange={(e, newValue) => {
                       setState(newValue ?? "");
-                      field.onChange(e);
+                      field.onChange(newValue);
                     }}
                   />
                 )}
@@ -179,7 +228,7 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
                     )}
                     onChange={(e, newValue) => {
                       setCity(newValue ?? "");
-                      field.onChange(e);
+                      field.onChange(newValue);
                     }}
                   />
                 )}
@@ -190,10 +239,11 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
                 name="languages"
                 rules={{ required: false }}
                 control={control}
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <Autocomplete
-                    {...field}
                     multiple
+                    {...field}
+                    onChange={(e, newValue) => onChange(newValue)}
                     sx={{ flex: 1, width: "100%" }}
                     options={languages}
                     renderInput={(params) => (

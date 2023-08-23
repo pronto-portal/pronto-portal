@@ -4,9 +4,16 @@ import { User } from "../../types/User";
 import { completeProfile } from "../graphql/mutations/completeProfile";
 import { getCookie } from "cookies-next";
 import { getUser } from "../graphql/queries";
-import { GetTranslatorsInput, PaginatedInput } from "../../types/inputTypes";
+import {
+  GetTranslatorsInput,
+  AddAndCreateTranslatorInput,
+} from "../../types/inputTypes";
 import { getTranslators } from "../graphql/queries/getTranslators";
-import { GetTranslatorsResponse } from "../../types/responseTypes";
+import {
+  AddAndCreateTranslatorResponse,
+  GetTranslatorsResponse,
+} from "../../types/responseTypes";
+import { addAndCreateTranslator } from "../graphql/mutations/addAndCreateTranslator";
 
 export const api = createApi({
   baseQuery: graphqlRequestBaseQuery({
@@ -55,6 +62,18 @@ export const api = createApi({
       }),
       providesTags: [{ type: "Translators", id: "current" }],
     }),
+    addAndCreateTranslator: builder.mutation<
+      AddAndCreateTranslatorResponse,
+      AddAndCreateTranslatorInput
+    >({
+      query: (vars) => ({
+        document: addAndCreateTranslator,
+        variables: {
+          ...vars,
+        },
+      }),
+      invalidatesTags: [{ type: "User", id: "current" }],
+    }),
   }),
 });
 
@@ -62,4 +81,5 @@ export const {
   useCompleteProfileMutation,
   useGetUserQuery,
   useGetTranslatorsQuery,
+  useAddAndCreateTranslatorMutation,
 } = api;

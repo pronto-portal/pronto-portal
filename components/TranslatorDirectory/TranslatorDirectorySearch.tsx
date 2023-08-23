@@ -80,6 +80,7 @@ export const TranslatorDirectorySearch: React.FC = () => {
       ...translator,
     })
   );
+
   return (
     <>
       <Stack
