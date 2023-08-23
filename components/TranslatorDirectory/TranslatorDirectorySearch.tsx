@@ -11,6 +11,7 @@ import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { GetTranslatorsFilters } from "../../types/inputTypes";
 import { Box } from "@mui/material";
 import { TranslatorSearchByOption } from "./TranslatorSearchByOption";
+import { AddTranslatorForm } from "./AddTranslatorForm";
 
 interface SearchableTranslator extends User {
   label: string;
@@ -30,6 +31,8 @@ export const TranslatorDirectorySearch: React.FC = () => {
 
   const [searchBy, setSearchBy] = useState<SearchableTranslatorKey>("id");
   const [searchByValue, setSearchByValue] = useState<string>("");
+  const [openAddTranslatorForm, setOpenAddTranslatorForm] =
+    useState<boolean>(false);
 
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>();
   const { city, setCity, state, setState, stateISOCodes, cities } =
@@ -78,105 +81,122 @@ export const TranslatorDirectorySearch: React.FC = () => {
     })
   );
   return (
-    <Stack
-      direction="column"
-      justifyContent="space-between"
-      spacing={1}
-      flexWrap={"nowrap"}
-    >
+    <>
       <Stack
-        direction="row"
+        direction="column"
         justifyContent="space-between"
         spacing={1}
-        alignItems="center"
+        flexWrap={"nowrap"}
       >
-        <Autocomplete
-          sx={{ flex: 1 }}
-          onChange={(_e, newValue) => {
-            setSearchByValue(newValue ? newValue[searchBy].toString() : "");
-          }}
-          options={searchableTranslators}
-          getOptionLabel={(option) =>
-            option[searchBy] ? option[searchBy].toString() : ""
-          }
-          renderInput={(params) => (
-            <TextField {...params} label={`Search by ${searchBy}`} />
-          )}
-          renderOption={(props, option) => (
-            <Box component="li" {...props}>
-              <TranslatorSearchByOption translator={option} />
-            </Box>
-          )}
-        />
-        <TextField
-          sx={{ flex: 0.25 }}
-          select
-          defaultValue={searchBy}
-          onChange={(e) =>
-            setSearchBy(e.target.value as SearchableTranslatorKey)
-          }
-          label="Search by"
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          spacing={1}
+          alignItems="center"
         >
-          {searchableFields.map((field) => (
-            <MenuItem key={`searchableTranslatorField${field}`} value={field}>
-              {field}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Stack>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        spacing={1}
-        alignItems="center"
-      >
-        <Autocomplete
-          multiple
-          sx={{ flex: 1 }}
-          defaultValue={ctxFilter.languages}
-          onChange={(_e, newValue) => setSelectedLanguages(newValue)}
-          options={languages}
-          renderInput={(params) => <TextField {...params} label="Languages" />}
-        />
-        <Autocomplete
-          value={state}
-          defaultValue={ctxFilter.state}
-          sx={{ flex: 1 }}
-          options={stateISOCodes}
-          autoHighlight
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="State *"
-              inputProps={{ ...params.inputProps, maxLength: 10 }}
-            />
-          )}
-          onChange={(_e, newValue) => setState(newValue ?? "")}
-        />
-        <Autocomplete
-          value={city}
-          sx={{ flex: 1 }}
-          defaultValue={ctxFilter.city}
-          disabled={!state}
-          options={cities}
-          autoHighlight
-          onChange={(_e, newValue) => setCity(newValue ?? "")}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="City *"
-              inputProps={{ ...params.inputProps, maxLength: 85 }}
-            />
-          )}
-        />
-        <Button
-          variant="contained"
-          sx={{ height: "100%" }}
-          onClick={handleApplyFilters}
+          <Autocomplete
+            sx={{ flex: 1 }}
+            onChange={(_e, newValue) => {
+              setSearchByValue(newValue ? newValue[searchBy].toString() : "");
+            }}
+            options={searchableTranslators}
+            getOptionLabel={(option) =>
+              option[searchBy] ? option[searchBy].toString() : ""
+            }
+            renderInput={(params) => (
+              <TextField {...params} label={`Search by ${searchBy}`} />
+            )}
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                <TranslatorSearchByOption translator={option} />
+              </Box>
+            )}
+          />
+          <TextField
+            sx={{ flex: 0.25 }}
+            select
+            defaultValue={searchBy}
+            onChange={(e) =>
+              setSearchBy(e.target.value as SearchableTranslatorKey)
+            }
+            label="Search by"
+          >
+            {searchableFields.map((field) => (
+              <MenuItem key={`searchableTranslatorField${field}`} value={field}>
+                {field}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Stack>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          spacing={1}
+          alignItems="center"
         >
-          Filter
-        </Button>
+          <Autocomplete
+            multiple
+            sx={{ flex: 1 }}
+            defaultValue={ctxFilter.languages}
+            onChange={(_e, newValue) => setSelectedLanguages(newValue)}
+            options={languages}
+            renderInput={(params) => (
+              <TextField {...params} label="Languages" />
+            )}
+          />
+          <Autocomplete
+            value={state}
+            defaultValue={ctxFilter.state}
+            sx={{ flex: 1 }}
+            options={stateISOCodes}
+            autoHighlight
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="State *"
+                inputProps={{ ...params.inputProps, maxLength: 10 }}
+              />
+            )}
+            onChange={(_e, newValue) => setState(newValue ?? "")}
+          />
+          <Autocomplete
+            value={city}
+            sx={{ flex: 1 }}
+            defaultValue={ctxFilter.city}
+            disabled={!state}
+            options={cities}
+            autoHighlight
+            onChange={(_e, newValue) => setCity(newValue ?? "")}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="City *"
+                inputProps={{ ...params.inputProps, maxLength: 85 }}
+              />
+            )}
+          />
+        </Stack>
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={1}
+        >
+          <Button variant="contained" onClick={handleApplyFilters}>
+            Apply Filters
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => setOpenAddTranslatorForm(true)}
+          >
+            Add Translator
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
+      <AddTranslatorForm
+        open={openAddTranslatorForm}
+        handleClose={() => setOpenAddTranslatorForm(false)}
+      />
+    </>
   );
 };
