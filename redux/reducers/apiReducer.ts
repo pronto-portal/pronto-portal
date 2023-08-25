@@ -1,8 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { graphqlRequestBaseQuery } from "@rtk-query/graphql-request-base-query";
 import { User } from "../../types/User";
 import { completeProfile } from "../graphql/mutations/completeProfile";
-import { getCookie } from "cookies-next";
 import { getUser } from "../graphql/queries";
 import {
   GetTranslatorsInput,
@@ -14,18 +12,10 @@ import {
   GetTranslatorsResponse,
 } from "../../types/responseTypes";
 import { addAndCreateTranslator } from "../graphql/mutations/addAndCreateTranslator";
+import { baseQuery } from "../baseQuery";
 
 export const api = createApi({
-  baseQuery: graphqlRequestBaseQuery({
-    url: process.env.NEXT_PUBLIC_API_URL!,
-    prepareHeaders: (headers) => {
-      const token = getCookie("x-access-token");
-      if (token) {
-        headers.set("authorization", `Bearer ${token.toString()}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery,
   tagTypes: ["User", "Translators"],
   endpoints: (builder) => ({
     completeProfile: builder.mutation<

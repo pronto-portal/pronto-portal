@@ -1,3 +1,4 @@
+import { Assignment } from "./Assignment";
 import { User } from "./User";
 
 export interface AddAndCreateTranslatorResponse {
@@ -11,4 +12,8 @@ export interface GetTranslators {
 
 export interface GetTranslatorsResponse {
   getTranslators: GetTranslators;
+}
+
+export interface GetAssignmentsResponse {
+  getAssignments: Assignment[];
 }

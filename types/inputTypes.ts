@@ -28,3 +28,17 @@ export interface AddAndCreateTranslatorInput {
     state?: string;
   };
 }
+
+export interface dateRange {
+  date1: Date;
+  date2: Date;
+}
+
+export interface GetAssignmentsFilter {
+  assignedTo?: GetTranslatorsFilters;
+  date?: Date;
+}
+
+export interface GetAssignmentsInput {
+  input: PaginatedInput;
+}
