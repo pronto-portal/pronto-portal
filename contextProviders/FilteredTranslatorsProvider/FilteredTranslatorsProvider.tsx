@@ -4,6 +4,7 @@ import { User } from "../../types/User";
 import { useGetTranslatorsQuery } from "../../redux/reducers/apiReducer";
 import { GetTranslators } from "../../types/responseTypes";
 import { GetTranslatorsFilters } from "../../types/inputTypes";
+import { usePaginationState } from "../../hooks/usePaginationState";
 
 interface FilteredTranslatorsContextProps extends GetTranslators {
   filters: GetTranslatorsFilters;
@@ -24,8 +25,8 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
   children,
 }) => {
   const [filters, setFilters] = useState<GetTranslatorsFilters>({});
-  const [page, setPage] = useState<number>(0);
-  const [countPerPage, setCountPerPage] = useState<number>(20);
+  const { page, setPage, countPerPage, setCountPerPage } =
+    usePaginationState(20);
 
   const { data, isLoading, error } = useGetTranslatorsQuery(
     {
