@@ -29,16 +29,34 @@ export interface AddAndCreateTranslatorInput {
   };
 }
 
-export interface dateRange {
+export interface DateRange {
   date1: Date;
   date2: Date;
 }
 
+export interface GetAddressesFilter {
+  address1?: string;
+  address2?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+}
+
+export interface GetClaimantsFilter {
+  language?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 export interface GetAssignmentsFilter {
   assignedTo?: GetTranslatorsFilters;
+  address?: GetAddressesFilter;
+  claimant?: GetClaimantsFilter;
+  dateRange?: DateRange;
   date?: Date;
 }
 
 export interface GetAssignmentsInput {
   input: PaginatedInput;
+  where?: GetAssignmentsFilter;
 }

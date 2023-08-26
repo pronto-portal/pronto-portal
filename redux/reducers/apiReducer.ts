@@ -16,7 +16,7 @@ import { baseQuery } from "../baseQuery";
 
 export const api = createApi({
   baseQuery,
-  tagTypes: ["User", "Translators"],
+  tagTypes: ["User", "Translators", "Assignments"],
   endpoints: (builder) => ({
     completeProfile: builder.mutation<
       { completeProfile: User },
