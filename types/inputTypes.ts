@@ -49,6 +49,7 @@ export interface GetClaimantsFilter {
 }
 
 export interface GetAssignmentsFilter {
+  id?: string;
   assignedTo?: GetTranslatorsFilters;
   address?: GetAddressesFilter;
   claimant?: GetClaimantsFilter;

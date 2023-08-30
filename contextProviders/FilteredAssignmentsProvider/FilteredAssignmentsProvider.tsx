@@ -63,3 +63,14 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
     </FilteredAssignmentsContext.Provider>
   );
 };
+
+export const useFilteredAssignments = () => {
+  const data = useContext(FilteredAssignmentsContext);
+
+  if (!data)
+    throw new Error(
+      "useFilteredAssignments must be used within a FilteredAssignmentsProvider component"
+    );
+
+  return data;
+};
