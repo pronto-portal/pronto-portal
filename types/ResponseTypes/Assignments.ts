@@ -1,4 +1,4 @@
-import { Assignment } from "../Assignment";
+import { Assignment } from "../ObjectTypes";
 import { TotalRowCount } from "./base";
 
 export interface GetAssignments extends TotalRowCount {

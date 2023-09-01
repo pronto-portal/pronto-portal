@@ -1,14 +1,25 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery } from "../baseQuery";
-import { getAssignments } from "../graphql/queries/getAssignments";
 import { api } from "./apiReducer";
 import { createAddress } from "../graphql/mutations/createAddress";
+import { CreateAddressInput, GetAddressesInput } from "../../types/InputTypes";
+import {
+  GetAddressResponse,
+  GetAddressesResponse,
+} from "../../types/ResponseTypes";
+import { getAddresses } from "../graphql/queries/getAddresses";
 
 export const addresses = api.injectEndpoints({
   endpoints: (builder) => ({
-    createAddress: builder.mutation<any, any>({
+    createAddress: builder.mutation<GetAddressResponse, CreateAddressInput>({
       query: (vars) => ({
         document: createAddress,
+        variables: {
+          ...vars,
+        },
+      }),
+    }),
+    getAddresses: builder.query<GetAddressesResponse, GetAddressesInput>({
+      query: (vars) => ({
+        document: getAddresses,
         variables: {
           ...vars,
         },
@@ -17,4 +28,4 @@ export const addresses = api.injectEndpoints({
   }),
 });
 
-export const {} = addresses;
+export const { useCreateAddressMutation, useGetAddressesQuery } = addresses;
