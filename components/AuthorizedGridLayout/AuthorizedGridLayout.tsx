@@ -24,7 +24,7 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
       sx={{
         width: "100%",
         height: "100%",
-        backgroundColor: "primary.light",
+        backgroundColor: "primary.main",
       }}
     >
       <NavBar />
