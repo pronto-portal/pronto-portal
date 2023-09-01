@@ -7,6 +7,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { AddressForm } from "../AddressForm";
+import { FilteredAddressesProvider } from "../../contextProviders/FilteredAddressesProvider";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -28,8 +29,8 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-      <DialogTitle>Add Assignment</DialogTitle>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <DialogTitle textAlign="center">Add Assignment</DialogTitle>
       <DialogContent>
         <Stack
           direction="column"
@@ -51,7 +52,11 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
               <StepLabel>Enter address details</StepLabel>
             </Step>
           </Stepper>
-          {activeStep === 0 && <AddressForm onSuccess={() => {}} />}
+          {activeStep === 0 && (
+            <FilteredAddressesProvider>
+              <AddressForm onSuccess={() => {}} />
+            </FilteredAddressesProvider>
+          )}
         </Stack>
       </DialogContent>
     </Dialog>
