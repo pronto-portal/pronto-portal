@@ -13,7 +13,7 @@ import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { User } from "../../types/ObjectTypes";
 import { useAddAndCreateTranslatorMutation } from "../../redux/reducers";
 import phone from "phone";
-import { useSnackbar } from "../../contextProviders/SnackbarProvider";
+import { useSnackbar } from "notistack";
 import { AddAndCreateTranslatorResponse } from "../../types/ResponseTypes";
 
 interface AddTranslatorFormProps {
@@ -48,7 +48,7 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
   const { languages } = useLanguages();
   const [addAndCreateTranslator] = useAddAndCreateTranslatorMutation();
 
-  const { setOpen, setSeverity, setMessage } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const submit: SubmitHandler<Partial<User>> = (data) => {
     addAndCreateTranslator({
@@ -64,13 +64,13 @@ export const AddTranslatorForm: React.FC<AddTranslatorFormProps> = ({
     }).then((res) => {
       handleClose();
       if ("data" in res) {
-        setMessage("Succesfully added translator");
-        setSeverity("success");
-        setOpen(true);
+        enqueueSnackbar("Successfully added translator", {
+          variant: "success",
+        });
       } else {
-        setMessage("Unable to add or create translator");
-        setSeverity("error");
-        setOpen(true);
+        enqueueSnackbar("Unable to add or create translator", {
+          variant: "error",
+        });
       }
     });
   };

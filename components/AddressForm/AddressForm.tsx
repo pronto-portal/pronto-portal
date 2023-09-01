@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { StepperFormBaseProps } from "../../types/StepperFormBaseProps";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Grid from "@mui/material/Grid";
@@ -9,10 +9,20 @@ import geocodeByAddress from "../../utils/geocodeByAddress";
 import Autocomplete from "@mui/material/Autocomplete";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { useFilteredAddresses } from "../../contextProviders/FilteredAddressesProvider";
 import { Address } from "../../types/ObjectTypes";
+import {
+  useCreateAddressMutation,
+  useGetAddressesQuery,
+} from "../../redux/reducers";
+import { GetAddressResponse } from "../../types/ResponseTypes";
+import { ResponseData, ResponseError } from "../../types/ResponseTypes/base";
+import { useSnackbar } from "notistack";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 
-interface AddressFormProps extends StepperFormBaseProps {}
+interface AddressFormProps extends StepperFormBaseProps {
+  onSuccess: (address?: Address) => void;
+}
 interface AddressFormState {
   apt: string;
 }
@@ -25,12 +35,12 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
   });
 
   const [googleAddress, setGoogleAddress] = useState<string>("");
-  const { addresses } = useFilteredAddresses();
-  const [selectedAddress, setSelectedAddress] = useState<Address>(
-    {} as Address
-  );
+  const { data } = useGetAddressesQuery({});
+  const [createAddress, { isLoading }] = useCreateAddressMutation();
+  const { enqueueSnackbar } = useSnackbar();
+  const { address, setAddress } = useAddAssignmentFlow();
 
-  const onSubmit: SubmitHandler<AddressFormState> = async (data) => {
+  const onSubmit: SubmitHandler<AddressFormState> = async (submitData) => {
     if (googleAddress) {
       const results = await geocodeByAddress(googleAddress);
       const address = results[0].address_components;
@@ -45,20 +55,40 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
       const zipCode = address.find((item) =>
         item.types.includes("postal_code")
       );
-      const country = address.find((item) => item.types.includes("country"));
+      // const country = address.find((item) => item.types.includes("country"));
       const address1 = `${streetNumber?.long_name} ${streetName?.long_name}`;
-      const address2 = `${city?.long_name}, ${state?.short_name} ${zipCode?.long_name}`;
-      const addressData = {
-        address1: address1,
-        address2: address2,
-        city: city?.long_name,
-        state: state?.short_name,
-        zipCode: zipCode?.long_name,
-        country: country?.long_name,
-      };
 
-      console.log(addressData);
-      onSuccess();
+      if (address1 && city && state && zipCode) {
+        const addressData = {
+          address1: address1,
+          address2: submitData.apt,
+          city: city.long_name,
+          state: state.short_name,
+          zipCode: zipCode.long_name,
+        };
+
+        console.log(addressData);
+
+        createAddress({ input: addressData }).then((res) => {
+          const { data } = res as ResponseData<GetAddressResponse>;
+
+          if (data) {
+            enqueueSnackbar("Address created successfully", {
+              variant: "success",
+            });
+            onSuccess(data.getAddress);
+          } else {
+            const { error } = res as ResponseError;
+            enqueueSnackbar(error.message, { variant: "error" });
+          }
+        });
+      }
+    }
+  };
+
+  const handleOnSelectExistingAddress = () => {
+    if (address) {
+      onSuccess(address);
     }
   };
 
@@ -84,7 +114,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Apt"
+                  label="Apt/Suite"
                   variant="outlined"
                   fullWidth
                 />
@@ -92,9 +122,13 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <Button type="submit" variant="contained">
-              Add and Select
-            </Button>
+            {isLoading ? (
+              <CircularProgress />
+            ) : (
+              <Button type="submit" variant="contained">
+                Add and Select
+              </Button>
+            )}
           </Grid>
           <Grid xs={1} item sx={{ width: "100%" }}>
             <Divider />
@@ -104,14 +138,15 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
           </Grid>
           <Grid item xs={2} sx={{ width: "100%" }}>
             <Autocomplete
-              options={addresses}
+              options={data ? data.getAddresses.addresses : []}
               getOptionLabel={(option) =>
-                `${option.address1}, ${option.address2}, ${option.city}, ${option.state}, ${option.zipCode}`
+                `${option.address1}, ${
+                  option.address2 ? option.address2 + "," : ""
+                } ${option.city}, ${option.state}, ${option.zipCode}`
               }
               onChange={(_, newValue) => {
                 if (newValue) {
-                  setSelectedAddress(newValue);
-                  setValue("apt", newValue.address2 || "");
+                  setAddress(newValue);
                 }
               }}
               renderInput={(params) => (
@@ -125,7 +160,11 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <Button type="submit" variant="contained">
+            <Button
+              onClick={handleOnSelectExistingAddress}
+              variant="contained"
+              disabled={isLoading}
+            >
               Select
             </Button>
           </Grid>

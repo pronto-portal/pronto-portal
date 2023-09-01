@@ -3,6 +3,13 @@ import { baseQuery } from "../baseQuery";
 
 export const api = createApi({
   baseQuery,
-  tagTypes: ["User", "Translators", "Assignments"],
+  tagTypes: [
+    "User",
+    "Translators",
+    "Assignments",
+    "Addresses",
+    "Claimants",
+    "Reminders",
+  ],
   endpoints: () => ({}),
 });

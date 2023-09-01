@@ -1,12 +1,12 @@
-import { Assignment } from "../ObjectTypes";
+import { Address, Assignment } from "../ObjectTypes";
 import { TotalRowCount } from "./base";
 
 export interface GetAddressResponse {
-  getAddress: Assignment;
+  getAddress: Address;
 }
 
 export interface GetAddresses extends TotalRowCount {
-  assignments: Assignment[];
+  addresses: Address[];
 }
 
 export interface GetAddressesResponse {

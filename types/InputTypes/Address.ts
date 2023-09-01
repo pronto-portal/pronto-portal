@@ -9,7 +9,7 @@ export interface GetAddressesFilter {
 }
 
 export interface GetAddressesInput {
-  paginatedInput: PaginatedInput;
+  paginatedInput?: PaginatedInput;
   where?: GetAddressesFilter;
 }
 

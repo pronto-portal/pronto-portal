@@ -5,17 +5,12 @@ import { useGetTranslatorsQuery } from "../../redux/reducers";
 import { GetTranslators } from "../../types/ResponseTypes";
 import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { usePaginationState } from "../../hooks/usePaginationState";
+import { FilteredObjects } from "../../types/FilteredObjectsType";
 
-interface FilteredTranslatorsContextProps extends GetTranslators {
-  filters: GetTranslatorsFilters;
-  setFilters: React.Dispatch<React.SetStateAction<GetTranslatorsFilters>>;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  countPerPage: number;
-  setCountPerPage: React.Dispatch<React.SetStateAction<number>>;
-  isLoading?: boolean;
-  error?: unknown;
-}
+type FilteredTranslatorsContextProps = FilteredObjects<
+  GetTranslatorsFilters,
+  GetTranslators
+>;
 
 const FilteredTranslatorsContext = createContext(
   {} as FilteredTranslatorsContextProps

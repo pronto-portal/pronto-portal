@@ -4,17 +4,12 @@ import { GetAssignments } from "../../types/ResponseTypes";
 import { Wrapper } from "../../types/Wrapper";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { useGetAssignmentsQuery } from "../../redux/reducers/assignmentsReducer";
+import { FilteredObjects } from "../../types/FilteredObjectsType";
 
-interface FilteredAssignmentsContextProps extends GetAssignments {
-  filters: GetAssignmentsFilter;
-  setFilters: React.Dispatch<React.SetStateAction<GetAssignmentsFilter>>;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  countPerPage: number;
-  setCountPerPage: React.Dispatch<React.SetStateAction<number>>;
-  isLoading?: boolean;
-  error?: unknown;
-}
+type FilteredAssignmentsContextProps = FilteredObjects<
+  GetAssignmentsFilter,
+  GetAssignments
+>;
 
 const FilteredAssignmentsContext = createContext(
   {} as FilteredAssignmentsContextProps
@@ -34,7 +29,7 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
         countPerPage,
       },
 
-      where: filters,
+      ...(Object.keys(filters).length ? { where: filters } : {}),
     },
     {
       refetchOnMountOrArgChange: true,

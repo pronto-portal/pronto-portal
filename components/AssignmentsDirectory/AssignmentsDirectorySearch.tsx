@@ -9,6 +9,7 @@ import { GetAssignmentsFilter } from "../../types/InputTypes";
 import { Box } from "@mui/material";
 import { Assignment } from "../../types/ObjectTypes";
 import { AddAssignmentsForm } from "./AddAssignmentForm";
+import { AddAssignmentFlowProvider } from "../../contextProviders/AddAssignmentFlowProvider";
 
 interface SearchableAssignments extends Assignment {
   label: string;
@@ -129,10 +130,12 @@ export const AssignmentsDirectorySearch: React.FC = () => {
           </Button>
         </Stack>
       </Stack>
-      <AddAssignmentsForm
-        open={openAddAssignmentsForm}
-        handleClose={() => setOpenAddAssignmentsForm(false)}
-      />
+      <AddAssignmentFlowProvider>
+        <AddAssignmentsForm
+          open={openAddAssignmentsForm}
+          handleClose={() => setOpenAddAssignmentsForm(false)}
+        />
+      </AddAssignmentFlowProvider>
     </>
   );
 };

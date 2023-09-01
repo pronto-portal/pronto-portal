@@ -16,6 +16,7 @@ export const addresses = api.injectEndpoints({
           ...vars,
         },
       }),
+      invalidatesTags: [{ type: "Addresses", id: "current" }],
     }),
     getAddresses: builder.query<GetAddressesResponse, GetAddressesInput>({
       query: (vars) => ({
@@ -24,6 +25,7 @@ export const addresses = api.injectEndpoints({
           ...vars,
         },
       }),
+      providesTags: [{ type: "Addresses", id: "current" }],
     }),
   }),
 });

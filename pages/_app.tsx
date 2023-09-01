@@ -9,7 +9,7 @@ import { AuthorizedGridLayout } from "../components/AuthorizedGridLayout";
 import { LanguagesProvider } from "../contextProviders/LanguagesProvider/LanguagesProvider";
 import { wrapper } from "../redux/store";
 import { Provider } from "react-redux";
-import { SnackbarProvider } from "../contextProviders/SnackbarProvider";
+import { SnackbarProvider } from "notistack";
 
 const roboto = Roboto({
   weight: "400",

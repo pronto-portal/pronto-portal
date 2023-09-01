@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
 export const getAddresses = gql`
-  query GetAddresses($input: PaginatedInput!, $where: AddressesFilter) {
+  query GetAddresses($input: PaginatedInput, $where: AddressesFilter) {
     getAddresses(input: $input, where: $where) {
       totalRowCount
       addresses {
