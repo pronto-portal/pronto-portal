@@ -1,4 +1,4 @@
-import { User } from "../User";
+import { User } from "../ObjectTypes";
 import { TotalRowCount } from "./base";
 
 export interface AddAndCreateTranslatorResponse {
