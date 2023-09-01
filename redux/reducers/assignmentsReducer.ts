@@ -1,9 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { GetAssignmentsInput } from "../../types/inputTypes";
-import { GetAssignmentsResponse } from "../../types/responseTypes";
+import { GetAssignmentsInput } from "../../types/InputTypes";
 import { baseQuery } from "../baseQuery";
 import { getAssignments } from "../graphql/queries/getAssignments";
 import { api } from "./apiReducer";
+import { GetAssignmentsResponse } from "../../types/ResponseTypes";
 
 export const assignments = api.injectEndpoints({
   endpoints: (builder) => ({

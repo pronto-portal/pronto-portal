@@ -1,9 +1,9 @@
 import React, { createContext, useState, useContext } from "react";
 import { Wrapper } from "../../types/Wrapper";
-import { User } from "../../types/User";
-import { useGetTranslatorsQuery } from "../../redux/reducers/apiReducer";
-import { GetTranslators } from "../../types/responseTypes";
-import { GetTranslatorsFilters } from "../../types/inputTypes";
+import { User } from "../../types/ObjectTypes";
+import { useGetTranslatorsQuery } from "../../redux/reducers";
+import { GetTranslators } from "../../types/ResponseTypes";
+import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { usePaginationState } from "../../hooks/usePaginationState";
 
 interface FilteredTranslatorsContextProps extends GetTranslators {

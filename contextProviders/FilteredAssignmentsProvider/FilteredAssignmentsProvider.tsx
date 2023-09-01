@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
-import { GetAssignmentsFilter } from "../../types/inputTypes";
-import { GetAssignments } from "../../types/responseTypes";
+import { GetAssignmentsFilter } from "../../types/InputTypes";
+import { GetAssignments } from "../../types/ResponseTypes";
 import { Wrapper } from "../../types/Wrapper";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { useGetAssignmentsQuery } from "../../redux/reducers/assignmentsReducer";

@@ -5,9 +5,9 @@ import { useFilteredAssignments } from "../../contextProviders/FilteredAssignmen
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { GetAssignmentsFilter } from "../../types/inputTypes";
+import { GetAssignmentsFilter } from "../../types/InputTypes";
 import { Box } from "@mui/material";
-import { Assignment } from "../../types/Assignment";
+import { Assignment } from "../../types/ObjectTypes";
 import { AddAssignmentsForm } from "./AddAssignmentForm";
 
 interface SearchableAssignments extends Assignment {

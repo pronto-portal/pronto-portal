@@ -14,14 +14,14 @@ import {
   Radio,
 } from "@mui/material";
 import { PhoneResult, phone } from "phone";
-import { User } from "../../types/User";
+import { User } from "../../types/ObjectTypes";
 import { State, City } from "country-state-city";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { useRouter } from "next/router";
 import {
   useCompleteProfileMutation,
   useGetUserQuery,
-} from "../../redux/reducers/apiReducer";
+} from "../../redux/reducers";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 
 export default function CompleteProfile() {

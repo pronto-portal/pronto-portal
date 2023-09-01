@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import MenuItem from "@mui/material/MenuItem";
-import { User } from "../../types/User";
+import { User } from "../../types/ObjectTypes";
 import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
-import { GetTranslatorsFilters } from "../../types/inputTypes";
+import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { Box } from "@mui/material";
 import { TranslatorSearchByOption } from "./TranslatorSearchByOption";
 import { AddTranslatorForm } from "./AddTranslatorForm";

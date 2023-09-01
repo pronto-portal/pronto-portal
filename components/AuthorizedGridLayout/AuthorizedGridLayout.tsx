@@ -3,8 +3,8 @@ import { Wrapper } from "../../types/Wrapper";
 import { Stack } from "@mui/material";
 import { NavBar } from "../NavBar";
 import Router, { useRouter } from "next/router";
-import { User } from "../../types/User";
-import { useGetUserQuery } from "../../redux/reducers/apiReducer";
+import { User } from "../../types/ObjectTypes";
+import { useGetUserQuery } from "../../redux/reducers";
 
 export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
   const { data } = useGetUserQuery();

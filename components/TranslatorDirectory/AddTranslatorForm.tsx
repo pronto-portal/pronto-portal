@@ -10,11 +10,11 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
-import { User } from "../../types/User";
-import { useAddAndCreateTranslatorMutation } from "../../redux/reducers/apiReducer";
+import { User } from "../../types/ObjectTypes";
+import { useAddAndCreateTranslatorMutation } from "../../redux/reducers";
 import phone from "phone";
 import { useSnackbar } from "../../contextProviders/SnackbarProvider";
-import { AddAndCreateTranslatorResponse } from "../../types/responseTypes";
+import { AddAndCreateTranslatorResponse } from "../../types/ResponseTypes";
 
 interface AddTranslatorFormProps {
   open: boolean;

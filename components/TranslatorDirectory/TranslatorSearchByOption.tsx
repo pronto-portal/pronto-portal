@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
-import { User } from "../../types/User";
+import { User } from "../../types/ObjectTypes";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
