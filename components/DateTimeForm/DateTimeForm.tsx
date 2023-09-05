@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
 import Grid from "@mui/material/Grid";
 import moment from "moment";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const { date, setDate } = useAddAssignmentFlow();
@@ -28,6 +29,10 @@ export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
           label="Date Time"
           orientation="landscape"
           defaultValue={moment()}
+          viewRenderers={{
+            hours: renderTimeViewClock,
+            minutes: renderTimeViewClock,
+          }}
           onChange={(newValue) => {
             if (newValue) setDate(newValue.toDate());
           }}
