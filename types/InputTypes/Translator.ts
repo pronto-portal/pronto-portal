@@ -10,7 +10,7 @@ export interface GetTranslatorsFilters {
 }
 
 export interface GetTranslatorsInput {
-  input: PaginatedInput;
+  input?: PaginatedInput;
   where?: GetTranslatorsFilters;
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext } from "react";
-import { Address, Claimant } from "../../types/ObjectTypes";
+import { Address, Claimant, User } from "../../types/ObjectTypes";
 import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { Reminder } from "../../types/ObjectTypes";
 
@@ -10,6 +10,8 @@ interface AddAssignmentFlowContextProps {
   setClaimant: React.Dispatch<React.SetStateAction<Claimant>>;
   reminder: Reminder;
   setReminder: React.Dispatch<React.SetStateAction<Reminder>>;
+  translator: User;
+  setTranslator: React.Dispatch<React.SetStateAction<User>>;
 }
 
 const AddAssignmentFlowContext = createContext<AddAssignmentFlowContextProps>(
@@ -20,6 +22,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
   const [address, setAddress] = useState<Address>({} as Address);
   const [claimant, setClaimant] = useState<Claimant>({} as Claimant);
   const [reminder, setReminder] = useState<Reminder>({} as Reminder);
+  const [translator, setTranslator] = useState<User>({} as User);
 
   return (
     <AddAssignmentFlowContext.Provider
@@ -30,6 +33,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
         setClaimant,
         reminder,
         setReminder,
+        translator,
+        setTranslator,
       }}
     >
       {children}

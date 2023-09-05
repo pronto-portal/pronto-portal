@@ -5,6 +5,8 @@ import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
+import Phone from "phone";
+
 interface UserInfoAutocompleteOptionProps {
   option: Person;
 }
@@ -46,7 +48,13 @@ export const UserInfoAutocompleteOption: React.FC<
           }}
         >
           <PhoneAndroidIcon />
-          <Typography>{phone}</Typography>
+          <Typography>
+            {
+              Phone(phone.replace(/[\W\D]/g, " "), {
+                validateMobilePrefix: false,
+              }).phoneNumber
+            }
+          </Typography>
         </Grid>
       </Grid>
       <Grid
