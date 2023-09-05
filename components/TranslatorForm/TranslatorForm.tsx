@@ -18,14 +18,22 @@ export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   };
 
   return (
-    <Grid container direction={"column"} spacing={2}>
-      <Grid item>
+    <Grid
+      container
+      direction={"column"}
+      spacing={2}
+      alignItems="center"
+      alignContent="center"
+    >
+      <Grid item sx={{ width: "100%" }}>
         <Autocomplete
           options={data?.getTranslators?.translators || []}
           getOptionLabel={(option) =>
             option ? option.firstName + " " + option.lastName : ""
           }
-          renderInput={(params) => <TextField {...params} label="Translator" />}
+          renderInput={(params) => (
+            <TextField {...params} label="Translator" fullWidth />
+          )}
           onChange={(_, newValue) => {
             if (newValue) {
               setTranslator(newValue);
@@ -42,6 +50,7 @@ export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
         <Button
           variant={"contained"}
           onClick={handleSubmit}
+          fullWidth
           disabled={!Object.keys(translator).length}
         >
           Next
