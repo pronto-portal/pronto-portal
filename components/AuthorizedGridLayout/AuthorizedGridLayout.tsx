@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Wrapper } from "../../types/Wrapper";
+import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { Stack } from "@mui/material";
 import { NavBar } from "../NavBar";
 import Router, { useRouter } from "next/router";

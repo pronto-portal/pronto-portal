@@ -4,7 +4,7 @@ import { GetAddressesFilter } from "../../types/InputTypes";
 import { useGetAddressesQuery } from "../../redux/reducers";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { FilteredObjects } from "../../types/FilteredObjectsType";
-import { Wrapper } from "../../types/Wrapper";
+import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { GetAddresses } from "../../types/ResponseTypes";
 
 type FilteredAddressesContextProps = FilteredObjects<

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StepperFormBaseProps } from "../../types/StepperFormBaseProps";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -19,15 +18,13 @@ import { ResponseData, ResponseError } from "../../types/ResponseTypes/base";
 import { useSnackbar } from "notistack";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
+import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
 
-interface AddressFormProps extends StepperFormBaseProps {
-  onSuccess: (address?: Address) => void;
-}
 interface AddressFormState {
   apt: string;
 }
 
-export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
+export const AddressForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const { control, handleSubmit, setValue } = useForm<AddressFormState>({
     defaultValues: {
       apt: "",
@@ -76,7 +73,8 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
             enqueueSnackbar("Address created successfully", {
               variant: "success",
             });
-            onSuccess(data.getAddress);
+            setAddress(data.getAddress);
+            onSuccess();
           } else {
             const { error } = res as ResponseError;
             enqueueSnackbar(error.message, { variant: "error" });
@@ -86,9 +84,11 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
     }
   };
 
+  const addressExists = !!Object.keys(address).length;
+
   const handleOnSelectExistingAddress = () => {
-    if (address) {
-      onSuccess(address);
+    if (addressExists) {
+      onSuccess();
     }
   };
 
@@ -163,7 +163,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({ onSuccess }) => {
             <Button
               onClick={handleOnSelectExistingAddress}
               variant="contained"
-              disabled={isLoading}
+              disabled={isLoading || !addressExists}
             >
               Select
             </Button>

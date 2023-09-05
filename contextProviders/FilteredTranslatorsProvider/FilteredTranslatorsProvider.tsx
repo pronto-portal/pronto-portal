@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import { Wrapper } from "../../types/Wrapper";
+import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { User } from "../../types/ObjectTypes";
 import { useGetTranslatorsQuery } from "../../redux/reducers";
 import { GetTranslators } from "../../types/ResponseTypes";

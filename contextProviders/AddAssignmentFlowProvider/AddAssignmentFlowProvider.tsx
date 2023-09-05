@@ -1,6 +1,6 @@
 import React, { useState, useContext, createContext } from "react";
 import { Address, Claimant } from "../../types/ObjectTypes";
-import { Wrapper } from "../../types/Wrapper";
+import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { Reminder } from "../../types/ObjectTypes";
 
 interface AddAssignmentFlowContextProps {

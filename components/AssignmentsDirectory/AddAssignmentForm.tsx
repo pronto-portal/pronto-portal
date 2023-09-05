@@ -8,6 +8,8 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { AddressForm } from "../AddressForm";
 import { FilteredAddressesProvider } from "../../contextProviders/FilteredAddressesProvider";
+import Box from "@mui/material/Box";
+import { ClaimantForm } from "../ClaimantForm/ClaimantForm";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -40,6 +42,9 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
         >
           <Stepper activeStep={activeStep}>
             <Step>
+              <StepLabel>Enter address details</StepLabel>
+            </Step>
+            <Step>
               <StepLabel>Enter claimant details</StepLabel>
             </Step>
             <Step>
@@ -48,14 +53,16 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
             <Step>
               <StepLabel>Set date and time</StepLabel>
             </Step>
-            <Step>
-              <StepLabel>Enter address details</StepLabel>
-            </Step>
           </Stepper>
           {activeStep === 0 && (
-            <FilteredAddressesProvider>
-              <AddressForm onSuccess={() => {}} />
-            </FilteredAddressesProvider>
+            <AddressForm
+              onSuccess={() => {
+                setActiveStep(1);
+              }}
+            />
+          )}
+          {activeStep === 1 && (
+            <ClaimantForm onSuccess={() => setActiveStep(2)} />
           )}
         </Stack>
       </DialogContent>
