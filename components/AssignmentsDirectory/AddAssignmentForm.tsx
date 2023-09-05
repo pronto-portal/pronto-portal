@@ -11,6 +11,7 @@ import { FilteredAddressesProvider } from "../../contextProviders/FilteredAddres
 import Box from "@mui/material/Box";
 import { ClaimantForm } from "../ClaimantForm/ClaimantForm";
 import { TranslatorForm } from "../TranslatorForm";
+import { DateTimeForm } from "../DateTimeForm";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -67,6 +68,9 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
           )}
           {activeStep === 2 && (
             <TranslatorForm onSuccess={() => setActiveStep(3)} />
+          )}
+          {activeStep === 3 && (
+            <DateTimeForm onSuccess={() => setActiveStep(4)} />
           )}
         </Stack>
       </DialogContent>
