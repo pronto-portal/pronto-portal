@@ -31,9 +31,7 @@ export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
           getOptionLabel={(option) =>
             option ? option.firstName + " " + option.lastName : ""
           }
-          renderInput={(params) => (
-            <TextField {...params} label="Translator" fullWidth />
-          )}
+          renderInput={(params) => <TextField {...params} label="Translator" />}
           onChange={(_, newValue) => {
             if (newValue) {
               setTranslator(newValue);

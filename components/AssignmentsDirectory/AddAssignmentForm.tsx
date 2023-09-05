@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import { ClaimantForm } from "../ClaimantForm/ClaimantForm";
 import { TranslatorForm } from "../TranslatorForm";
 import { DateTimeForm } from "../DateTimeForm";
+import { ReminderForm } from "../ReminderForm";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -33,7 +34,7 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
       <DialogTitle textAlign="center">Add Assignment</DialogTitle>
       <DialogContent>
         <Stack
@@ -55,6 +56,12 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
             <Step>
               <StepLabel>Set date and time</StepLabel>
             </Step>
+            <Step>
+              <StepLabel>Set reminders</StepLabel>
+            </Step>
+            <Step>
+              <StepLabel>Confirm</StepLabel>
+            </Step>
           </Stepper>
           {activeStep === 0 && (
             <AddressForm
@@ -71,6 +78,9 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
           )}
           {activeStep === 3 && (
             <DateTimeForm onSuccess={() => setActiveStep(4)} />
+          )}
+          {activeStep === 4 && (
+            <ReminderForm onSuccess={() => setActiveStep(5)} />
           )}
         </Stack>
       </DialogContent>

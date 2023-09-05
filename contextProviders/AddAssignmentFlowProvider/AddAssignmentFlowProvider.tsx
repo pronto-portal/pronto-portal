@@ -14,6 +14,10 @@ interface AddAssignmentFlowContextProps {
   setTranslator: React.Dispatch<React.SetStateAction<User>>;
   date?: Date;
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  remindTranslator: boolean;
+  setRemindTranslator: React.Dispatch<React.SetStateAction<boolean>>;
+  remindClaimant: boolean;
+  setRemindClaimant: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AddAssignmentFlowContext = createContext<AddAssignmentFlowContextProps>(
@@ -26,6 +30,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
   const [reminder, setReminder] = useState<Reminder>({} as Reminder);
   const [translator, setTranslator] = useState<User>({} as User);
   const [date, setDate] = useState<Date>();
+  const [remindTranslator, setRemindTranslator] = useState<boolean>(true);
+  const [remindClaimant, setRemindClaimant] = useState<boolean>(true);
 
   return (
     <AddAssignmentFlowContext.Provider
@@ -35,6 +41,10 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
         claimant,
         setClaimant,
         reminder,
+        remindTranslator,
+        setRemindTranslator,
+        remindClaimant,
+        setRemindClaimant,
         setReminder,
         translator,
         setTranslator,
