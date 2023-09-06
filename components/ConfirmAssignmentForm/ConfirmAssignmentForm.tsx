@@ -17,6 +17,9 @@ import EditIcon from "@mui/icons-material/Edit";
 
 const FlexCard = styled(Card)({
   flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
 });
 
 export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
