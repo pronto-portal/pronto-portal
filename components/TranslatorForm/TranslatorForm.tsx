@@ -25,7 +25,12 @@ export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       alignItems="center"
       alignContent="center"
     >
-      <Grid item sx={{ width: "100%" }}>
+      <Grid
+        item
+        sx={{
+          width: "100%",
+        }}
+      >
         <Autocomplete
           options={data?.getTranslators?.translators || []}
           getOptionLabel={(option) =>

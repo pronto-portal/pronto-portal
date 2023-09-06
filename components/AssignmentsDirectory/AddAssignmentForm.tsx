@@ -13,6 +13,7 @@ import { ClaimantForm } from "../ClaimantForm/ClaimantForm";
 import { TranslatorForm } from "../TranslatorForm";
 import { DateTimeForm } from "../DateTimeForm";
 import { ReminderForm } from "../ReminderForm";
+import { ConfirmAssignmentForm } from "../ConfirmAssignmentForm";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -81,6 +82,9 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
           )}
           {activeStep === 4 && (
             <ReminderForm onSuccess={() => setActiveStep(5)} />
+          )}
+          {activeStep === 5 && (
+            <ConfirmAssignmentForm onSuccess={() => setActiveStep(6)} />
           )}
         </Stack>
       </DialogContent>

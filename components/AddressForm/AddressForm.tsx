@@ -64,8 +64,6 @@ export const AddressForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
           zipCode: zipCode.long_name,
         };
 
-        console.log(addressData);
-
         createAddress({ input: addressData }).then((res) => {
           const { data } = res as ResponseData<GetAddressResponse>;
 

@@ -49,8 +49,6 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const claimantExists = !!Object.keys(claimant).length;
 
   const onSubmit: SubmitHandler<ClaimantFormState> = (data) => {
-    console.log(errors);
-
     createClaimant({ input: data })
       .unwrap()
       .then((res) => {

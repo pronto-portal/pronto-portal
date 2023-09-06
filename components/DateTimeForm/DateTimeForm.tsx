@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 import Button from "@mui/material/Button";
@@ -9,6 +9,11 @@ import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const { date, setDate } = useAddAssignmentFlow();
+  const defaultValue = moment();
+
+  useEffect(() => {
+    setDate(defaultValue.toDate());
+  }, [defaultValue, setDate]);
 
   const handleOnSubmit = () => {
     if (date) {
@@ -28,7 +33,7 @@ export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
         <DateTimePicker
           label="Date Time"
           orientation="landscape"
-          defaultValue={moment()}
+          defaultValue={defaultValue}
           viewRenderers={{
             hours: renderTimeViewClock,
             minutes: renderTimeViewClock,
