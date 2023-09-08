@@ -22,3 +22,14 @@ export interface CreateAddressInput {
     zipCode: string;
   };
 }
+
+export interface UpdateAddressInput {
+  input: {
+    id: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+  };
+}

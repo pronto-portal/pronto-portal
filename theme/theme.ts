@@ -54,5 +54,13 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiGrid: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          margin: 0,
+        },
+      },
+    },
   },
 });

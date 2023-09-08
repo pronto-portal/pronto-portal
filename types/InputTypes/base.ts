@@ -7,3 +7,7 @@ export interface DateRange {
   date1: Date;
   date2: Date;
 }
+
+export interface GetById {
+  input: { id: string };
+}

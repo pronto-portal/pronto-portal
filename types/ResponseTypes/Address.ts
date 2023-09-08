@@ -12,3 +12,11 @@ export interface GetAddresses extends TotalRowCount {
 export interface GetAddressesResponse {
   getAddresses: GetAddresses;
 }
+
+export interface CreateAddressResponse {
+  createAddress: Address;
+}
+
+export interface UpdateAddressResponse {
+  updateAddress: Address;
+}
