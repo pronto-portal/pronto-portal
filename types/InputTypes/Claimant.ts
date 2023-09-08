@@ -15,3 +15,7 @@ export interface GetClaimantsInput {
 export interface CreateClaimantsInput {
   input: Omit<Claimant, "id" | "user" | "userId">;
 }
+
+export interface UpdateClaimantsInput {
+  input: Omit<Claimant, "id" | "user" | "userId" | "assignment">;
+}

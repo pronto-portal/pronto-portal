@@ -43,7 +43,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
       alignContent="start"
     >
       <Grid item xs={2}>
-        <Typography>Confirm Assignment</Typography>
+        <Typography variant="h5">Confirm Assignment</Typography>
       </Grid>
       <FlexRowGridItem xs={2}>
         <FlexCard sx={{ flex: 1 }}>

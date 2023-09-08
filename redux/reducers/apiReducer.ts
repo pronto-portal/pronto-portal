@@ -6,9 +6,13 @@ export const api = createApi({
   tagTypes: [
     "User",
     "Translators",
+    "Assignment",
     "Assignments",
+    "Address",
     "Addresses",
+    "Claimant",
     "Claimants",
+    "Reminder",
     "Reminders",
   ],
   endpoints: () => ({}),

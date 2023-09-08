@@ -67,6 +67,8 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
     }
   };
 
+  // todo: modify to add prop that toggles create and edit mode
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid
@@ -275,4 +277,8 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       </Grid>
     </form>
   );
+};
+
+ClaimantForm.defaultProps = {
+  mode: "create",
 };

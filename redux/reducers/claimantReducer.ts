@@ -3,12 +3,15 @@ import { createClaimant } from "../graphql/mutations/createClaimant";
 import {
   CreateClaimantsInput,
   GetClaimantsFilter,
+  UpdateClaimantsInput,
 } from "../../types/InputTypes";
 import {
   GetClaimantResponse,
   GetClaimantsResponse,
 } from "../../types/ResponseTypes";
 import { getClaimants } from "../graphql/queries/getClaimants";
+import { updateClaimant } from "../graphql/mutations/updateClaimant";
+import { getClaimant } from "../graphql/queries/getClaimant";
 
 export const claimantApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,7 +20,7 @@ export const claimantApi = api.injectEndpoints({
         document: getClaimants,
         variables: input,
       }),
-      providesTags: ["Claimants"],
+      providesTags: [{ type: "Claimants", id: "current" }],
     }),
     createClaimant: builder.mutation<GetClaimantResponse, CreateClaimantsInput>(
       {
@@ -25,11 +28,33 @@ export const claimantApi = api.injectEndpoints({
           document: createClaimant,
           variables: input,
         }),
-        invalidatesTags: ["Claimants"],
+        invalidatesTags: [{ type: "Claimants", id: "current" }],
       }
     ),
+    editClaiamant: builder.mutation<GetClaimantResponse, UpdateClaimantsInput>({
+      query: (input) => ({
+        document: updateClaimant,
+        variables: input,
+      }),
+      invalidatesTags: [
+        { type: "Claimants", id: "current" },
+        { type: "Claimant", id: "current" },
+      ],
+    }),
+    getClaimant: builder.query<GetClaimantResponse, string>({
+      query: (id) => ({
+        document: getClaimant,
+        variables: { input: { id } },
+      }),
+      providesTags: [{ type: "Claimant", id: "current" }],
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetClaimantsQuery, useCreateClaimantMutation } = claimantApi;
+export const {
+  useGetClaimantsQuery,
+  useCreateClaimantMutation,
+  useEditClaiamantMutation,
+  useGetClaimantQuery,
+} = claimantApi;
