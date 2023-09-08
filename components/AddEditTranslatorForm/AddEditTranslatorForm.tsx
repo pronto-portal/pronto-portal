@@ -21,6 +21,7 @@ import { ModelForm } from "../../types/PropTypes/AssignmentFlowForm";
 import { FlexRowGridItem } from "../FlexRowGridItem";
 import { firstCharToUpper } from "../../utils/firstCharToUpper";
 import { validateEmail } from "../../utils/validateEmail";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
   id = "",
@@ -302,9 +303,13 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
             justifyContent: "center",
           }}
         >
-          <Button type="submit" variant="contained">
-            {firstCharToUpper(mode)} translator
-          </Button>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button type="submit" variant="contained">
+              {firstCharToUpper(mode)} translator
+            </Button>
+          )}
         </FlexRowGridItem>
       </Grid>
     </ResponsiveForm>
