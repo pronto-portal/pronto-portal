@@ -9,6 +9,7 @@ import {
   CreateClaimantResponse,
   GetClaimantResponse,
   GetClaimantsResponse,
+  UpdateClaimantResponse,
 } from "../../types/ResponseTypes";
 import { getClaimants } from "../graphql/queries/getClaimants";
 import { updateClaimant } from "../graphql/mutations/updateClaimant";
@@ -33,7 +34,10 @@ export const claimantApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Claimants", id: "current" }],
     }),
-    editClaiamant: builder.mutation<GetClaimantResponse, UpdateClaimantsInput>({
+    editClaiamant: builder.mutation<
+      UpdateClaimantResponse,
+      UpdateClaimantsInput
+    >({
       query: (input) => ({
         document: updateClaimant,
         variables: input,

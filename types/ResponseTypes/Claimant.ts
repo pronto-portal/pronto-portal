@@ -16,3 +16,7 @@ export interface GetClaimants extends TotalRowCount {
 export interface GetClaimantsResponse {
   getClaimants: GetClaimants;
 }
+
+export interface UpdateClaimantResponse {
+  updateClaimant: Claimant;
+}

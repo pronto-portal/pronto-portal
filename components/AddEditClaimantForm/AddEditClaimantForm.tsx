@@ -11,7 +11,10 @@ import {
 } from "../../redux/reducers/claimantReducer";
 import { useSnackbar } from "notistack";
 import { ResponseData, ResponseError } from "../../types/ResponseTypes/base";
-import { GetClaimantResponse } from "../../types/ResponseTypes";
+import {
+  GetClaimantResponse,
+  UpdateClaimantResponse,
+} from "../../types/ResponseTypes";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -80,10 +83,10 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
 
     if (mode === "edit") {
       editClaimant({ input: claimantData }).then((res) => {
-        const { data } = res as ResponseData<GetClaimantResponse>;
+        const { data } = res as ResponseData<UpdateClaimantResponse>;
 
         if (data) {
-          onSuccess(data.getClaimant);
+          onSuccess(data.updateClaimant);
           enqueueSnackbar("Claimant updated successfully", {
             variant: "success",
           });
