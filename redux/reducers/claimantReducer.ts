@@ -6,6 +6,7 @@ import {
   UpdateClaimantsInput,
 } from "../../types/InputTypes";
 import {
+  CreateClaimantResponse,
   GetClaimantResponse,
   GetClaimantsResponse,
 } from "../../types/ResponseTypes";
@@ -22,15 +23,16 @@ export const claimantApi = api.injectEndpoints({
       }),
       providesTags: [{ type: "Claimants", id: "current" }],
     }),
-    createClaimant: builder.mutation<GetClaimantResponse, CreateClaimantsInput>(
-      {
-        query: (input) => ({
-          document: createClaimant,
-          variables: input,
-        }),
-        invalidatesTags: [{ type: "Claimants", id: "current" }],
-      }
-    ),
+    createClaimant: builder.mutation<
+      CreateClaimantResponse,
+      CreateClaimantsInput
+    >({
+      query: (input) => ({
+        document: createClaimant,
+        variables: input,
+      }),
+      invalidatesTags: [{ type: "Claimants", id: "current" }],
+    }),
     editClaiamant: builder.mutation<GetClaimantResponse, UpdateClaimantsInput>({
       query: (input) => ({
         document: updateClaimant,

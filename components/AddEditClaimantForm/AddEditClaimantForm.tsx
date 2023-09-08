@@ -17,17 +17,15 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import phone from "phone";
 import { FlexRowGridItem } from "../FlexRowGridItem";
-import {
-  AssignmentFlowForm,
-  ModelForm,
-} from "../../types/PropTypes/AssignmentFlowForm";
+import { ModelForm } from "../../types/PropTypes/AssignmentFlowForm";
 import { firstCharToUpper } from "../../utils/firstCharToUpper";
 import { validateEmail } from "../../utils/validateEmail";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
+import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
 
 interface AddEditClaimantFormProps extends ModelForm<Claimant> {
-  claimantId: string;
+  claimantId?: string;
   onSuccess: (data?: Claimant) => void;
 }
 
@@ -40,12 +38,18 @@ interface AddEditClaimantFormInputs {
 }
 
 export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
-  claimantId,
+  claimantId = "",
   onSuccess,
-  mode,
+  mode = "create",
 }) => {
   const { data } = useGetClaimantQuery(claimantId);
-  const oldClaimant = data?.getClaimant || ({} as Claimant);
+  const oldClaimant = data?.getClaimant || {
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    languages: [],
+  };
 
   const [editClaimant, { isLoading: isEditLoading }] =
     useEditClaiamantMutation();
@@ -63,8 +67,8 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
     defaultValues: oldClaimant,
   });
 
-  const onSubmit: SubmitHandler<AddEditClaimantFormInputs> = async (data) => {
-    const claimantData: Claimant = {
+  const onSubmit: SubmitHandler<AddEditClaimantFormInputs> = (data) => {
+    const claimantData = {
       ...oldClaimant,
       id: claimantId,
       firstName: data.firstName,
@@ -75,7 +79,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
     };
 
     if (mode === "edit") {
-      await editClaimant({ input: claimantData }).then((res) => {
+      editClaimant({ input: claimantData }).then((res) => {
         const { data } = res as ResponseData<GetClaimantResponse>;
 
         if (data) {
@@ -89,14 +93,16 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
         }
       });
     } else if (mode === "create") {
-      await createClaimant({ input: data })
+      createClaimant({ input: data })
         .unwrap()
         .then((res) => {
-          onSuccess(res.getClaimant);
-          enqueueSnackbar("Claimant created", { variant: "success" });
+          if (res) {
+            onSuccess(res.createClaimant);
+            enqueueSnackbar("Claimant created", { variant: "success" });
+          }
         })
         .catch(({ error }: ResponseError) => {
-          enqueueSnackbar(error.message, { variant: "error" });
+          if (error) enqueueSnackbar(error.message, { variant: "error" });
         });
     }
   };
@@ -104,29 +110,36 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
   const { languages } = useLanguages();
 
   return (
-    <Grid
-      container
-      spacing={2}
-      direction="column"
-      alignItems="center"
-      sx={{ width: "100%" }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FlexRowGridItem item>
-          <Typography>
+    <ResponsiveForm onSubmit={handleSubmit(onSubmit)}>
+      <Grid
+        container
+        spacing={1}
+        direction="column"
+        alignItems="center"
+        sx={{ width: "100%", height: "100%", padding: 0, margin: 0 }}
+      >
+        <Grid item>
+          <Typography variant="h6" textAlign="center">
             {mode === "create"
-              ? firstCharToUpper(mode)
-              : firstCharToUpper(mode || "edit")}
+              ? firstCharToUpper(mode) + " "
+              : firstCharToUpper(mode) + " "}
             Claimant {mode === "edit" ? claimantId : ""}
           </Typography>
-        </FlexRowGridItem>
+        </Grid>
         <FlexRowGridItem item>
           <Controller
             name="firstName"
             rules={{ required: "First name is required" }}
             control={control}
             render={({ field }) => (
-              <TextField {...field} label="First Name" variant="outlined" />
+              <TextField
+                {...field}
+                label="First Name"
+                variant="outlined"
+                helperText={errors.firstName?.message || " "}
+                error={!!errors.firstName?.message}
+                fullWidth
+              />
             )}
           />
           <Controller
@@ -134,7 +147,14 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
             rules={{ required: "Last name is required" }}
             control={control}
             render={({ field }) => (
-              <TextField {...field} label="Last Name" variant="outlined" />
+              <TextField
+                {...field}
+                label="Last Name"
+                helperText={errors.lastName?.message || " "}
+                error={!!errors.lastName?.message}
+                variant="outlined"
+                fullWidth
+              />
             )}
           />
         </FlexRowGridItem>
@@ -178,46 +198,72 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
               },
             }}
             render={({ field }) => (
-              <TextField {...field} label="Email" variant="outlined" />
+              <TextField
+                {...field}
+                label="Email"
+                variant="outlined"
+                fullWidth
+              />
             )}
           />
         </FlexRowGridItem>
 
-        <Grid item>
+        <Grid item width="100%">
           <Controller
             name="languages"
-            control={control}
             rules={{
               required: "Languages are required",
               validate: (value) => value.length > 0,
             }}
+            control={control}
             render={({ field }) => (
               <Autocomplete
                 {...field}
                 multiple
                 options={languages}
+                onChange={(_, newValue) => {
+                  if (newValue) {
+                    field.onChange(newValue);
+                  }
+                }}
                 renderInput={(params) => (
-                  <TextField {...params} variant="outlined" label="Languages" />
+                  <TextField
+                    {...params}
+                    label="Languages"
+                    variant="outlined"
+                    helperText={errors.languages?.message || " "}
+                    error={!!errors.languages?.message}
+                    fullWidth
+                  />
                 )}
               />
             )}
           />
         </Grid>
 
-        <Grid item>
+        <Grid
+          item
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           {isLoading ? (
             <CircularProgress />
           ) : (
             <Button type="submit" variant="contained">
-              Add and select claimant
+              {firstCharToUpper(mode)} Claimant
             </Button>
           )}
         </Grid>
-      </form>
-    </Grid>
+      </Grid>
+    </ResponsiveForm>
   );
 };
 
 AddEditClaimantForm.defaultProps = {
+  claimantId: "",
   mode: "create",
 };
