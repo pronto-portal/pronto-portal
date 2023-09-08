@@ -119,7 +119,8 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
         spacing={1}
         direction="column"
         alignItems="center"
-        sx={{ width: "100%", height: "100%", padding: 0, margin: 0 }}
+        width={1}
+        height={1}
       >
         <Grid item>
           <Typography variant="h6" textAlign="center">

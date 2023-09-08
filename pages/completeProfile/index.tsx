@@ -25,7 +25,7 @@ import {
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 
 export default function CompleteProfile() {
-  const { data } = useGetUserQuery();
+  const { data } = useGetUserQuery({});
 
   const [phoneNumber, setPhoneNumber] = useState<PhoneResult>({
     phoneNumber: "",

@@ -1,22 +1,34 @@
 import { gql } from "graphql-request";
 
 export const updateUser = gql`
-  mutation UpdateUser($input: UpdateUserInput!) {
+  mutation UpdateUser($input: UpdateUserInput) {
     updateUser(input: $input) {
       id
-      createdAt
-      updatedAt
       email
-      phone
+      updatedAt
       firstName
       lastName
-      isManager
-      isTranslator
-      isBanned
-      isProfileComplete
-      city
-      state
+      phone
       languages
+      translatingFor {
+        id
+        firstName
+        lastName
+        languages
+        email
+        phone
+      }
+      translators {
+        id
+        firstName
+        lastName
+        languages
+        email
+        phone
+      }
+      isTranslator
+      isManager
+      isProfileComplete
     }
   }
 `;

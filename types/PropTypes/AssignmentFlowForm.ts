@@ -1,4 +1,5 @@
 export interface ModelForm<T = undefined> {
+  id?: string;
   onSuccess: (data?: T) => void;
   mode?: "create" | "edit";
 }

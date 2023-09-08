@@ -5,6 +5,7 @@ export const api = createApi({
   baseQuery,
   tagTypes: [
     "User",
+    "Translator",
     "Translators",
     "Assignment",
     "Assignments",

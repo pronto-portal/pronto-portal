@@ -12,3 +12,7 @@ export interface GetTranslators extends TotalRowCount {
 export interface GetTranslatorsResponse {
   getTranslators: GetTranslators;
 }
+
+export interface GetTranslatorResponse {
+  getTranslator: User;
+}
