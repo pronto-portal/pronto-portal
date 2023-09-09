@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -11,7 +11,6 @@ import { User } from "../../types/ObjectTypes";
 import {
   useAddAndCreateTranslatorMutation,
   useGetTranslatorQuery,
-  useGetTranslatorsQuery,
   useUpdateUserMutation,
 } from "../../redux/reducers";
 import phone from "phone";
@@ -35,27 +34,31 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
     { skip: mode === "create" }
   );
 
-  const oldTranslator =
-    data && mode === "edit" && id
-      ? data.getTranslator
-      : {
-          firstName: "",
-          lastName: "",
-          city: "",
-          state: "",
-          email: "",
-          phone: "",
-          languages: [],
-        };
+  const defaultValues: Partial<User> = {
+    firstName: "",
+    lastName: "",
+    city: "",
+    state: "",
+    email: "",
+    phone: "",
+    languages: [],
+  };
+
+  const oldTranslator = data?.getTranslator || defaultValues;
 
   const {
     control,
     handleSubmit,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm({
-    defaultValues: oldTranslator,
+    defaultValues,
   });
+
+  useEffect(() => {
+    if (mode === "edit" && data && data.getTranslator)
+      reset(data.getTranslator);
+  }, [data, mode, reset]);
 
   const { cities, stateISOCodes, city, setCity, state, setState } =
     useSelectCityState();
@@ -96,6 +99,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
     else if (mode === "edit") {
       updateUser({
         input: {
+          ...oldTranslator,
           id: id,
           firstName: data.firstName || "",
           lastName: data.lastName || "",
@@ -172,7 +176,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
             rules={{
               required: "Phone is required",
               validate: (value) => {
-                if (!phone(value).isValid) return "Phone is invalid";
+                if (!phone(value || "").isValid) return "Phone is invalid";
 
                 return true;
               },
@@ -200,7 +204,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
             rules={{
               required: "Email is required",
               validate: (value) => {
-                if (!validateEmail(value)) return "Email is invalid";
+                if (!validateEmail(value || "")) return "Email is invalid";
 
                 return true;
               },

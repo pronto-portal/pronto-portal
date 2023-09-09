@@ -8,6 +8,8 @@ export const getTranslator = gql`
       phone
       firstName
       lastName
+      city
+      state
       languages
     }
   }

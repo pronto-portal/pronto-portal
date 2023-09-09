@@ -57,7 +57,11 @@ export const ObjectGridSpread = <T extends {}>({
           displayValue = value.toString();
         }
 
-        if (Array.isArray(value) && value.length) {
+        if (
+          Array.isArray(value) &&
+          value.length &&
+          typeof value[0] === "string"
+        ) {
           displayValue = (
             <Stack
               direction="row"

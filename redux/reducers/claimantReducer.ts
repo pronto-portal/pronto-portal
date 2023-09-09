@@ -50,7 +50,6 @@ export const claimantApi = api.injectEndpoints({
     }),
     getClaimant: builder.query<GetClaimantResponse, GetClaimantInput>({
       query: (variables) => {
-        console.log(variables);
         return {
           document: getClaimant,
           variables,

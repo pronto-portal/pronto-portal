@@ -1,6 +1,3 @@
-import { User } from "../../types/ObjectTypes";
-import { completeProfile } from "../graphql/mutations/completeProfile";
-import { getUser } from "../graphql/queries";
 import {
   GetTranslatorsInput,
   AddAndCreateTranslatorInput,
@@ -15,6 +12,7 @@ import {
 import { api } from "./apiReducer";
 import { GetTranslatorResponse } from "../../types/ResponseTypes";
 import { GetById } from "../../types/InputTypes";
+import { getTranslator } from "../graphql/queries/getTranslator";
 
 export const translators = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -41,7 +39,7 @@ export const translators = api.injectEndpoints({
     }),
     getTranslator: builder.query<GetTranslatorResponse, GetById>({
       query: (variables) => ({
-        document: getUser,
+        document: getTranslator,
         variables: variables,
       }),
       providesTags: [{ type: "Translator", id: "current" }],
