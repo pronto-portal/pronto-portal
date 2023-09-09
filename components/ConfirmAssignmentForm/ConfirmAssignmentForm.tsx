@@ -32,6 +32,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
     remindClaimant,
     remindTranslator,
     address,
+    handleOpenEditing,
   } = useAddAssignmentFlow();
 
   return (
@@ -48,13 +49,12 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
       <FlexRowGridItem xs={2}>
         <FlexCard sx={{ flex: 1 }}>
           <CardHeader title="Address" />
-
           <CardContent>
             <ObjectGridSpread<Address> object={address} />
           </CardContent>
           <CardActions>
             <IconButton>
-              <EditIcon />
+              <EditIcon onClick={() => handleOpenEditing("address")} />
             </IconButton>
           </CardActions>
         </FlexCard>
@@ -65,7 +65,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
           </CardContent>
           <CardActions>
             <IconButton>
-              <EditIcon />
+              <EditIcon onClick={() => handleOpenEditing("claimant")} />
             </IconButton>
           </CardActions>
         </FlexCard>
@@ -75,10 +75,10 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
           <CardHeader title="Translator" />
           <CardContent>
             <ObjectGridSpread<User> object={translator} />
-          </CardContent>{" "}
+          </CardContent>
           <CardActions>
             <IconButton>
-              <EditIcon />
+              <EditIcon onClick={() => handleOpenEditing("translator")} />
             </IconButton>
           </CardActions>
         </FlexCard>
@@ -86,10 +86,10 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
           <CardHeader title="Date" />
           <CardContent>
             <Typography>{date?.toString()}</Typography>
-          </CardContent>{" "}
+          </CardContent>
           <CardActions>
             <IconButton>
-              <EditIcon />
+              <EditIcon onClick={() => handleOpenEditing("date")} />
             </IconButton>
           </CardActions>
         </FlexCard>
@@ -97,7 +97,6 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
       <FlexRowGridItem xs={2}>
         <FlexCard>
           <CardHeader title="Reminders" />
-
           <CardContent>
             <Typography>
               Remind claimant: {remindClaimant ? "Yes" : "No"}
@@ -108,7 +107,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
           </CardContent>
           <CardActions>
             <IconButton>
-              <EditIcon />
+              <EditIcon onClick={() => handleOpenEditing("reminder")} />
             </IconButton>
           </CardActions>
         </FlexCard>

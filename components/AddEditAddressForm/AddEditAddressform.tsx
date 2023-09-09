@@ -28,14 +28,13 @@ interface AddressFormState {
 }
 
 interface AddEditAddressFormProps extends ModelForm<Address> {
-  addressId?: string;
   onSuccess: (data?: Address) => void;
 }
 
 export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
   onSuccess,
   mode = "create",
-  addressId = "",
+  id = "",
 }) => {
   const { control, handleSubmit, setValue } = useForm<AddressFormState>({
     defaultValues: {
@@ -44,11 +43,14 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
   });
 
   const [googleAddress, setGoogleAddress] = useState<string>("");
-  const { data, isLoading: isGetAddressLoading } = useGetAddressQuery({
-    input: {
-      id: addressId,
+  const { data, isLoading: isGetAddressLoading } = useGetAddressQuery(
+    {
+      input: {
+        id: id,
+      },
     },
-  });
+    { skip: mode === "create" }
+  );
 
   const [createAddress, { isLoading: isCreateAddressLoading }] =
     useCreateAddressMutation();
@@ -101,21 +103,19 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
             }
           });
         } else if (mode === "edit") {
-          editAddress({ input: { ...addressData, id: addressId } }).then(
-            (res) => {
-              const { data } = res as ResponseData<UpdateAddressResponse>;
+          editAddress({ input: { ...addressData, id: id } }).then((res) => {
+            const { data } = res as ResponseData<UpdateAddressResponse>;
 
-              if (data) {
-                enqueueSnackbar("Address updated successfully", {
-                  variant: "success",
-                });
-                onSuccess(data.updateAddress);
-              } else {
-                const { error } = res as ResponseError;
-                enqueueSnackbar(error.message, { variant: "error" });
-              }
+            if (data) {
+              enqueueSnackbar("Address updated successfully", {
+                variant: "success",
+              });
+              onSuccess(data.updateAddress);
+            } else {
+              const { error } = res as ResponseError;
+              enqueueSnackbar(error.message, { variant: "error" });
             }
-          );
+          });
         }
       }
     }
@@ -144,7 +144,7 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
       >
         <Grid item xs={1}>
           <Typography>
-            {firstCharToUpper(mode)} address {mode === "edit" ? addressId : ""}
+            {firstCharToUpper(mode)} address {mode === "edit" ? id : ""}
           </Typography>
         </Grid>
         <Grid item xs={2} width={0.75}>

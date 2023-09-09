@@ -1,10 +1,11 @@
+import { CreateEdit } from "../CRUDModes";
+
 export interface ModelForm<T = undefined> {
   id?: string;
   onSuccess: (data?: T) => void;
-  mode?: "create" | "edit";
+  mode?: CreateEdit;
 }
 
 export interface AssignmentFlowForm extends ModelForm {
   onSuccess: () => void;
-  mode?: "create" | "edit";
 }

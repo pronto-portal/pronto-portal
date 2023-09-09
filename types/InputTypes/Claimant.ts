@@ -19,3 +19,9 @@ export interface CreateClaimantsInput {
 export interface UpdateClaimantsInput {
   input: Omit<Claimant, "id" | "user" | "userId" | "assignment">;
 }
+
+export interface GetClaimantInput {
+  input: {
+    id: string;
+  };
+}

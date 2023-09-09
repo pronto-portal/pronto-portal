@@ -6,6 +6,7 @@ import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
 import Grid from "@mui/material/Grid";
 import moment from "moment";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
+import Typography from "@mui/material/Typography";
 
 export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const { date, setDate } = useAddAssignmentFlow();
@@ -29,7 +30,10 @@ export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       alignItems="center"
       alignContent="center"
     >
-      <Grid item xs={12}>
+      <Grid item xs={2}>
+        <Typography variant="h5">Date and Time</Typography>
+      </Grid>
+      <Grid item xs={4}>
         <DateTimePicker
           label="Date Time"
           orientation="landscape"
@@ -43,9 +47,9 @@ export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
           }}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={4}>
         <Button variant={"contained"} onClick={handleOnSubmit} fullWidth>
-          Next
+          Confirm
         </Button>
       </Grid>
     </Grid>

@@ -28,7 +28,6 @@ import Button from "@mui/material/Button";
 import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
 
 interface AddEditClaimantFormProps extends ModelForm<Claimant> {
-  claimantId?: string;
   onSuccess: (data?: Claimant) => void;
 }
 
@@ -41,11 +40,14 @@ interface AddEditClaimantFormInputs {
 }
 
 export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
-  claimantId = "",
+  id = "",
   onSuccess,
   mode = "create",
 }) => {
-  const { data } = useGetClaimantQuery(claimantId);
+  const { data } = useGetClaimantQuery(
+    { input: { id } },
+    { skip: mode === "create" }
+  );
   const oldClaimant = data?.getClaimant || {
     firstName: "",
     lastName: "",
@@ -73,7 +75,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
   const onSubmit: SubmitHandler<AddEditClaimantFormInputs> = (data) => {
     const claimantData = {
       ...oldClaimant,
-      id: claimantId,
+      id: id,
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone,
@@ -127,7 +129,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
             {mode === "create"
               ? firstCharToUpper(mode) + " "
               : firstCharToUpper(mode) + " "}
-            Claimant {mode === "edit" ? claimantId : ""}
+            Claimant {mode === "edit" ? id : ""}
           </Typography>
         </Grid>
         <FlexRowGridItem item>
@@ -268,6 +270,6 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
 };
 
 AddEditClaimantForm.defaultProps = {
-  claimantId: "",
+  id: "",
   mode: "create",
 };

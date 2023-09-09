@@ -2,6 +2,7 @@ import { api } from "./apiReducer";
 import { createClaimant } from "../graphql/mutations/createClaimant";
 import {
   CreateClaimantsInput,
+  GetClaimantInput,
   GetClaimantsFilter,
   UpdateClaimantsInput,
 } from "../../types/InputTypes";
@@ -47,10 +48,10 @@ export const claimantApi = api.injectEndpoints({
         { type: "Claimant", id: "current" },
       ],
     }),
-    getClaimant: builder.query<GetClaimantResponse, string>({
-      query: (id) => ({
+    getClaimant: builder.query<GetClaimantResponse, GetClaimantInput>({
+      query: (variables) => ({
         document: getClaimant,
-        variables: { input: { id } },
+        variables,
       }),
       providesTags: [{ type: "Claimant", id: "current" }],
     }),
