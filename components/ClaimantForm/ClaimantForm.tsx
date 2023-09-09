@@ -43,19 +43,19 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       alignItems="center"
       alignContent="center"
     >
-      <Grid item>
+      <Grid item width={1}>
         <AddEditClaimantForm onSuccess={onClaimantFormSubmit} />
       </Grid>
-      <Grid item sx={{ width: "50%" }} xs={2}>
+      <Grid item width={1} xs={2}>
         <Divider sx={{ paddingBottom: 1 }} />
       </Grid>
-      <Grid item sx={{ width: "100%" }} xs={1}>
+      <Grid item width={1} xs={1}>
         <Typography textAlign="center">
           Or select an existing claimant
         </Typography>
       </Grid>
 
-      <Grid item sx={{ width: "50%" }} xs={1}>
+      <Grid item width={1} xs={1}>
         <Autocomplete
           options={data?.getClaimants?.claimants || []}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
