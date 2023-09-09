@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -29,13 +29,13 @@ interface GoogleMapsAutoCompleteProps {
 }
 
 const GoogleMapsAutoComplete: React.FC<GoogleMapsAutoCompleteProps> = ({
-  value: higherValue,
+  value: higherValue = "",
   onChange,
 }) => {
-  const [value, setValue] = React.useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = React.useState("");
-  const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
-  const loaded = React.useRef(false);
+  const [value, setValue] = useState<PlaceType | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState<readonly PlaceType[]>([]);
+  const loaded = useRef(false);
 
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
@@ -66,7 +66,7 @@ const GoogleMapsAutoComplete: React.FC<GoogleMapsAutoCompleteProps> = ({
     []
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     let active = true;
 
     if (!autocompleteService.current && (window as any).google) {
@@ -128,7 +128,7 @@ const GoogleMapsAutoComplete: React.FC<GoogleMapsAutoCompleteProps> = ({
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Add a location" fullWidth />
+        <TextField {...params} label="Set a location" fullWidth />
       )}
       renderOption={(props, option) => {
         const matches =

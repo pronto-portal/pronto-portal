@@ -8,6 +8,7 @@ export const getClaimant = gql`
       lastName
       email
       phone
+      languages
     }
   }
 `;

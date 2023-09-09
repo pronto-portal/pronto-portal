@@ -25,17 +25,20 @@ export const ObjectGridSpread = <T extends {}>({
       container
       direction={"column"}
       spacing={2}
+      padding={2}
       alignItems="start"
-      alignContent="start"
+      alignContent="space-between"
+      width={1}
+      maxWidth={1}
     >
       {entries.map(([key, value]) => {
         let displayValue: React.ReactNode = "";
 
         if (value && typeof value === "object" && showNestedObjects) {
           return (
-            <Card key={key} sx={{ paddingLeft: 2, width: "100%" }}>
+            <Card key={key} sx={{ width: "100%", padding: 0 }}>
               <CardHeader title={firstCharToUpper(key)} />
-              <CardContent>
+              <CardContent sx={{ padding: 0 }}>
                 <ObjectGridSpread<typeof value> object={value} />
               </CardContent>
             </Card>

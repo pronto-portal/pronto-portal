@@ -49,10 +49,13 @@ export const claimantApi = api.injectEndpoints({
       ],
     }),
     getClaimant: builder.query<GetClaimantResponse, GetClaimantInput>({
-      query: (variables) => ({
-        document: getClaimant,
-        variables,
-      }),
+      query: (variables) => {
+        console.log(variables);
+        return {
+          document: getClaimant,
+          variables,
+        };
+      },
       providesTags: [{ type: "Claimant", id: "current" }],
     }),
   }),

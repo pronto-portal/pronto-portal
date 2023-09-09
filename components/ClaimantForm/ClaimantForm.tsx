@@ -65,7 +65,7 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
             }
           }}
           renderOption={(props, option) => (
-            <li {...props}>
+            <li {...props} key={option.id}>
               <UserInfoAutocompleteOption option={option} />
             </li>
           )}

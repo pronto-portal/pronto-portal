@@ -1,5 +1,5 @@
 // This component will be a form that will allow the user to edit the claimant's information using react hook form and an rtk query hook.
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Claimant } from "../../types/ObjectTypes";
 import Grid from "@mui/material/Grid";
@@ -48,13 +48,16 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
     { input: { id } },
     { skip: mode === "create" }
   );
-  const oldClaimant = data?.getClaimant || {
+
+  const defaultValues = {
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
     languages: [],
   };
+
+  const oldClaimant = data?.getClaimant || defaultValues;
 
   const [editClaimant, { isLoading: isEditLoading }] =
     useEditClaiamantMutation();
@@ -67,10 +70,15 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<AddEditClaimantFormInputs>({
-    defaultValues: oldClaimant,
+    defaultValues,
   });
+
+  useEffect(() => {
+    if (data) reset(data.getClaimant);
+  }, [data, reset]);
 
   const onSubmit: SubmitHandler<AddEditClaimantFormInputs> = (data) => {
     const claimantData = {
