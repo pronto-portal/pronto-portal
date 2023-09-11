@@ -42,7 +42,7 @@ export const AssignmentsDirectorySearch: React.FC = () => {
 
   useEffect(() => {
     searchableFields.forEach((field) => {
-      if (ctxFilter[field]) {
+      if (ctxFilter && ctxFilter[field]) {
         setSearchBy(field);
         setSearchByValue(ctxFilter[field] as string);
       }
@@ -55,12 +55,16 @@ export const AssignmentsDirectorySearch: React.FC = () => {
     ctxSetFilter(newFilters);
   };
 
-  const searchableAssignments: SearchableAssignments[] = assignments.map(
-    (assignment) => ({
-      label: `${assignment.id} - ${assignment.dateTime.toLocaleDateString()}`,
-      ...assignment,
-    })
-  );
+  const searchableAssignments: SearchableAssignments[] =
+    assignments &&
+    assignments.map((assignment) => {
+      return {
+        label: `${assignment.id} - ${new Date(
+          assignment.dateTime
+        ).toLocaleDateString()}`,
+        ...assignment,
+      };
+    });
 
   return (
     <>

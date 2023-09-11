@@ -15,7 +15,7 @@ export const ReminderForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
     onSuccess();
   };
 
-  const { setRemindTranslator, setRemindClaimant } = useAddAssignmentFlow();
+  const { setCreateReminder } = useAddAssignmentFlow();
 
   const yesNoOptions: Record<string, boolean> = {
     yes: true,
@@ -35,22 +35,12 @@ export const ReminderForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       </Grid>
       <Grid item>
         <FormControl>
-          <FormLabel>Would you like us to remind the translator?</FormLabel>
+          <FormLabel>
+            Would you like us to remind the translator and the claimant?
+          </FormLabel>
           <RadioGroup
             defaultValue="yes"
-            onChange={(e) => setRemindTranslator(yesNoOptions[e.target.value])}
-          >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
-      </Grid>
-      <Grid item>
-        <FormControl>
-          <FormLabel>Would you like us to remind the claimant?</FormLabel>
-          <RadioGroup
-            defaultValue="yes"
-            onChange={(e) => setRemindClaimant(yesNoOptions[e.target.value])}
+            onChange={(e) => setCreateReminder(yesNoOptions[e.target.value])}
           >
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />

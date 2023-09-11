@@ -12,7 +12,7 @@ export interface Assignment {
   createdByUserId: string;
   claimant: Claimant;
   claimantId: string;
-  dateTime: Date;
+  dateTime: string;
   address: Address;
   addressId: string;
   isComplete: boolean;

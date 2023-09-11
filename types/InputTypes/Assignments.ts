@@ -16,3 +16,12 @@ export interface GetAssignmentsInput {
   input: PaginatedInput;
   where?: GetAssignmentsFilter;
 }
+
+export interface CreateAssignmentInput {
+  input: {
+    translatorId: string;
+    addressId: string;
+    claimantId: string;
+    dateTime: Date;
+  };
+}

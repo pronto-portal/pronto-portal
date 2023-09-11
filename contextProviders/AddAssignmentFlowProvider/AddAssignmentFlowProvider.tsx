@@ -28,11 +28,10 @@ interface AddAssignmentFlowContextProps {
   setTranslator: React.Dispatch<React.SetStateAction<User>>;
   date?: Date;
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-  remindTranslator: boolean;
-  setRemindTranslator: React.Dispatch<React.SetStateAction<boolean>>;
-  remindClaimant: boolean;
-  setRemindClaimant: React.Dispatch<React.SetStateAction<boolean>>;
+  createReminder: boolean;
+  setCreateReminder: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenEditing: (type: AssignmentFlowEditingType) => void;
+  reset: () => void;
 }
 
 const AddAssignmentFlowContext = createContext<AddAssignmentFlowContextProps>(
@@ -45,14 +44,22 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
   const [reminder, setReminder] = useState<Reminder>({} as Reminder);
   const [translator, setTranslator] = useState<User>({} as User);
   const [date, setDate] = useState<Date>();
-  const [remindTranslator, setRemindTranslator] = useState<boolean>(true);
-  const [remindClaimant, setRemindClaimant] = useState<boolean>(true);
+  const [createReminder, setCreateReminder] = useState<boolean>(true);
   const [editing, setEditing] = useState<AssignmentFlowEditingType>();
   const [openEditing, setOpenEditing] = useState<boolean>(false);
 
   const handleOpenEditing = (editingType: AssignmentFlowEditingType) => {
     setEditing(editingType);
     setOpenEditing(true);
+  };
+
+  const reset = () => {
+    setAddress({} as Address);
+    setClaimant({} as Claimant);
+    setReminder({} as Reminder);
+    setTranslator({} as User);
+    setDate(undefined);
+    setCreateReminder(true);
   };
 
   return (
@@ -64,16 +71,15 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
           claimant,
           setClaimant,
           reminder,
-          remindTranslator,
-          setRemindTranslator,
-          remindClaimant,
-          setRemindClaimant,
+          createReminder,
+          setCreateReminder,
           setReminder,
           translator,
           setTranslator,
           date,
           setDate,
           handleOpenEditing,
+          reset,
         }}
       >
         {children}

@@ -8,3 +8,7 @@ export interface GetAssignments extends TotalRowCount {
 export interface GetAssignmentsResponse {
   getAssignments: GetAssignments;
 }
+
+export interface CreateAssignmentResponse {
+  createAssignment: Assignment;
+}

@@ -4,3 +4,4 @@ export * from "./Claimant";
 export * from "./Translator";
 export * from "./User";
 export * from "./base";
+export * from "./Reminder";

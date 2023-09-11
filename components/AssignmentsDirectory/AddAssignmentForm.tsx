@@ -14,6 +14,7 @@ import { TranslatorForm } from "../TranslatorForm";
 import { DateTimeForm } from "../DateTimeForm";
 import { ReminderForm } from "../ReminderForm";
 import { ConfirmAssignmentForm } from "../ConfirmAssignmentForm";
+import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -33,6 +34,8 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
   const handlePrevStep = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const { reset } = useAddAssignmentFlow();
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
@@ -84,7 +87,13 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
             <ReminderForm onSuccess={() => setActiveStep(5)} />
           )}
           {activeStep === 5 && (
-            <ConfirmAssignmentForm onSuccess={() => setActiveStep(6)} />
+            <ConfirmAssignmentForm
+              onSuccess={() => {
+                setActiveStep(0);
+                handleClose();
+                reset();
+              }}
+            />
           )}
         </Stack>
       </DialogContent>

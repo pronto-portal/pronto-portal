@@ -14,6 +14,12 @@ import { ObjectGridSpread } from "../ObjectGridSpread/ObjectGridSpread";
 import { Address, Claimant, Reminder, User } from "../../types/ObjectTypes";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import {
+  useCreateAssignmentMutation,
+  useCreateReminderMutation,
+} from "../../redux/reducers";
+import { useSnackbar } from "notistack";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const FlexCard = styled(Card)({
   flex: 1,
@@ -34,11 +40,63 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
     claimant,
     translator,
     date,
-    remindClaimant,
-    remindTranslator,
+    createReminder,
     address,
     handleOpenEditing,
   } = useAddAssignmentFlow();
+
+  const [createAssignment, { data, isLoading: assignmentIsLoading }] =
+    useCreateAssignmentMutation();
+  const [
+    createReminderMutation,
+    { data: reminderData, isLoading: reminderIsLoading },
+  ] = useCreateReminderMutation();
+
+  const isLoading = assignmentIsLoading || reminderIsLoading;
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleCreateAssignment = () => {
+    if (translator && claimant && date && address)
+      createAssignment({
+        input: {
+          translatorId: translator.id,
+          addressId: address.id,
+          claimantId: claimant.id,
+          dateTime: date,
+        },
+      }).then((res) => {
+        if ("data" in res && res.data.createAssignment) {
+          const assignment = res.data.createAssignment;
+
+          if (createReminder) {
+            createReminderMutation({
+              input: {
+                assignmentId: assignment.id,
+              },
+            }).then((reminderRes) => {
+              if ("data" in reminderRes && reminderRes.data.createReminder) {
+                enqueueSnackbar("Assignment with reminder created", {
+                  variant: "success",
+                });
+                onSuccess();
+              } else if ("error" in reminderRes) {
+                enqueueSnackbar("Failed to create a reminder", {
+                  variant: "error",
+                });
+              }
+            });
+          } else {
+            enqueueSnackbar("Assignment created", { variant: "success" });
+            onSuccess();
+          }
+        } else if ("error" in res) {
+          enqueueSnackbar("Failed to create an assignment", {
+            variant: "error",
+          });
+        }
+      });
+  };
 
   return (
     <Grid
@@ -58,7 +116,10 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
             <ObjectGridSpread<Address> object={address} />
           </FlexCardContent>
           <CardActions>
-            <IconButton onClick={() => handleOpenEditing("address")}>
+            <IconButton
+              onClick={() => handleOpenEditing("address")}
+              disabled={isLoading}
+            >
               <EditIcon />
             </IconButton>
           </CardActions>
@@ -69,7 +130,10 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
             <ObjectGridSpread<Claimant> object={claimant} />
           </FlexCardContent>
           <CardActions>
-            <IconButton onClick={() => handleOpenEditing("claimant")}>
+            <IconButton
+              onClick={() => handleOpenEditing("claimant")}
+              disabled={isLoading}
+            >
               <EditIcon />
             </IconButton>
           </CardActions>
@@ -82,7 +146,10 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
             <ObjectGridSpread<User> object={translator} />
           </FlexCardContent>
           <CardActions>
-            <IconButton onClick={() => handleOpenEditing("translator")}>
+            <IconButton
+              onClick={() => handleOpenEditing("translator")}
+              disabled={isLoading}
+            >
               <EditIcon />
             </IconButton>
           </CardActions>
@@ -93,7 +160,10 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
             <Typography textAlign="center">{date?.toString()}</Typography>
           </CardContent>
           <CardActions>
-            <IconButton onClick={() => handleOpenEditing("date")}>
+            <IconButton
+              onClick={() => handleOpenEditing("date")}
+              disabled={isLoading}
+            >
               <EditIcon />
             </IconButton>
           </CardActions>
@@ -104,23 +174,27 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
           <CardHeader title="Reminders" />
           <FlexCardContent>
             <Typography>
-              Remind claimant: {remindClaimant ? "Yes" : "No"}
-            </Typography>
-            <Typography>
-              Remind translator: {remindTranslator ? "Yes" : "No"}
+              Create Reminder: {createReminder ? "Yes" : "No"}
             </Typography>
           </FlexCardContent>
           <CardActions>
-            <IconButton onClick={() => handleOpenEditing("reminder")}>
+            <IconButton
+              onClick={() => handleOpenEditing("reminder")}
+              disabled={isLoading}
+            >
               <EditIcon />
             </IconButton>
           </CardActions>
         </FlexCard>
       </FlexRowGridItem>
       <Grid item xs={2}>
-        <Button variant="contained" onClick={onSuccess}>
-          Confirm
-        </Button>
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <Button variant="contained" onClick={handleCreateAssignment}>
+            Confirm
+          </Button>
+        )}
       </Grid>
     </Grid>
   );

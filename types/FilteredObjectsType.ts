@@ -1,6 +1,6 @@
 type BaseFilteredObjects<FiltersType> = {
-  filters?: FiltersType;
-  setFilters?: React.Dispatch<React.SetStateAction<FiltersType>>;
+  filters: FiltersType;
+  setFilters: React.Dispatch<React.SetStateAction<FiltersType>>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   countPerPage: number;
