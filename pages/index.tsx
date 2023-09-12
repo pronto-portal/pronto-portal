@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <Stack
       direction="column"
-      width="60%"
+      width="100%"
       height="100%"
       alignItems="center"
       justifyContent="flex-start"

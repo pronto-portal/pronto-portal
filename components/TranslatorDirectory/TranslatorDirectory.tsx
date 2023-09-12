@@ -14,7 +14,7 @@ export const TranslatorDirectory: React.FC<TranslatorDirectoryProps> = ({ data }
     // No longer using the useGetTranslatorsQuery hook. Instead, we use the passed data prop directly.
 
     return (
-        <Collapsable title="Translators" sx={{ width: "100%" }}>
+        <Collapsable title="Translators" sx={{ width: "100%", borderRadius: "2rem" }}>
             {data ? (
                 <Grid container direction="column" sx={{ width: "100%" }}>
                     <Grid item sx={{ width: "100%" }} xs={2}>

@@ -6,7 +6,12 @@ import {
   useReactTable,
   flexRender,
 } from '@tanstack/react-table';
-import { Table, TableBody, TableCell, TableHead, TableRow, useTheme } from '@mui/material';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 
 interface TranslatorsTableProps {
   data: User[];
@@ -14,7 +19,6 @@ interface TranslatorsTableProps {
 
 export const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ data }) => {
   const columnHelper = createColumnHelper<User>();
-  const theme = useTheme(); // Use the useTheme hook to access the current theme
 
   const columns = [
     columnHelper.accessor('firstName', {
@@ -41,10 +45,10 @@ export const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ data }) => {
         {table.getHeaderGroups().map(headerGroup => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <TableCell key={header.id} sx={{ color: theme.typography.allVariants.color }}>
+              <TableCell key={header.id}>
                 {header.isPlaceholder
                   ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
+                  : <Typography>{flexRender(header.column.columnDef.header, header.getContext())}</Typography>}
               </TableCell>
             ))}
           </TableRow>
@@ -54,8 +58,8 @@ export const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ data }) => {
         {table.getRowModel().rows.map(row => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map(cell => (
-              <TableCell key={cell.id} sx={{ color: theme.typography.allVariants.color }}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              <TableCell key={cell.id} >
+                <Typography>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Typography>
               </TableCell>
             ))}
           </TableRow>
