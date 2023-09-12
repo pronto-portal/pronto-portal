@@ -57,7 +57,7 @@ export default function Home() {
       justifyContent="flex-start"
       p={2}
     >
-      <TranslatorDirectory />
+      <TranslatorDirectory data={users}/>
     </Stack>
   );
 }
