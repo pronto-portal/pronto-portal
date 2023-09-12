@@ -6,7 +6,7 @@ import {
   useReactTable,
   flexRender,
 } from '@tanstack/react-table';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, useTheme } from '@mui/material';
 
 interface TranslatorsTableProps {
   data: User[];
@@ -14,6 +14,7 @@ interface TranslatorsTableProps {
 
 export const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ data }) => {
   const columnHelper = createColumnHelper<User>();
+  const theme = useTheme(); // Use the useTheme hook to access the current theme
 
   const columns = [
     columnHelper.accessor('firstName', {
@@ -40,7 +41,7 @@ export const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ data }) => {
         {table.getHeaderGroups().map(headerGroup => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <TableCell key={header.id}>
+              <TableCell key={header.id} sx={{ color: theme.typography.allVariants.color }}>
                 {header.isPlaceholder
                   ? null
                   : flexRender(header.column.columnDef.header, header.getContext())}
@@ -53,7 +54,7 @@ export const TranslatorsTable: React.FC<TranslatorsTableProps> = ({ data }) => {
         {table.getRowModel().rows.map(row => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map(cell => (
-              <TableCell key={cell.id}>
+              <TableCell key={cell.id} sx={{ color: theme.typography.allVariants.color }}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
