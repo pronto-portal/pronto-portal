@@ -10,20 +10,24 @@ import { Theme } from "@mui/material/styles";
 
 interface CollapsableProps extends Wrapper {
   sx?: SxProps<Theme>;
+  sxSummary?: SxProps<Theme>;
+  sxDetails?: SxProps<Theme>;
   title: string;
 }
 
 export const Collapsable: React.FC<CollapsableProps> = ({
   children,
   sx,
+  sxSummary,
+  sxDetails,
   title,
 }) => {
   return (
     <Accordion sx={sx}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={sxSummary}>
         <Typography>{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
+      <AccordionDetails sx={sxDetails}>{children}</AccordionDetails>
     </Accordion>
   );
 };

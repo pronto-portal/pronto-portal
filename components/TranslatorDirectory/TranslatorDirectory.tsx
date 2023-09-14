@@ -1,11 +1,12 @@
 import React from "react";
 import { Collapsable } from "../Collapsable";
-import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TranslatorDirectorySearch } from "./TranslatorDirectorySearch";
 import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
 import TablePagination from "@mui/material/TablePagination";
-import { TranslatorsTable } from "../TranslatorsTable";
+import { ModelsTable } from "../ModelsTable";
+import Stack from "@mui/material/Stack";
 
 export const TranslatorDirectory: React.FC = () => {
   const {
@@ -19,16 +20,37 @@ export const TranslatorDirectory: React.FC = () => {
   } = useFilteredTranslators();
 
   return (
-    <Collapsable title="Translators" sx={{ width: "100%" }}>
+    <Collapsable
+      title="Translators"
+      sx={{
+        width: "100%",
+      }}
+      sxDetails={{
+        maxHeight: "60vh",
+        height: "60vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       {!isLoading && translators ? (
-        <Grid container direction="column" sx={{ width: "100%" }}>
-          <Grid item sx={{ width: "100%" }} xs={2}>
+        <Stack
+          direction="column"
+          flexWrap="nowrap"
+          sx={{ width: "100%", height: "100%" }}
+        >
+          <Box sx={{ width: "100%", flex: 1 }}>
             <TranslatorDirectorySearch />
-          </Grid>
-          <Grid item sx={{ width: "100%" }} xs={1}>
-            <TranslatorsTable data={translators} />
-          </Grid>
-          <Grid item sx={{ width: "100%" }} xs={1}>
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              flex: 1,
+            }}
+          >
+            <ModelsTable data={translators} />
+          </Box>
+          <Box sx={{ width: "100%", flex: 1 }}>
             <TablePagination
               component="div"
               page={page}
@@ -39,10 +61,10 @@ export const TranslatorDirectory: React.FC = () => {
                 setCountPerPage(parseInt(e.target.value, 10))
               }
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Stack>
       ) : (
-        <LinearProgress sx={{ width: "100%" }} />
+        <LinearProgress sx={{ width: "100%", height: "100%" }} />
       )}
     </Collapsable>
   );
