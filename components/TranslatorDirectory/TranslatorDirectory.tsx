@@ -7,6 +7,7 @@ import { useFilteredTranslators } from "../../contextProviders/FilteredTranslato
 import TablePagination from "@mui/material/TablePagination";
 import { ModelsTable } from "../ModelsTable";
 import Stack from "@mui/material/Stack";
+import { grey } from "@mui/material/colors";
 
 export const TranslatorDirectory: React.FC = () => {
   const {
@@ -28,29 +29,46 @@ export const TranslatorDirectory: React.FC = () => {
       sxDetails={{
         maxHeight: "60vh",
         height: "60vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
       }}
     >
       {!isLoading && translators ? (
         <Stack
           direction="column"
           flexWrap="nowrap"
+          flexDirection="column"
+          justifyContent="space-between"
           sx={{ width: "100%", height: "100%" }}
+          spacing={1}
         >
-          <Box sx={{ width: "100%", flex: 1 }}>
-            <TranslatorDirectorySearch />
+          <Box sx={{ width: "100%", flex: 0.25 }}>
+            <Collapsable
+              sx={{
+                width: "100%",
+                backgroundColor: grey[100],
+                boxShadow: "none",
+                borderWidth: 0,
+              }}
+              sxSummary={{
+                height: "auto",
+              }}
+              sxDetails={{
+                height: "100%",
+              }}
+              title="Filters"
+            >
+              <TranslatorDirectorySearch />
+            </Collapsable>
           </Box>
           <Box
             sx={{
               width: "100%",
               flex: 1,
+              overflowY: "auto",
             }}
           >
             <ModelsTable data={translators} />
           </Box>
-          <Box sx={{ width: "100%", flex: 1 }}>
+          <Box sx={{ width: "100%", flex: 0.25 }}>
             <TablePagination
               component="div"
               page={page}
