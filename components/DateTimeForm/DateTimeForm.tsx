@@ -1,25 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 import Button from "@mui/material/Button";
-import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
+import { ModelForm } from "../../types/PropTypes/AssignmentFlowForm";
 import Grid from "@mui/material/Grid";
 import moment from "moment";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import Typography from "@mui/material/Typography";
 
-export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
-  const { date, setDate } = useAddAssignmentFlow();
+export const DateTimeForm: React.FC<ModelForm<Date>> = ({
+  onSuccess,
+  mode = "create",
+}) => {
+  const { setDate: setFlowDate } = useAddAssignmentFlow();
   const defaultValue = moment();
 
+  const [date, setDate] = useState<moment.Moment>(defaultValue);
+
   useEffect(() => {
-    setDate(defaultValue.toDate());
-  }, [defaultValue, setDate]);
+    if (defaultValue && mode === "create") setDate(defaultValue);
+    else if (mode === "edit" && date) setDate(date);
+  }, [defaultValue, setDate, mode, date]);
 
   const handleOnSubmit = () => {
-    if (date) {
-      onSuccess();
-    }
+    if (date && mode === "edit") onSuccess(date.toDate());
+    else if (date && mode === "create") setFlowDate(date.toDate());
   };
 
   return (
@@ -43,7 +48,7 @@ export const DateTimeForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
             minutes: renderTimeViewClock,
           }}
           onChange={(newValue) => {
-            if (newValue) setDate(newValue.toDate());
+            if (newValue && setDate) setDate(newValue);
           }}
         />
       </Grid>

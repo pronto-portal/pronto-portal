@@ -7,8 +7,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { AddressForm } from "../AddressForm";
-import { FilteredAddressesProvider } from "../../contextProviders/FilteredAddressesProvider";
-import Box from "@mui/material/Box";
 import { ClaimantForm } from "../ClaimantForm/ClaimantForm";
 import { TranslatorForm } from "../TranslatorForm";
 import { DateTimeForm } from "../DateTimeForm";

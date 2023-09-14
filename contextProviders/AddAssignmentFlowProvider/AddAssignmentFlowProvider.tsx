@@ -135,8 +135,12 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
           )}
           {editing === "date" && (
             <DateTimeForm
-              onSuccess={() => {
-                setOpenEditing(false);
+              mode="edit"
+              onSuccess={(data) => {
+                if (data) {
+                  setDate(data);
+                  setOpenEditing(false);
+                }
               }}
             />
           )}
