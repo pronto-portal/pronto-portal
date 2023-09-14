@@ -1,53 +1,10 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { User } from "../types/User";
-import { TranslatorDirectory } from "../components/TranslatorDirectory";
-
-const users: User[] = [
-  {
-    id: "f4e7daa1-a2f8-4142-8c3a-4b6e830e38a6",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isManager: false,
-    isTranslator: true,
-    isBanned: false,
-    email: "example1@email.com",
-    phone: "123-456-7890",
-    firstName: "John",
-    lastName: "Doe",
-    profilePic: "",
-    isProfileComplete: false,
-    city: "Los Angeles",
-    state: "CA",
-    languages: ["English", "Spanish"]
-},
-{
-    id: "1c5b8a12-e5f5-4b6c-b8bf-45d9051d9885",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    email: "example2@email.com",
-    isManager: false,
-    isTranslator: true,
-    isBanned: false,
-    phone: "123-456-7890",
-    firstName: "Jane",
-    lastName: "Smith",
-    profilePic: "https://path-to-image.jpg",
-    isProfileComplete: true,
-    city: "New York",
-    state: "NY",
-    languages: ["English"]
-}
-];
+import { Stack } from "@mui/material";
+import { TranslatorDirectory } from "../components/IconLabel";
+import { FilteredTranslatorsProvider } from "../contextProviders/FilteredTranslatorsProvider";
+import { FilteredAssignmentsProvider } from "../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
+import { AssignmentDirectory } from "../components/AssignmentsDirectory/AssignmentsDirectory";
 
 export default function Home() {
-  // Gets the current user and caches it for other components to use
   return (
     <Stack
       direction="column"
@@ -57,7 +14,12 @@ export default function Home() {
       justifyContent="flex-start"
       p={2}
     >
-      <TranslatorDirectory data={users}/>
+      <FilteredTranslatorsProvider>
+        <TranslatorDirectory />
+      </FilteredTranslatorsProvider>
+      <FilteredAssignmentsProvider>
+        <AssignmentDirectory />
+      </FilteredAssignmentsProvider>
     </Stack>
   );
 }

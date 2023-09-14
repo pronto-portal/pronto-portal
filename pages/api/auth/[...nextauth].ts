@@ -71,6 +71,8 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
                 if (resCookies) {
                   tokens = parseSetCookie(resCookies);
+                  console.log("SETTING COOKIES");
+                  console.log("TOKENS", tokens);
 
                   setCookie("x-access-token", tokens["x-access-token"], {
                     req,

@@ -3,33 +3,47 @@ import { Collapsable } from "../Collapsable";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TranslatorDirectorySearch } from "./TranslatorDirectorySearch";
+import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
+import TablePagination from "@mui/material/TablePagination";
 import { TranslatorsTable } from "../TranslatorsTable";
-import { User } from "../../types/User";
 
-interface TranslatorDirectoryProps {
-    data: User[];
-}
+export const TranslatorDirectory: React.FC = () => {
+  const {
+    translators,
+    isLoading,
+    page,
+    setPage,
+    totalRowCount,
+    countPerPage,
+    setCountPerPage,
+  } = useFilteredTranslators();
 
-export const TranslatorDirectory: React.FC<TranslatorDirectoryProps> = ({ data }) => {
-    // No longer using the useGetTranslatorsQuery hook. Instead, we use the passed data prop directly.
-
-    return (
-        <Collapsable title="Translators" sx={{ width: "100%", borderRadius: "2rem" }}>
-            {data ? (
-                <Grid container direction="column" sx={{ width: "100%" }}>
-                    <Grid item sx={{ width: "100%" }} xs={2}>
-                        <TranslatorDirectorySearch translators={data} />
-                    </Grid>
-                    <Grid item sx={{ width: "100%" }} xs={9}>
-                        {/* You can add additional content or components here if needed. */}
-                    </Grid>
-                    <Grid item sx={{ width: "100%" }} xs={1}>
-                        <TranslatorsTable data={data} />
-                    </Grid>
-                </Grid>
-            ) : (
-                <LinearProgress sx={{ width: "100%" }} />
-            )}
-        </Collapsable>
-    );
+  return (
+    <Collapsable title="Translators" sx={{ width: "100%" }}>
+      {!isLoading && translators ? (
+        <Grid container direction="column" sx={{ width: "100%" }}>
+          <Grid item sx={{ width: "100%" }} xs={2}>
+            <TranslatorDirectorySearch />
+          </Grid>
+          <Grid item sx={{ width: "100%" }} xs={1}>
+            <TranslatorsTable data={translators} />
+          </Grid>
+          <Grid item sx={{ width: "100%" }} xs={1}>
+            <TablePagination
+              component="div"
+              page={page}
+              onPageChange={(_, page) => setPage(page)}
+              count={totalRowCount}
+              rowsPerPage={countPerPage}
+              onRowsPerPageChange={(e) =>
+                setCountPerPage(parseInt(e.target.value, 10))
+              }
+            />
+          </Grid>
+        </Grid>
+      ) : (
+        <LinearProgress sx={{ width: "100%" }} />
+      )}
+    </Collapsable>
+  );
 };

@@ -4,19 +4,33 @@ export const updateUser = gql`
   mutation UpdateUser($input: UpdateUserInput!) {
     updateUser(input: $input) {
       id
-      createdAt
-      updatedAt
       email
-      phone
+      updatedAt
       firstName
       lastName
-      isManager
-      isTranslator
-      isBanned
-      isProfileComplete
+      phone
+      languages
+      translatingFor {
+        id
+        firstName
+        lastName
+        languages
+        email
+        phone
+      }
+      translators {
+        id
+        firstName
+        lastName
+        languages
+        email
+        phone
+      }
       city
       state
-      languages
+      isTranslator
+      isManager
+      isProfileComplete
     }
   }
 `;

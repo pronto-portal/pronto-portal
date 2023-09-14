@@ -1,5 +1,5 @@
 import React from "react";
-import { Wrapper } from "../../types/Wrapper";
+import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { Box } from "@mui/material";
 
 export const PageWrapper: React.FC<Wrapper> = ({ children }) => {
