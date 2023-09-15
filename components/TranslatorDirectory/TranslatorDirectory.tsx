@@ -1,7 +1,7 @@
 import React from "react";
 import { TranslatorDirectorySearch } from "./TranslatorDirectorySearch";
 import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
-import { ModelDirectoryLayout } from "../ModelDirectoryLayout/ModelDirectoryLayout";
+import { ModelDirectoryLayout } from "../ModelDirectoryLayout";
 
 export const TranslatorDirectory: React.FC = () => {
   const {
