@@ -1,4 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
+export interface PaginationState {
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  countPerPage: number;
+  setCountPerPage: React.Dispatch<React.SetStateAction<number>>;
+}
 
 export const usePaginationState = (defaultCountPerPage?: number) => {
   const [page, setPage] = useState<number>(0);
