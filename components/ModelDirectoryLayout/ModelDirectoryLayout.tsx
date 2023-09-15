@@ -14,6 +14,7 @@ interface ModelDirectoryLayoutProps<T extends {}> extends PaginationState {
   totalRowCount: number;
   isLoading?: boolean;
   renderFilters?: React.ReactNode;
+  omitFields?: string[];
 }
 
 export const ModelDirectoryLayout = <T extends {}>({
@@ -26,6 +27,7 @@ export const ModelDirectoryLayout = <T extends {}>({
   totalRowCount,
   countPerPage,
   setCountPerPage,
+  omitFields,
 }: ModelDirectoryLayoutProps<T>) => {
   return (
     <Collapsable
@@ -75,7 +77,7 @@ export const ModelDirectoryLayout = <T extends {}>({
               overflowY: "auto",
             }}
           >
-            <ModelsTable data={data} />
+            <ModelsTable data={data} omitFields={omitFields} />
           </Box>
           <Box sx={{ width: "100%", flex: 0.25 }}>
             <TablePagination

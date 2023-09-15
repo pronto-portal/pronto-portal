@@ -18,6 +18,7 @@ export const TranslatorDirectory: React.FC = () => {
     <ModelDirectoryLayout
       titleText="Translators"
       data={translators}
+      omitFields={["id"]}
       isLoading={isLoading}
       page={page}
       setPage={setPage}

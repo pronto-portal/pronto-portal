@@ -17,20 +17,32 @@ import TableContainer from "@mui/material/TableContainer";
 
 interface ModelsTableProps<T extends {}> {
   data: T[];
+  omitFields?: string[];
 }
 
-export const ModelsTable = <T extends {}>({ data }: ModelsTableProps<T>) => {
+export const ModelsTable = <T extends {}>({
+  data,
+  omitFields,
+}: ModelsTableProps<T>) => {
   const dataKeys = data && data.length > 0 ? Object.keys(data[0]) : [];
 
-  const columns: ColumnDef<T, unknown>[] = dataKeys.map((key) => {
-    const column: ColumnDef<T, unknown> = {
-      accessorKey: key,
-      id: key,
-      header: splitCamelCase(key),
-    };
+  const columns: ColumnDef<T, unknown>[] = dataKeys
+    .map((key) => {
+      const column: ColumnDef<T, unknown> = {
+        accessorKey: key,
+        id: key,
+        header: splitCamelCase(key),
+      };
 
-    return column;
-  });
+      return column;
+    })
+    .filter((column) => {
+      if (omitFields) {
+        return !omitFields.includes(column.accessorKey.toString());
+      } else {
+        return true;
+      }
+    });
 
   const table = useReactTable({
     data,
