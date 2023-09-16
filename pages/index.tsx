@@ -12,6 +12,7 @@ export default function Home() {
       height="100%"
       alignItems="center"
       justifyContent="flex-start"
+      spacing={2}
       p={2}
     >
       <FilteredTranslatorsProvider>

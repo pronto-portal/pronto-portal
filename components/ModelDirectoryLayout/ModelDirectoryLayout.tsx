@@ -7,19 +7,18 @@ import { ModelsTable } from "../ModelsTable";
 import Stack from "@mui/material/Stack";
 import { grey } from "@mui/material/colors";
 import { PaginationState } from "../../hooks/usePaginationState";
+import { ModelsTableProps } from "../../types/PropTypes/ModelTableProps";
 
 interface ModelDirectoryLayoutProps<T extends {}> extends PaginationState {
   titleText: string;
-  data: T[];
   totalRowCount: number;
   isLoading?: boolean;
   renderFilters?: React.ReactNode;
-  omitFields?: string[];
+  tableProps: ModelsTableProps<T>;
 }
 
 export const ModelDirectoryLayout = <T extends {}>({
   titleText,
-  data,
   renderFilters,
   isLoading,
   page,
@@ -27,7 +26,7 @@ export const ModelDirectoryLayout = <T extends {}>({
   totalRowCount,
   countPerPage,
   setCountPerPage,
-  omitFields,
+  tableProps,
 }: ModelDirectoryLayoutProps<T>) => {
   return (
     <Collapsable
@@ -36,11 +35,11 @@ export const ModelDirectoryLayout = <T extends {}>({
         width: "100%",
       }}
       sxDetails={{
-        maxHeight: "60vh",
-        height: "60vh",
+        maxHeight: "80vh",
+        height: "80vh",
       }}
     >
-      {!isLoading && data ? (
+      {!isLoading && tableProps.data ? (
         <Stack
           direction="column"
           flexWrap="nowrap"
@@ -77,7 +76,7 @@ export const ModelDirectoryLayout = <T extends {}>({
               overflowY: "auto",
             }}
           >
-            <ModelsTable data={data} omitFields={omitFields} />
+            <ModelsTable {...tableProps} />
           </Box>
           <Box sx={{ width: "100%", flex: 0.25 }}>
             <TablePagination

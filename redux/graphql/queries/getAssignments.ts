@@ -16,19 +16,36 @@ export const getAssignments = gql`
         }
         assignedTo {
           id
+          email
+          phone
           firstName
           lastName
+          city
+          state
+          languages
         }
         createdBy {
           id
+          email
+          phone
           firstName
           lastName
+          city
+          state
+          languages
         }
         claimant {
           id
           firstName
           lastName
+          email
+          phone
+          languages
         }
+        isComplete
+        createdAt
+        claimantNoShow
+        translatorNoShow
       }
       totalRowCount
     }

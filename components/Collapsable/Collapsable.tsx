@@ -12,7 +12,7 @@ interface CollapsableProps extends Wrapper {
   sx?: SxProps<Theme>;
   sxSummary?: SxProps<Theme>;
   sxDetails?: SxProps<Theme>;
-  title: string;
+  title: React.ReactNode | string;
 }
 
 export const Collapsable: React.FC<CollapsableProps> = ({
@@ -25,7 +25,7 @@ export const Collapsable: React.FC<CollapsableProps> = ({
   return (
     <Accordion sx={sx}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={sxSummary}>
-        <Typography>{title}</Typography>
+        {typeof title === "string" ? <Typography>{title}</Typography> : title}
       </AccordionSummary>
       <AccordionDetails sx={sxDetails}>{children}</AccordionDetails>
     </Accordion>
