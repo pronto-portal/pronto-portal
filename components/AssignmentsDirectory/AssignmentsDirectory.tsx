@@ -1,10 +1,5 @@
 import React from "react";
-import { Collapsable } from "../Collapsable";
-import Grid from "@mui/material/Grid";
-import LinearProgress from "@mui/material/LinearProgress";
 import { AssignmentsDirectorySearch } from "./AssignmentsDirectorySearch";
-// import { useFilteredAssignments } from "../../contextProviders/FilteredAssignmentsProvider";
-import TablePagination from "@mui/material/TablePagination";
 import { useFilteredAssignments } from "../../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
 import { ModelDirectoryLayout } from "../ModelDirectoryLayout";
 
@@ -18,8 +13,6 @@ export const AssignmentDirectory: React.FC = () => {
     countPerPage,
     setCountPerPage,
   } = useFilteredAssignments();
-
-  // todo: Get rid of duplicate code in TranslatorDirectory and AssignmentDirectory
 
   return (
     <ModelDirectoryLayout

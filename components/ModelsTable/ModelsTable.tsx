@@ -16,7 +16,6 @@ import TableContainer from "@mui/material/TableContainer";
 import { CollapsableRow } from "../CollapsableRow/CollapsableRow";
 import { ModelsTableProps } from "../../types/PropTypes/ModelTableProps";
 import { grey } from "@mui/material/colors";
-import { firstCharToUpper } from "../../utils/firstCharToUpper";
 import Paper from "@mui/material/Paper";
 
 export const ModelsTable = <T extends {}>({
