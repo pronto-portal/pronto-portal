@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { TranslatorDirectory } from "../components/IconLabel";
 import { FilteredTranslatorsProvider } from "../contextProviders/FilteredTranslatorsProvider";
 import { FilteredAssignmentsProvider } from "../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
@@ -10,7 +10,7 @@ export default function Home() {
       direction="column"
       width="100%"
       height="100%"
-      alignItems="center"
+      alignItems="flex-start"
       justifyContent="flex-start"
       spacing={2}
       p={2}
