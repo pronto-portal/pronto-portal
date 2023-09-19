@@ -2,6 +2,7 @@ import React from "react";
 import { AssignmentsDirectorySearch } from "./AssignmentsDirectorySearch";
 import { useFilteredAssignments } from "../../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
 import { ModelDirectoryLayout } from "../ModelDirectoryLayout";
+import { Assignment } from "../../types/ObjectTypes";
 
 export const AssignmentDirectory: React.FC = () => {
   const {
@@ -15,7 +16,7 @@ export const AssignmentDirectory: React.FC = () => {
   } = useFilteredAssignments();
 
   return (
-    <ModelDirectoryLayout
+    <ModelDirectoryLayout<Assignment>
       titleText="Assignments"
       tableProps={{
         data: assignments,
