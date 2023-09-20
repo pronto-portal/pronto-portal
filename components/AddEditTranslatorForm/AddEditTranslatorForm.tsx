@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useForm, Controller, SubmitHandler, set } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
@@ -49,19 +49,23 @@ export const AddEditTranslatorForm: React.FC<ModelForm<Translator>> = ({
   const {
     control,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm({
     defaultValues,
   });
 
-  useEffect(() => {
-    if (mode === "edit" && data && data.getNonUserTranslator)
-      reset(data.getNonUserTranslator);
-  }, [data, mode, reset]);
-
   const { cities, stateISOCodes, city, setCity, state, setState } =
     useSelectCityState();
+
+  useEffect(() => {
+    if (mode === "edit" && data && data.getNonUserTranslator) {
+      reset(data.getNonUserTranslator);
+      setCity(data.getNonUserTranslator.city || "");
+      setState(data.getNonUserTranslator.state || "");
+    }
+  }, [data, mode, reset, setCity, setState]);
 
   const { languages } = useLanguages();
   const [addAndCreateTranslator, { isLoading: isAddAndCreateLoading }] =
