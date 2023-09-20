@@ -1,4 +1,5 @@
-import { PaginatedInput } from "./base";
+import { Translator } from "../ObjectTypes";
+import { GetById, PaginatedInput } from "./base";
 
 export interface GetTranslatorsFilters {
   id?: string;
@@ -24,4 +25,22 @@ export interface AddAndCreateTranslatorInput {
     city?: string;
     state?: string;
   };
+}
+
+export interface UpdateNonUserTranslatorInput {
+  input: Partial<
+    Omit<Translator, "id" | "createdAt" | "updatedAt" | "assignedTo">
+  >;
+}
+
+export interface GetNonUserTranslatorInput {
+  input: GetById;
+}
+
+export interface DeleteNonUserTranslatorInput {
+  input: GetById;
+}
+
+export interface AddNonTranslatorUser {
+  input: Omit<Translator, "id" | "createdAt" | "updatedAt" | "assignedTo">;
 }

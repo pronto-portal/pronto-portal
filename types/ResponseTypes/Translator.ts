@@ -1,4 +1,4 @@
-import { User } from "../ObjectTypes";
+import { Translator, User } from "../ObjectTypes";
 import { TotalRowCount } from "./base";
 
 export interface AddAndCreateTranslatorResponse {
@@ -15,4 +15,28 @@ export interface GetTranslatorsResponse {
 
 export interface GetTranslatorResponse {
   getTranslator: User;
+}
+
+export interface GetNonUserTranslators extends TotalRowCount {
+  translators: Translator[];
+}
+
+export interface GetNonUserTranslatorsResponse {
+  getNonUserTranslators: GetNonUserTranslators;
+}
+
+export interface GetNonUserTranslatorResponse {
+  getNonUserTranslator: Translator;
+}
+
+export interface UpdateNonUserTranslatorResponse {
+  updateNonUserTranslator: Translator;
+}
+
+export interface DeleteNonUserTranslatorResponse {
+  deleteNonUserTranslator: Translator;
+}
+
+export interface AddNonUserTranslatorResponse {
+  addNonUserTranslator: Translator;
 }
