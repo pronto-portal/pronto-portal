@@ -28,9 +28,7 @@ export interface AddAndCreateTranslatorInput {
 }
 
 export interface UpdateNonUserTranslatorInput {
-  input: Partial<
-    Omit<Translator, "id" | "createdAt" | "updatedAt" | "assignedTo">
-  >;
+  input: Partial<Omit<Translator, "createdAt" | "updatedAt" | "assignedTo">>;
 }
 
 export interface GetNonUserTranslatorInput {

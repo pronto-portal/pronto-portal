@@ -5,7 +5,7 @@ export const getNonUserTranslators = gql`
     $input: PaginatedInput
     $where: TranslatorsFilter
   ) {
-    getNonUserTranslators(input: $input) {
+    getNonUserTranslators(input: $input, where: $where) {
       totalRowCount
       translators {
         id

@@ -11,7 +11,7 @@ import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
 import { FlexRowGridItem } from "../FlexRowGridItem/FlexRowGridItem";
 import { styled } from "@mui/system";
 import { ObjectGridSpread } from "../ObjectGridSpread/ObjectGridSpread";
-import { Address, Claimant, Reminder, User } from "../../types/ObjectTypes";
+import { Address, Claimant, Translator, User } from "../../types/ObjectTypes";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -143,7 +143,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
         <FlexCard>
           <CardHeader title="Translator" />
           <FlexCardContent>
-            <ObjectGridSpread<User> object={translator} />
+            <ObjectGridSpread<Translator> object={translator} />
           </FlexCardContent>
           <CardActions>
             <IconButton

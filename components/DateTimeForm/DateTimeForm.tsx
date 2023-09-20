@@ -24,7 +24,10 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({
 
   const handleOnSubmit = () => {
     if (date && mode === "edit") onSuccess(date.toDate());
-    else if (date && mode === "create") setFlowDate(date.toDate());
+    else if (date && mode === "create") {
+      setFlowDate(date.toDate());
+      onSuccess(date.toDate());
+    }
   };
 
   return (

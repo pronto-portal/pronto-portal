@@ -7,12 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
-import { User } from "../../types/ObjectTypes";
-import {
-  useAddAndCreateTranslatorMutation,
-  useGetTranslatorQuery,
-  useUpdateUserMutation,
-} from "../../redux/reducers";
+import { Translator, User } from "../../types/ObjectTypes";
 import phone from "phone";
 import { useSnackbar } from "notistack";
 import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
@@ -21,20 +16,25 @@ import { FlexRowGridItem } from "../FlexRowGridItem";
 import { firstCharToUpper } from "../../utils/firstCharToUpper";
 import { validateEmail } from "../../utils/validateEmail";
 import CircularProgress from "@mui/material/CircularProgress";
+import {
+  useAddNonUserTranslatorMutation,
+  useGetNonUserTranslatorQuery,
+  useUpdateNonUserTranslatorMutation,
+} from "../../redux/reducers/nonUserTranslatorReducer";
 
-export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
+export const AddEditTranslatorForm: React.FC<ModelForm<Translator>> = ({
   id = "",
   onSuccess,
   mode = "create",
 }) => {
-  const { data, isLoading: isGetUserLoading } = useGetTranslatorQuery(
+  const { data, isLoading: isGetUserLoading } = useGetNonUserTranslatorQuery(
     {
       input: { id },
     },
     { skip: mode === "create" }
   );
 
-  const defaultValues: Partial<User> = {
+  const defaultValues: Partial<Translator> = {
     firstName: "",
     lastName: "",
     city: "",
@@ -44,7 +44,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
     languages: [],
   };
 
-  const oldTranslator = data?.getTranslator || defaultValues;
+  const oldTranslator = data?.getNonUserTranslator || defaultValues;
 
   const {
     control,
@@ -56,8 +56,8 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
   });
 
   useEffect(() => {
-    if (mode === "edit" && data && data.getTranslator)
-      reset(data.getTranslator);
+    if (mode === "edit" && data && data.getNonUserTranslator)
+      reset(data.getNonUserTranslator);
   }, [data, mode, reset]);
 
   const { cities, stateISOCodes, city, setCity, state, setState } =
@@ -65,8 +65,9 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
 
   const { languages } = useLanguages();
   const [addAndCreateTranslator, { isLoading: isAddAndCreateLoading }] =
-    useAddAndCreateTranslatorMutation();
-  const [updateUser, { isLoading: isUpdateLoading }] = useUpdateUserMutation();
+    useAddNonUserTranslatorMutation();
+  const [updateTranslator, { isLoading: isUpdateLoading }] =
+    useUpdateNonUserTranslatorMutation();
   const { enqueueSnackbar } = useSnackbar();
 
   const isLoading =
@@ -89,7 +90,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
           enqueueSnackbar("Successfully added translator", {
             variant: "success",
           });
-          onSuccess(res.data.addAndCreateTranslator);
+          onSuccess(res.data.addNonUserTranslator);
         } else {
           enqueueSnackbar("Unable to add or create translator", {
             variant: "error",
@@ -97,7 +98,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
         }
       });
     else if (mode === "edit") {
-      updateUser({
+      updateTranslator({
         input: {
           ...oldTranslator,
           id: id,
@@ -114,7 +115,7 @@ export const AddEditTranslatorForm: React.FC<ModelForm<User>> = ({
           enqueueSnackbar("Successfully updated translator", {
             variant: "success",
           });
-          onSuccess(res.data.updateUser);
+          onSuccess(res.data.updateNonUserTranslator);
         } else {
           enqueueSnackbar("Unable to update translator", {
             variant: "error",

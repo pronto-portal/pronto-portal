@@ -2,14 +2,18 @@ import React, { createContext, useState, useContext } from "react";
 import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { User } from "../../types/ObjectTypes";
 import { useGetTranslatorsQuery } from "../../redux/reducers";
-import { GetTranslators } from "../../types/ResponseTypes";
+import {
+  GetNonUserTranslators,
+  GetTranslators,
+} from "../../types/ResponseTypes";
 import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { FilteredObjects } from "../../types/FilteredObjectsType";
+import { useGetNonUserTranslatorsQuery } from "../../redux/reducers/nonUserTranslatorReducer";
 
 type FilteredTranslatorsContextProps = FilteredObjects<
   GetTranslatorsFilters,
-  GetTranslators
+  GetNonUserTranslators
 >;
 
 const FilteredTranslatorsContext = createContext(
@@ -23,7 +27,7 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
   const { page, setPage, countPerPage, setCountPerPage } =
     usePaginationState(20);
 
-  const { data, isLoading, error } = useGetTranslatorsQuery(
+  const { data, isLoading, error } = useGetNonUserTranslatorsQuery(
     {
       input: {
         page,
@@ -37,8 +41,8 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
     }
   );
 
-  const translators = data ? data.getTranslators.translators : [];
-  const totalRowCount = data ? data.getTranslators.totalRowCount : 0;
+  const translators = data ? data.getNonUserTranslators.translators : [];
+  const totalRowCount = data ? data.getNonUserTranslators.totalRowCount : 0;
 
   return (
     <FilteredTranslatorsContext.Provider

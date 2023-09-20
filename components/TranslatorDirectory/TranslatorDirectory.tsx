@@ -2,7 +2,7 @@ import React from "react";
 import { TranslatorDirectorySearch } from "./TranslatorDirectorySearch";
 import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
 import { ModelDirectoryLayout } from "../ModelDirectoryLayout";
-import { User } from "../../types/ObjectTypes";
+import { Translator, User } from "../../types/ObjectTypes";
 
 export const TranslatorDirectory: React.FC = () => {
   const {
@@ -16,7 +16,7 @@ export const TranslatorDirectory: React.FC = () => {
   } = useFilteredTranslators();
 
   return (
-    <ModelDirectoryLayout<User>
+    <ModelDirectoryLayout<Translator>
       titleText="Translators"
       tableProps={{
         data: translators,

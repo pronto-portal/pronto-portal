@@ -10,6 +10,7 @@ import {
   AddNonTranslatorUser,
   GetTranslatorsInput,
   GetNonUserTranslatorInput,
+  GetById,
 } from "../../types/InputTypes";
 import {
   AddNonUserTranslatorResponse,
@@ -33,7 +34,7 @@ export const nonUserTranslatorReducer = api.injectEndpoints({
     }),
     deleteNonUserTranslator: builder.mutation<
       DeleteNonUserTranslatorResponse,
-      DeleteNonUserTranslatorInput
+      GetById
     >({
       query: (input) => ({
         document: deleteNonUserTranslator,
@@ -41,10 +42,7 @@ export const nonUserTranslatorReducer = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "NonUserTranslators", id: "current" }],
     }),
-    getNonUserTranslator: builder.query<
-      GetNonUserTranslatorResponse,
-      GetNonUserTranslatorInput
-    >({
+    getNonUserTranslator: builder.query<GetNonUserTranslatorResponse, GetById>({
       query: (input) => ({
         document: getNonUserTranslator,
         variables: input,

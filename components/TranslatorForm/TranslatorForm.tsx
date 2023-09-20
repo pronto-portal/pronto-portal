@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { useGetTranslatorsQuery } from "../../redux/reducers";
 import TextField from "@mui/material/TextField";
 import { UserInfoAutocompleteOption } from "../UserInfoAutocompleteOption";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
+import { useGetNonUserTranslatorsQuery } from "../../redux/reducers/nonUserTranslatorReducer";
 
 export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
-  const { data } = useGetTranslatorsQuery({});
+  const { data } = useGetNonUserTranslatorsQuery({});
   const { translator, setTranslator } = useAddAssignmentFlow();
   const handleSubmit = () => {
     if (Object.keys(translator).length) {
@@ -32,7 +32,7 @@ export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
         }}
       >
         <Autocomplete
-          options={data?.getTranslators?.translators || []}
+          options={data?.getNonUserTranslators?.translators || []}
           getOptionLabel={(option) =>
             option ? option.firstName + " " + option.lastName : ""
           }
