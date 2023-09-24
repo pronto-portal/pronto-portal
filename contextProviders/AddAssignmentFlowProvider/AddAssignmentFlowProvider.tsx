@@ -9,6 +9,9 @@ import { AddEditClaimantForm } from "../../components/AddEditClaimantForm";
 import { ReminderForm } from "../../components/ReminderForm";
 import { AddEditTranslatorForm } from "../../components/AddEditTranslatorForm";
 import { DateTimeForm } from "../../components/DateTimeForm";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { TranslatorSelect } from "../../components/TranslatorSelect";
 
 type AssignmentFlowEditingType =
   | "address"
@@ -86,7 +89,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
         <Dialog
           open={openEditing}
           onClose={() => setOpenEditing(false)}
-          maxWidth="sm"
+          maxWidth="md"
+          fullWidth
         >
           <DialogContent>
             {editing === "address" && (
@@ -121,10 +125,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
               />
             )}
             {editing === "translator" && (
-              <AddEditTranslatorForm
-                mode="edit"
-                id={translator.id}
-                onSuccess={(data) => {
+              <TranslatorSelect
+                onConfirm={(data) => {
                   if (data) {
                     setTranslator(data);
                     setOpenEditing(false);
