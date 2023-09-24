@@ -10,6 +10,8 @@ import {
   MenuItem,
   Tooltip,
   Avatar,
+  SxProps,
+  Theme,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
@@ -33,7 +35,11 @@ const navItems = [
   },
 ];
 
-export const NavBar: React.FC = () => {
+interface NavBarProps {
+  sx?: SxProps<Theme>;
+}
+
+export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -48,7 +54,7 @@ export const NavBar: React.FC = () => {
   if (!session) return null;
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={sx}>
       <Toolbar>
         <Stack
           direction="row"
