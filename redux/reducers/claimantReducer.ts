@@ -3,7 +3,7 @@ import { createClaimant } from "../graphql/mutations/createClaimant";
 import {
   CreateClaimantsInput,
   GetClaimantInput,
-  GetClaimantsFilter,
+  GetClaimantsInput,
   UpdateClaimantsInput,
 } from "../../types/InputTypes";
 import {
@@ -18,7 +18,7 @@ import { getClaimant } from "../graphql/queries/getClaimant";
 
 export const claimantApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getClaimants: builder.query<GetClaimantsResponse, GetClaimantsFilter>({
+    getClaimants: builder.query<GetClaimantsResponse, GetClaimantsInput>({
       query: (input) => ({
         document: getClaimants,
         variables: input,

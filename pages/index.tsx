@@ -3,6 +3,8 @@ import { TranslatorDirectory } from "../components/IconLabel";
 import { FilteredTranslatorsProvider } from "../contextProviders/FilteredTranslatorsProvider";
 import { FilteredAssignmentsProvider } from "../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
 import { AssignmentDirectory } from "../components/AssignmentsDirectory/AssignmentsDirectory";
+import { FilteredClaimantsProvider } from "../contextProviders/FilteredClaimantsProvider/FilteredClaimantsProvider";
+import { ClaimantsDirectory } from "../components/ClaimantsDirectory";
 
 export default function Home() {
   return (
@@ -21,6 +23,9 @@ export default function Home() {
       <FilteredAssignmentsProvider>
         <AssignmentDirectory />
       </FilteredAssignmentsProvider>
+      <FilteredClaimantsProvider>
+        <ClaimantsDirectory />
+      </FilteredClaimantsProvider>
     </Stack>
   );
 }

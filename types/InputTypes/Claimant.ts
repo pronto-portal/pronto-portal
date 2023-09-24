@@ -8,7 +8,7 @@ export interface GetClaimantsFilter {
 }
 
 export interface GetClaimantsInput {
-  paginatedInput?: PaginatedInput;
+  input?: PaginatedInput;
   where?: GetClaimantsFilter;
 }
 
