@@ -9,13 +9,14 @@ import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 import Button from "@mui/material/Button";
+import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
 
 export const ReminderForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const handleOnSubmit = () => {
     onSuccess();
   };
 
-  const { setCreateReminder } = useAddAssignmentFlow();
+  const { setCreateReminder, createReminder } = useAddAssignmentFlow();
 
   const yesNoOptions: Record<string, boolean> = {
     yes: true,
@@ -23,35 +24,39 @@ export const ReminderForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   };
 
   return (
-    <Grid
-      container
-      spacing={2}
-      alignItems="center"
-      alignContent="center"
-      direction="column"
-    >
-      <Grid item>
-        <Typography>Reminders</Typography>
+    <ResponsiveForm>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        alignContent="center"
+        direction="column"
+        width="100%"
+        height="100%"
+      >
+        <Grid item>
+          <Typography>Reminders</Typography>
+        </Grid>
+        <Grid item>
+          <FormControl>
+            <FormLabel>
+              Would you like us to remind the translator and the claimant?
+            </FormLabel>
+            <RadioGroup
+              defaultValue={createReminder ? "yes" : "no"}
+              onChange={(e) => setCreateReminder(yesNoOptions[e.target.value])}
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+        <Grid item>
+          <Button onClick={handleOnSubmit} variant="contained">
+            Next
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item>
-        <FormControl>
-          <FormLabel>
-            Would you like us to remind the translator and the claimant?
-          </FormLabel>
-          <RadioGroup
-            defaultValue="yes"
-            onChange={(e) => setCreateReminder(yesNoOptions[e.target.value])}
-          >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
-      </Grid>
-      <Grid item>
-        <Button onClick={handleOnSubmit} variant="contained">
-          Next
-        </Button>
-      </Grid>
-    </Grid>
+    </ResponsiveForm>
   );
 };

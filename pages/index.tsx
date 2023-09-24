@@ -1,10 +1,12 @@
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { TranslatorDirectory } from "../components/IconLabel";
 import { FilteredTranslatorsProvider } from "../contextProviders/FilteredTranslatorsProvider";
 import { FilteredAssignmentsProvider } from "../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
 import { AssignmentDirectory } from "../components/AssignmentsDirectory/AssignmentsDirectory";
 import { FilteredClaimantsProvider } from "../contextProviders/FilteredClaimantsProvider/FilteredClaimantsProvider";
 import { ClaimantsDirectory } from "../components/ClaimantsDirectory";
+import { AssignmentWriteProvider } from "../contextProviders/AssignmentWriteProvider/AssignmentWriteProvider";
+import { TranslatorWriteProvider } from "../contextProviders/TranslatorWriteProvider";
 
 export default function Home() {
   return (
@@ -18,10 +20,16 @@ export default function Home() {
       p={2}
     >
       <FilteredTranslatorsProvider>
-        <TranslatorDirectory />
+        <TranslatorWriteProvider>
+          <TranslatorDirectory />
+        </TranslatorWriteProvider>
       </FilteredTranslatorsProvider>
       <FilteredAssignmentsProvider>
-        <AssignmentDirectory />
+        <AssignmentWriteProvider>
+          <TranslatorWriteProvider>
+            <AssignmentDirectory />
+          </TranslatorWriteProvider>
+        </AssignmentWriteProvider>
       </FilteredAssignmentsProvider>
       <FilteredClaimantsProvider>
         <ClaimantsDirectory />

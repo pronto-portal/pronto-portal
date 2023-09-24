@@ -1,12 +1,13 @@
 import { Address } from "./Address";
 import { Claimant } from "./Claimant";
 import { Reminder } from "./Reminder";
+import { Translator } from "./Translator";
 import { User } from "./User";
 
 export interface Assignment {
   id: string;
   createdAt: Date;
-  assignedTo: User;
+  assignedToUser: User;
   assignedToUserId: string;
   createdBy: User;
   createdByUserId: string;
@@ -19,4 +20,6 @@ export interface Assignment {
   claimantNoShow: boolean;
   translatorNoShow: boolean;
   reminder: Reminder;
+  assignedTo?: Translator;
+  assignedToId?: string;
 }

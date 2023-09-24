@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import MenuItem from "@mui/material/MenuItem";
-import { User } from "../../types/ObjectTypes";
+import { Translator } from "../../types/ObjectTypes";
 import { useFilteredTranslators } from "../../contextProviders/FilteredTranslatorsProvider";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -13,11 +13,15 @@ import { Box } from "@mui/material";
 import { TranslatorSearchByOption } from "./TranslatorSearchByOption";
 import { AddTranslatorForm } from "./AddTranslatorForm";
 
-interface SearchableTranslator extends User {
+interface SearchableTranslator extends Translator {
   label: string;
 }
 
-type SearchableTranslatorKey = keyof GetTranslatorsFilters;
+type SearchableTranslatorKey = keyof Pick<
+  Translator,
+  "phone" | "email" | "id" | "firstName" | "lastName"
+>;
+
 const searchableFields: SearchableTranslatorKey[] = ["phone", "email", "id"];
 
 export const TranslatorDirectorySearch: React.FC = () => {

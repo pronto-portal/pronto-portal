@@ -83,69 +83,69 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
         }}
       >
         {children}
+        <Dialog
+          open={openEditing}
+          onClose={() => setOpenEditing(false)}
+          maxWidth="sm"
+        >
+          <DialogContent>
+            {editing === "address" && (
+              <AddEditAddressForm
+                mode="edit"
+                id={address.id}
+                onSuccess={(data) => {
+                  if (data) {
+                    setAddress(data);
+                    setOpenEditing(false);
+                  }
+                }}
+              />
+            )}
+            {editing === "claimant" && (
+              <AddEditClaimantForm
+                mode="edit"
+                id={claimant.id}
+                onSuccess={(data) => {
+                  if (data) {
+                    setClaimant(data);
+                    setOpenEditing(false);
+                  }
+                }}
+              />
+            )}
+            {editing === "reminder" && (
+              <ReminderForm
+                onSuccess={() => {
+                  setOpenEditing(false);
+                }}
+              />
+            )}
+            {editing === "translator" && (
+              <AddEditTranslatorForm
+                mode="edit"
+                id={translator.id}
+                onSuccess={(data) => {
+                  if (data) {
+                    setTranslator(data);
+                    setOpenEditing(false);
+                  }
+                }}
+              />
+            )}
+            {editing === "date" && (
+              <DateTimeForm
+                mode="edit"
+                onSuccess={(data) => {
+                  if (data) {
+                    setDate(data);
+                    setOpenEditing(false);
+                  }
+                }}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
       </AddAssignmentFlowContext.Provider>
-      <Dialog
-        open={openEditing}
-        onClose={() => setOpenEditing(false)}
-        maxWidth="sm"
-      >
-        <DialogContent>
-          {editing === "address" && (
-            <AddEditAddressForm
-              mode="edit"
-              id={address.id}
-              onSuccess={(data) => {
-                if (data) {
-                  setAddress(data);
-                  setOpenEditing(false);
-                }
-              }}
-            />
-          )}
-          {editing === "claimant" && (
-            <AddEditClaimantForm
-              mode="edit"
-              id={claimant.id}
-              onSuccess={(data) => {
-                if (data) {
-                  setClaimant(data);
-                  setOpenEditing(false);
-                }
-              }}
-            />
-          )}
-          {editing === "reminder" && (
-            <ReminderForm
-              onSuccess={() => {
-                setOpenEditing(false);
-              }}
-            />
-          )}
-          {editing === "translator" && (
-            <AddEditTranslatorForm
-              mode="edit"
-              id={translator.id}
-              onSuccess={(data) => {
-                if (data) {
-                  setTranslator(data);
-                  setOpenEditing(false);
-                }
-              }}
-            />
-          )}
-          {editing === "date" && (
-            <DateTimeForm
-              mode="edit"
-              onSuccess={(data) => {
-                if (data) {
-                  setDate(data);
-                  setOpenEditing(false);
-                }
-              }}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

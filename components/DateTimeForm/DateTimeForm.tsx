@@ -37,6 +37,8 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({
       spacing={2}
       alignItems="center"
       alignContent="center"
+      width="100%"
+      height="100%"
     >
       <Grid item xs={2}>
         <Typography variant="h5">Date and Time</Typography>

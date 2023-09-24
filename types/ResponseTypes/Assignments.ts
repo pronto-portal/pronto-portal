@@ -12,3 +12,7 @@ export interface GetAssignmentsResponse {
 export interface CreateAssignmentResponse {
   createAssignment: Assignment;
 }
+
+export interface UpdateAssignmentResponse {
+  updateAssignment: Assignment;
+}

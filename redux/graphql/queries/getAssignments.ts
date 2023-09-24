@@ -14,7 +14,7 @@ export const getAssignments = gql`
           state
           zipCode
         }
-        assignedTo {
+        assignedToUser {
           id
           email
           phone
@@ -40,6 +40,16 @@ export const getAssignments = gql`
           lastName
           email
           phone
+          languages
+        }
+        assignedTo {
+          id
+          email
+          phone
+          firstName
+          lastName
+          city
+          state
           languages
         }
         isComplete

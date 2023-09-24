@@ -1,12 +1,13 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
 import { GetAssignmentsInput } from "../../types/InputTypes";
-import { baseQuery } from "../baseQuery";
 import { getAssignments } from "../graphql/queries/getAssignments";
 import { api } from "./apiReducer";
 import { GetAssignmentsResponse } from "../../types/ResponseTypes";
 import { createAssignment } from "../graphql/mutations/createAssignment";
 import { CreateAssignmentResponse } from "../../types/ResponseTypes";
 import { CreateAssignmentInput } from "../../types/InputTypes";
+import { UpdateAssignmentInput } from "../../types/InputTypes";
+import { UpdateAssignmentResponse } from "../../types/ResponseTypes";
+import { updateAssignment } from "../graphql/mutations/updateAssignment";
 
 export const assignments = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,8 +28,20 @@ export const assignments = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Assignments", id: "current" }],
     }),
+    updateAssignment: builder.mutation<
+      UpdateAssignmentResponse,
+      UpdateAssignmentInput
+    >({
+      query: (variables) => ({
+        document: updateAssignment,
+        variables,
+      }),
+    }),
   }),
 });
 
-export const { useGetAssignmentsQuery, useCreateAssignmentMutation } =
-  assignments;
+export const {
+  useGetAssignmentsQuery,
+  useCreateAssignmentMutation,
+  useUpdateAssignmentMutation,
+} = assignments;

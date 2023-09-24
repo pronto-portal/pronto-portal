@@ -25,20 +25,15 @@ const searchableFields: SearchableAssignmentsKey[] = [
 ];
 
 export const AssignmentsDirectorySearch: React.FC = () => {
-  const {
-    assignments,
-    filters: ctxFilter,
-    setFilters: ctxSetFilter,
-  } = useFilteredAssignments();
+  const { filters: ctxFilter, setFilters: ctxSetFilter } =
+    useFilteredAssignments();
 
   // I want to be able to have multiple filters and send them back
 
   const [searchBy, setSearchBy] = useState<SearchableAssignmentsKey>("id");
-  const [searchByValue, setSearchByValue] = useState<string>("");
+  const [_, setSearchByValue] = useState<string>("");
   const [openAddAssignmentsForm, setOpenAddAssignmentsForm] =
     useState<boolean>(false);
-
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>();
 
   useEffect(() => {
     searchableFields.forEach((field) => {
@@ -55,17 +50,6 @@ export const AssignmentsDirectorySearch: React.FC = () => {
     ctxSetFilter(newFilters);
   };
 
-  const searchableAssignments: SearchableAssignments[] =
-    assignments &&
-    assignments.map((assignment) => {
-      return {
-        label: `${assignment.id} - ${new Date(
-          assignment.dateTime
-        ).toLocaleDateString()}`,
-        ...assignment,
-      };
-    });
-
   return (
     <>
       <Stack
@@ -80,24 +64,6 @@ export const AssignmentsDirectorySearch: React.FC = () => {
           spacing={1}
           alignItems="center"
         >
-          {/* <Autocomplete
-            sx={{ flex: 1 }}
-            onChange={(_e, newValue) => {
-              setSearchByValue(newValue ? newValue[searchBy].toString() : "");
-            }}
-            options={searchableAssignments}
-            getOptionLabel={(option) =>
-              option[searchBy] ? option[searchBy].toString() : ""
-            }
-            renderInput={(params) => (
-              <TextField {...params} label={`Search by ${searchBy}`} />
-            )}
-            renderOption={(props, option) => (
-              <Box component="li" {...props}>
-                <AssignmentsSearchByOption translator={option} />
-              </Box>
-            )}
-          /> */}
           <TextField
             sx={{ flex: 0.25 }}
             select

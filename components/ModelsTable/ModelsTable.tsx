@@ -24,10 +24,14 @@ export const ModelsTable = <T extends {}>({
   expandObjectDepth = 0,
   depth = 0,
   omitFields,
+  omitExpandFields = [],
+  nestedRowActions,
+  rowActions,
 }: ModelsTableProps<T>) => {
-  const dataKeys = data && data.length > 0 ? Object.keys(data[0]) : [];
+  const dataKeys =
+    data && data.length > 0 && data[0] ? Object.keys(data[0]) : [];
   const expandableEntries =
-    data && data.length > 0
+    data && data.length > 0 && data[0]
       ? Object.entries(data[0]).filter(
           ([_, value]) => typeof value === "object"
         )
@@ -92,7 +96,8 @@ export const ModelsTable = <T extends {}>({
                     )}
                   </TableCell>
                 ))}
-                {showExpandedObjects && <TableCell />}
+                {rowActions !== undefined ? <TableCell /> : null}
+                {showExpandedObjects ? <TableCell /> : null}
               </TableRow>
             ))}
           </TableHead>
@@ -129,26 +134,37 @@ export const ModelsTable = <T extends {}>({
                       )
                         ? value
                         : [value];
+
+                      const rowActions =
+                        nestedRowActions !== undefined
+                          ? nestedRowActions(row.original)[key as keyof T]
+                          : undefined;
+
                       return (
-                        <TableCell
-                          key={column.id}
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            rowGap: 5,
-                          }}
-                        >
-                          <Typography variant="h5">
-                            {splitCamelCase(key)}
-                          </Typography>
-                          <ModelsTable
-                            data={childTableData}
-                            expandObjects={expandObjects}
-                            expandObjectDepth={expandObjectDepth}
-                            depth={depth + 1}
-                            omitFields={omitFields}
-                          />
-                        </TableCell>
+                        omitExpandFields.findIndex((val) => val === key) ===
+                          -1 && (
+                          <TableCell
+                            key={column.id}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              rowGap: 5,
+                            }}
+                          >
+                            <Typography variant="h5">
+                              {splitCamelCase(key)}
+                            </Typography>
+                            <ModelsTable
+                              data={childTableData}
+                              expandObjects={expandObjects}
+                              omitExpandFields={omitExpandFields}
+                              expandObjectDepth={expandObjectDepth}
+                              depth={depth + 1}
+                              omitFields={omitFields}
+                              rowActions={rowActions}
+                            />
+                          </TableCell>
+                        )
                       );
                     })
                   }
@@ -165,6 +181,9 @@ export const ModelsTable = <T extends {}>({
                       </Typography>
                     </TableCell>
                   ))}
+                  {rowActions !== undefined ? (
+                    <TableCell>{rowActions}</TableCell>
+                  ) : null}
                 </TableRow>
               )
             )}

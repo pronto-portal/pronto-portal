@@ -1,3 +1,4 @@
+import { Assignment } from "../ObjectTypes";
 import { GetAddressesFilter } from "./Address";
 import { GetClaimantsFilter } from "./Claimant";
 import { GetTranslatorsFilters } from "./Translator";
@@ -24,4 +25,10 @@ export interface CreateAssignmentInput {
     claimantId: string;
     dateTime: Date;
   };
+}
+
+export type UpdateAssignment = Partial<Assignment> & Pick<Assignment, "id">;
+
+export interface UpdateAssignmentInput {
+  input: UpdateAssignment;
 }
