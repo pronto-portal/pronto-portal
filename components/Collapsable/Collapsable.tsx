@@ -7,12 +7,14 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { SxProps } from "@mui/material/styles";
 import { Theme } from "@mui/material/styles";
+import AccordionActions from "@mui/material/AccordionActions";
 
 interface CollapsableProps extends Wrapper {
   sx?: SxProps<Theme>;
   sxSummary?: SxProps<Theme>;
   sxDetails?: SxProps<Theme>;
   title: React.ReactNode | string;
+  actions?: React.ReactNode;
 }
 
 export const Collapsable: React.FC<CollapsableProps> = ({
@@ -21,6 +23,7 @@ export const Collapsable: React.FC<CollapsableProps> = ({
   sxSummary,
   sxDetails,
   title,
+  actions,
 }) => {
   return (
     <Accordion sx={sx}>
@@ -28,6 +31,7 @@ export const Collapsable: React.FC<CollapsableProps> = ({
         {typeof title === "string" ? <Typography>{title}</Typography> : title}
       </AccordionSummary>
       <AccordionDetails sx={sxDetails}>{children}</AccordionDetails>
+      {actions ? <AccordionActions>{actions}</AccordionActions> : null}
     </Accordion>
   );
 };

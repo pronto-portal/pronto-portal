@@ -13,12 +13,14 @@ interface ModelDirectoryLayoutProps<T extends {}> extends PaginationState {
   titleText: string;
   totalRowCount: number;
   isLoading?: boolean;
+  actions?: React.ReactNode;
   renderFilters?: React.ReactNode;
   tableProps: ModelsTableProps<T>;
 }
 
 export const ModelDirectoryLayout = <T extends {}>({
   titleText,
+  actions,
   renderFilters,
   isLoading,
   page,
@@ -32,14 +34,9 @@ export const ModelDirectoryLayout = <T extends {}>({
     <Box height="auto" width={1}>
       <Collapsable
         title={titleText}
+        actions={actions}
         sx={{
           width: "100%",
-          padding: 0,
-        }}
-        sxSummary={{}}
-        sxDetails={{
-          maxHeight: "80vh",
-          height: "80vh",
         }}
       >
         {!isLoading && tableProps.data ? (
