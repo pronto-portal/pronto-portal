@@ -1,7 +1,7 @@
 // This component will be a form that will allow the user to edit the claimant's information using react hook form and an rtk query hook.
 import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Claimant } from "../../types/ObjectTypes";
+import { Claimant, Language } from "../../types/ObjectTypes";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import {
@@ -26,6 +26,7 @@ import { validateEmail } from "../../utils/validateEmail";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
+import { LanguagesAutocomplete } from "../LanguagesAutocomplete";
 
 interface AddEditClaimantFormProps extends ModelForm<Claimant> {
   onSuccess: (data?: Claimant) => void;
@@ -36,6 +37,7 @@ interface AddEditClaimantFormInputs {
   lastName: string;
   phone: string;
   email: string;
+  primaryLanguage: string;
   languages: string[];
 }
 
@@ -54,6 +56,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
     lastName: "",
     phone: "",
     email: "",
+    primaryLanguage: "",
     languages: [],
   };
 
@@ -71,6 +74,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors },
   } = useForm<AddEditClaimantFormInputs>({
     defaultValues,
@@ -88,6 +92,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
       lastName: data.lastName,
       phone: data.phone,
       email: data.email,
+      primaryLanguage: data.primaryLanguage,
       languages: data.languages,
     };
 
@@ -119,8 +124,6 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
         });
     }
   };
-
-  const { languages } = useLanguages();
 
   return (
     <ResponsiveForm onSubmit={handleSubmit(onSubmit)}>
@@ -222,38 +225,41 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
           />
         </FlexRowGridItem>
 
-        <Grid item width="100%">
+        <FlexRowGridItem item>
           <Controller
-            name="languages"
-            rules={{
-              required: "Languages are required",
-              validate: (value) => value.length > 0,
-            }}
+            name="primaryLanguage"
+            rules={{ required: "Primary language is required" }}
             control={control}
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                multiple
-                options={languages}
-                onChange={(_, newValue) => {
-                  if (newValue) {
-                    field.onChange(newValue);
-                  }
+            render={({ field: { value, onChange, ref } }) => (
+              <LanguagesAutocomplete
+                sx={{
+                  flex: 1,
                 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Languages"
-                    variant="outlined"
-                    helperText={errors.languages?.message || " "}
-                    error={!!errors.languages?.message}
-                    fullWidth
-                  />
-                )}
+                value={value}
+                onChange={onChange}
+                multiple={false}
+                label="Primary Language"
               />
             )}
           />
-        </Grid>
+
+          <Controller
+            name="languages"
+            control={control}
+            render={({ field: { value, onChange, ref } }) => (
+              <LanguagesAutocomplete
+                sx={{
+                  flex: 1,
+                }}
+                value={value}
+                multiple={true}
+                onChange={onChange}
+                ref={ref}
+                label="Other languages"
+              />
+            )}
+          />
+        </FlexRowGridItem>
 
         <Grid
           item

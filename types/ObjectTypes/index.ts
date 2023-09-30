@@ -6,3 +6,4 @@ export * from "./Reminder";
 export * from "./Person";
 export * from "./Comment";
 export * from "./Translator";
+export * from "./Language";

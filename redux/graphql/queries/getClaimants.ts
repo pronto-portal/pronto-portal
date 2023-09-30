@@ -13,6 +13,7 @@ export const getClaimants = gql`
         user {
           id
         }
+        primaryLanguage
         languages
       }
     }

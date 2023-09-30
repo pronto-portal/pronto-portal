@@ -1,8 +1,12 @@
-import React, { createContext, useContext } from "react";
-import { iso6393 } from "iso-639-3";
+import React, { createContext, useContext, useMemo } from "react";
+import { useLanguagesQuery } from "../../redux/reducers/apiReducer";
+import { Language } from "../../types/ObjectTypes";
 
 interface languagesProviderContext {
-  languages: string[];
+  languagesObject: Record<string, string>;
+  languages: Language[];
+  languageCodes: string[];
+  getLanguageFromCode: (code: string) => string;
 }
 
 const LanguagesContext = createContext<languagesProviderContext>(
@@ -12,11 +16,30 @@ const LanguagesContext = createContext<languagesProviderContext>(
 export const LanguagesProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const languages = iso6393
-    .filter((lang) => lang.type === "living" && lang.scope === "individual")
-    .map((lang) => lang.name);
+  const { data } = useLanguagesQuery({});
+
+  const languages = useMemo(() => (data ? data.getLanguages : []), [data]);
+
+  const languagesObject = useMemo(() => {
+    return languages.reduce((acc, { code, name }) => {
+      acc[code] = name;
+      return acc;
+    }, {} as Record<string, string>);
+  }, [languages]);
+
+  const languageCodes = useMemo(
+    () => languages.map(({ code }) => code),
+    [languages]
+  );
+
+  const getLanguageFromCode = (code: string) => {
+    return languagesObject[code] || "";
+  };
+
   return (
-    <LanguagesContext.Provider value={{ languages }}>
+    <LanguagesContext.Provider
+      value={{ languages, languagesObject, languageCodes, getLanguageFromCode }}
+    >
       {children}
     </LanguagesContext.Provider>
   );

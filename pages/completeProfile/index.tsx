@@ -23,6 +23,7 @@ import {
   useGetUserQuery,
 } from "../../redux/reducers";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
+import { LanguagesAutocomplete } from "../../components/LanguagesAutocomplete";
 
 export default function CompleteProfile() {
   const { data } = useGetUserQuery({});
@@ -227,13 +228,13 @@ export default function CompleteProfile() {
               </FormControl>
             </Grid>
             <Grid item xs={6}>
-              <Autocomplete
+              <LanguagesAutocomplete
+                value={languages}
                 multiple
-                onChange={(_e, newValue) => setLanguages(newValue)}
-                options={langs}
-                renderInput={(params) => (
-                  <TextField {...params} label="Spoken Languages" />
-                )}
+                label="Spoken Languages"
+                onChange={(val) => {
+                  setLanguages(val as string[]);
+                }}
               />
             </Grid>
           </Grid>

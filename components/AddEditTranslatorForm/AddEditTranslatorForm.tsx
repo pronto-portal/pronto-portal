@@ -6,7 +6,6 @@ import { useForm, Controller, SubmitHandler, set } from "react-hook-form";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
-import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { Translator, User } from "../../types/ObjectTypes";
 import phone from "phone";
 import { useSnackbar } from "notistack";
@@ -21,6 +20,7 @@ import {
   useGetNonUserTranslatorQuery,
   useUpdateNonUserTranslatorMutation,
 } from "../../redux/reducers/nonUserTranslatorReducer";
+import { LanguagesAutocomplete } from "../LanguagesAutocomplete";
 
 export const AddEditTranslatorForm: React.FC<ModelForm<Translator>> = ({
   id = "",
@@ -49,7 +49,6 @@ export const AddEditTranslatorForm: React.FC<ModelForm<Translator>> = ({
   const {
     control,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm({
@@ -67,7 +66,6 @@ export const AddEditTranslatorForm: React.FC<ModelForm<Translator>> = ({
     }
   }, [data, mode, reset, setCity, setState]);
 
-  const { languages } = useLanguages();
   const [addAndCreateTranslator, { isLoading: isAddAndCreateLoading }] =
     useAddNonUserTranslatorMutation();
   const [updateTranslator, { isLoading: isUpdateLoading }] =
@@ -286,21 +284,16 @@ export const AddEditTranslatorForm: React.FC<ModelForm<Translator>> = ({
             name="languages"
             rules={{ required: false }}
             control={control}
-            render={({ field: { onChange, ...field } }) => (
-              <Autocomplete
-                multiple
-                {...field}
-                onChange={(e, newValue) => onChange(newValue)}
-                sx={{ flex: 1, width: "100%" }}
-                options={languages}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    label="Languages"
-                    helperText=" "
-                  />
-                )}
+            render={({ field: { onChange, ref, value } }) => (
+              <LanguagesAutocomplete
+                sx={{
+                  flex: 1,
+                }}
+                value={value}
+                multiple={true}
+                onChange={onChange}
+                ref={ref}
+                label="Languages"
               />
             )}
           />

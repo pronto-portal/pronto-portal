@@ -3,6 +3,7 @@ import { PaginatedInput } from "./base";
 
 export interface GetClaimantsFilter {
   language?: string;
+  primaryLanguages?: string;
   firstName?: string;
   lastName?: string;
 }

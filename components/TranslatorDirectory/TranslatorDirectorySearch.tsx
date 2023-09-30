@@ -11,6 +11,7 @@ import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { Box } from "@mui/material";
 import { TranslatorSearchByOption } from "./TranslatorSearchByOption";
+import { LanguagesAutocomplete } from "../LanguagesAutocomplete";
 
 interface SearchableTranslator extends Translator {
   label: string;
@@ -145,15 +146,14 @@ export const TranslatorDirectorySearch: React.FC = () => {
           spacing={1}
           alignItems="center"
         >
-          <Autocomplete
-            multiple
+          <LanguagesAutocomplete
             sx={{ flex: 1 }}
-            defaultValue={ctxFilter.languages}
-            onChange={(_e, newValue) => setSelectedLanguages(newValue)}
-            options={languages}
-            renderInput={(params) => (
-              <TextField {...params} label="Languages" variant="standard" />
-            )}
+            value={selectedLanguages}
+            onChange={(val) => {
+              setSelectedLanguages(val as string[]);
+            }}
+            multiple
+            label="Languages"
           />
           <Autocomplete
             value={state}

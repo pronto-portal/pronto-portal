@@ -20,6 +20,7 @@ import {
 } from "../../redux/reducers";
 import { useSnackbar } from "notistack";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useLanguages } from "../../contextProviders/LanguagesProvider";
 
 const FlexCard = styled(Card)({
   flex: 1,
@@ -55,6 +56,8 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
   const isLoading = assignmentIsLoading || reminderIsLoading;
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const { getLanguageFromCode } = useLanguages();
 
   const handleCreateAssignment = () => {
     if (translator && claimant && date && address)
@@ -127,7 +130,15 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
         <FlexCard>
           <CardHeader title="Claimant" />
           <FlexCardContent>
-            <ObjectGridSpread<Claimant> object={claimant} />
+            <ObjectGridSpread<Claimant>
+              object={{
+                ...claimant,
+                primaryLanguage: getLanguageFromCode(claimant.primaryLanguage),
+                languages: claimant.languages.map((lang) =>
+                  getLanguageFromCode(lang)
+                ),
+              }}
+            />
           </FlexCardContent>
           <CardActions>
             <IconButton
@@ -143,7 +154,14 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
         <FlexCard>
           <CardHeader title="Translator" />
           <FlexCardContent>
-            <ObjectGridSpread<Translator> object={translator} />
+            <ObjectGridSpread<Translator>
+              object={{
+                ...translator,
+                languages: translator.languages.map((lang) =>
+                  getLanguageFromCode(lang)
+                ),
+              }}
+            />
           </FlexCardContent>
           <CardActions>
             <IconButton
