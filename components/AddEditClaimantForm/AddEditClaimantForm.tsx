@@ -45,6 +45,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
   id = "",
   onSuccess,
   mode = "create",
+  selectExisting = false,
 }) => {
   const { data } = useGetClaimantQuery(
     { input: { id } },

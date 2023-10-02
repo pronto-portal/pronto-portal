@@ -97,6 +97,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
               <AddEditAddressForm
                 mode="edit"
                 id={address.id}
+                selectExisting
                 onSuccess={(data) => {
                   if (data) {
                     setAddress(data);

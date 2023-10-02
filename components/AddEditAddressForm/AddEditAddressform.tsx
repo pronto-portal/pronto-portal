@@ -22,6 +22,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { ModelForm } from "../../types/PropTypes/AssignmentFlowForm";
 import { firstCharToUpper } from "../../utils/firstCharToUpper";
 import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
+import { AddressSelect } from "../AddressSelect";
 
 interface AddressFormState {
   apt: string;
@@ -35,6 +36,7 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
   onSuccess,
   mode = "create",
   id = "",
+  selectExisting = false,
 }) => {
   const { control, handleSubmit, setValue } = useForm<AddressFormState>({
     defaultValues: {
@@ -42,6 +44,7 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
     },
   });
 
+  const [address, setAddress] = useState<Address>({} as Address);
   const [googleAddress, setGoogleAddress] = useState<string>("");
   const { data, isLoading: isGetAddressLoading } = useGetAddressQuery(
     {
@@ -178,6 +181,25 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
             </Button>
           )}
         </Grid>
+        {selectExisting && (
+          <>
+            <Grid item xs={2} width={0.75}>
+              <AddressSelect
+                onChange={(data: Address) => {
+                  setGoogleAddress(
+                    `${data.address1} ${data.city} ${data.state} ${data.zipCode}`
+                  );
+                  setAddress(data);
+                }}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="contained" onClick={() => onSuccess(address)}>
+                Confirm
+              </Button>
+            </Grid>
+          </>
+        )}
       </Grid>
     </ResponsiveForm>
   );
