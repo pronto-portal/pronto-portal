@@ -184,6 +184,11 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
         {selectExisting && (
           <>
             <Grid item xs={2} width={0.75}>
+              <Typography textAlign="center">
+                Or select an existing address
+              </Typography>
+            </Grid>
+            <Grid item xs={2} width={0.75}>
               <AddressSelect
                 onChange={(data: Address) => {
                   setGoogleAddress(

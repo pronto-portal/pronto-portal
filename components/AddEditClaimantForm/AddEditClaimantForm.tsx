@@ -1,7 +1,7 @@
 // This component will be a form that will allow the user to edit the claimant's information using react hook form and an rtk query hook.
-import React, { useEffect } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Claimant, Language } from "../../types/ObjectTypes";
+import React, { useEffect, useState } from "react";
+import { Controller, SubmitHandler, set, useForm } from "react-hook-form";
+import { Claimant } from "../../types/ObjectTypes";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import {
@@ -11,12 +11,7 @@ import {
 } from "../../redux/reducers/claimantReducer";
 import { useSnackbar } from "notistack";
 import { ResponseData, ResponseError } from "../../types/ResponseTypes/base";
-import {
-  GetClaimantResponse,
-  UpdateClaimantResponse,
-} from "../../types/ResponseTypes";
-import { useLanguages } from "../../contextProviders/LanguagesProvider";
-import Autocomplete from "@mui/material/Autocomplete";
+import { UpdateClaimantResponse } from "../../types/ResponseTypes";
 import TextField from "@mui/material/TextField";
 import phone from "phone";
 import { FlexRowGridItem } from "../FlexRowGridItem";
@@ -27,6 +22,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
 import { LanguagesAutocomplete } from "../LanguagesAutocomplete";
+import { ClaimantSelect } from "../ClaimantSelect";
 
 interface AddEditClaimantFormProps extends ModelForm<Claimant> {
   onSuccess: (data?: Claimant) => void;
@@ -79,6 +75,8 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
   } = useForm<AddEditClaimantFormInputs>({
     defaultValues,
   });
+
+  const [claimant, setClaimant] = useState<Claimant>({} as Claimant);
 
   useEffect(() => {
     if (data) reset(data.getClaimant);
@@ -278,6 +276,27 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
             </Button>
           )}
         </Grid>
+        {selectExisting && (
+          <>
+            <Grid item width="100%">
+              <Typography textAlign="center">
+                Or select an existing claimant
+              </Typography>
+            </Grid>
+            <Grid item width="100%">
+              <ClaimantSelect
+                onChange={(data) => {
+                  if (data) setClaimant(data);
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <Button variant="contained" onClick={() => onSuccess(claimant)}>
+                Confirm
+              </Button>
+            </Grid>
+          </>
+        )}
       </Grid>
     </ResponsiveForm>
   );

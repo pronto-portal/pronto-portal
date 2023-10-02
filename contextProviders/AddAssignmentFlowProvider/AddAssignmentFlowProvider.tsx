@@ -110,6 +110,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
               <AddEditClaimantForm
                 mode="edit"
                 id={claimant.id}
+                selectExisting
                 onSuccess={(data) => {
                   if (data) {
                     setClaimant(data);
