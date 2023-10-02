@@ -74,7 +74,6 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
     handleSubmit,
     control,
     reset,
-    watch,
     formState: { errors },
   } = useForm<AddEditClaimantFormInputs>({
     defaultValues,
