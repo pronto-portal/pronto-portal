@@ -27,7 +27,29 @@ export interface CreateAssignmentInput {
   };
 }
 
-export type UpdateAssignment = Partial<Assignment> & Pick<Assignment, "id">;
+// t.nonNull.string("id");
+// t.nullable.string("translatorId");
+// t.nullable.string("claimantId");
+// t.nullable.string("addressId");
+// t.nullable.field("dateTime", {
+//   type: "DateTime",
+// });
+// t.nullable.boolean("isComplete");
+// t.nullable.boolean("claimantNoShow");
+// t.nullable.boolean("translatorNoShow");
+
+export type UpdateAssignment = Pick<Assignment, "id"> &
+  Partial<
+    Pick<
+      Assignment,
+      | "assignedToId"
+      | "claimantId"
+      | "addressId"
+      | "dateTime"
+      | "claimantNoShow"
+      | "translatorNoShow"
+    >
+  >;
 
 export interface UpdateAssignmentInput {
   input: UpdateAssignment;

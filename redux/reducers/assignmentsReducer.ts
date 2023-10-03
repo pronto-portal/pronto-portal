@@ -36,6 +36,7 @@ export const assignments = api.injectEndpoints({
         document: updateAssignment,
         variables,
       }),
+      invalidatesTags: [{ type: "Assignments", id: "current" }],
     }),
   }),
 });

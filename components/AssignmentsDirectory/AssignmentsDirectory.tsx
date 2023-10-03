@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { AssignmentsDirectorySearch } from "./AssignmentsDirectorySearch";
 import { useFilteredAssignments } from "../../contextProviders/FilteredAssignmentsProvider/FilteredAssignmentsProvider";
 import { ModelDirectoryLayout } from "../ModelDirectoryLayout";
-import { Assignment, Translator } from "../../types/ObjectTypes";
+import {
+  Address,
+  Assignment,
+  Claimant,
+  Translator,
+} from "../../types/ObjectTypes";
 import { ModelNestedRowActionsProps } from "../ModelNestedRowActions";
 import { useAssignmentWrite } from "../../contextProviders/AssignmentWriteProvider/AssignmentWriteProvider";
 import { NestedRowActions } from "../../types/PropTypes/ModelTableProps";
@@ -22,7 +27,12 @@ export const AssignmentDirectory: React.FC = () => {
     setCountPerPage,
   } = useFilteredAssignments();
 
-  const { setIsChangeTranslatorOpen } = useAssignmentWrite();
+  const {
+    setIsChangeTranslatorOpen,
+    setIsChangeClaimantOpen,
+    setIsChangeAddressOpen,
+    setAssignment,
+  } = useAssignmentWrite();
   const [openAddAssignmentsForm, setOpenAddAssignmentsForm] =
     useState<boolean>(false);
 
@@ -31,8 +41,27 @@ export const AssignmentDirectory: React.FC = () => {
       <ModelNestedRowActionsProps<Translator>
         onEditClick={() => {
           setIsChangeTranslatorOpen(true);
+          setAssignment(rowData);
         }}
         datum={rowData.assignedTo as Translator}
+      />
+    ),
+    claimant: (
+      <ModelNestedRowActionsProps<Claimant>
+        onEditClick={() => {
+          setIsChangeClaimantOpen(true);
+          setAssignment(rowData);
+        }}
+        datum={rowData.claimant as Claimant}
+      />
+    ),
+    address: (
+      <ModelNestedRowActionsProps<Address>
+        onEditClick={() => {
+          setIsChangeAddressOpen(true);
+          setAssignment(rowData);
+        }}
+        datum={rowData.address as Address}
       />
     ),
   });
