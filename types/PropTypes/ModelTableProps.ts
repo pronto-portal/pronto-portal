@@ -6,6 +6,12 @@ export type NestedRow<T> = {
 
 export type NestedRowActions<T> = (data: T) => NestedRow<T>;
 
+export type FieldFormatters<T> = {
+  [key in keyof T]?: (
+    field: T[key]
+  ) => T[keyof T] | React.ReactNode | number | string | string[] | boolean;
+};
+
 export interface ModelsTableProps<T extends {}> {
   data: T[];
   omitFields?: string[];
@@ -16,4 +22,5 @@ export interface ModelsTableProps<T extends {}> {
   baseRowActions?: React.ReactNode;
   nestedRowActions?: NestedRowActions<T>;
   rowActions?: (data: T) => React.ReactNode;
+  fieldFormatters?: FieldFormatters<T>;
 }

@@ -27,6 +27,7 @@ export const ModelsTable = <T extends {}>({
   omitExpandFields = [],
   nestedRowActions,
   rowActions,
+  fieldFormatters = {},
 }: ModelsTableProps<T>) => {
   const dataKeys =
     data && data.length > 0 && data[0] ? Object.keys(data[0]) : [];
@@ -49,6 +50,16 @@ export const ModelsTable = <T extends {}>({
         accessorKey: key,
         id: key,
         header: splitCamelCase(key),
+        cell: (props) => {
+          const value = props.row.original[key as keyof T];
+          const formatter = fieldFormatters[key as keyof T];
+
+          if (formatter) {
+            return formatter(value);
+          }
+
+          return value;
+        },
       };
 
       return column;
@@ -171,16 +182,18 @@ export const ModelsTable = <T extends {}>({
                 </CollapsableRow>
               ) : (
                 <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      <Typography>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </Typography>
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id}>
+                        <Typography>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </Typography>
+                      </TableCell>
+                    );
+                  })}
                   {rowActions !== undefined ? (
                     <TableCell>{rowActions(row.original)}</TableCell>
                   ) : null}

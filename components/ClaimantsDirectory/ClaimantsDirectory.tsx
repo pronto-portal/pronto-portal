@@ -4,6 +4,7 @@ import { Claimant } from "../../types/ObjectTypes";
 import { useFilteredClaimants } from "../../contextProviders/FilteredClaimantsProvider/FilteredClaimantsProvider";
 import { ModelNestedRowActionsProps } from "../ModelNestedRowActions";
 import { useClaimantWrite } from "../../contextProviders/ClaimantWriteProvider/ClaimantWriteProvider";
+import { useLanguages } from "../../contextProviders/LanguagesProvider";
 
 export const ClaimantsDirectory: React.FC = () => {
   const {
@@ -17,6 +18,7 @@ export const ClaimantsDirectory: React.FC = () => {
   } = useFilteredClaimants();
 
   const { setIsEditOpen, setClaimant } = useClaimantWrite();
+  const { getLanguageFromCode } = useLanguages();
 
   return (
     <ModelDirectoryLayout<Claimant>
@@ -33,6 +35,14 @@ export const ClaimantsDirectory: React.FC = () => {
             }}
           />
         ),
+        fieldFormatters: {
+          primaryLanguage: (lang) => getLanguageFromCode(lang),
+          languages: (langs) => {
+            return langs
+              .map((lang: string) => getLanguageFromCode(lang))
+              .join(", ");
+          },
+        },
       }}
       isLoading={isLoading}
       page={page}
