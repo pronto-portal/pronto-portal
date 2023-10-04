@@ -15,5 +15,5 @@ export interface ModelsTableProps<T extends {}> {
   depth?: number;
   baseRowActions?: React.ReactNode;
   nestedRowActions?: NestedRowActions<T>;
-  rowActions?: React.ReactNode;
+  rowActions?: (data: T) => React.ReactNode;
 }

@@ -161,7 +161,7 @@ export const ModelsTable = <T extends {}>({
                               expandObjectDepth={expandObjectDepth}
                               depth={depth + 1}
                               omitFields={omitFields}
-                              rowActions={rowActions}
+                              rowActions={(_) => rowActions}
                             />
                           </TableCell>
                         )
@@ -182,7 +182,7 @@ export const ModelsTable = <T extends {}>({
                     </TableCell>
                   ))}
                   {rowActions !== undefined ? (
-                    <TableCell>{rowActions}</TableCell>
+                    <TableCell>{rowActions(row.original)}</TableCell>
                   ) : null}
                 </TableRow>
               )

@@ -17,8 +17,11 @@ export interface CreateClaimantsInput {
   input: Omit<Claimant, "id" | "user" | "userId">;
 }
 
+export type UpdateClaimant = Pick<Claimant, "id"> &
+  Omit<Partial<Claimant>, "id" | "user" | "userId" | "assignment">;
+
 export interface UpdateClaimantsInput {
-  input: Omit<Claimant, "id" | "user" | "userId" | "assignment">;
+  input: UpdateClaimant;
 }
 
 export interface GetClaimantInput {

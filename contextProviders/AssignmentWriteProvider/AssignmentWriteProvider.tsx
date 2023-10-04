@@ -46,7 +46,6 @@ export const AssignmentWriteProvider: React.FC<Wrapper> = ({ children }) => {
     key: keyof UpdateAssignment,
     data: UpdateAssignment[keyof UpdateAssignment]
   ) => {
-    console.log(assignment);
     setIsChangeTranslatorOpen(false);
     updateAssignment({
       input: {

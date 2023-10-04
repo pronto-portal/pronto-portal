@@ -7,6 +7,7 @@ import { FilteredClaimantsProvider } from "../contextProviders/FilteredClaimants
 import { ClaimantsDirectory } from "../components/ClaimantsDirectory";
 import { AssignmentWriteProvider } from "../contextProviders/AssignmentWriteProvider/AssignmentWriteProvider";
 import { TranslatorWriteProvider } from "../contextProviders/TranslatorWriteProvider";
+import { ClaimantWriteProvider } from "../contextProviders/ClaimantWriteProvider/ClaimantWriteProvider";
 
 export default function Home() {
   return (
@@ -32,7 +33,9 @@ export default function Home() {
         </AssignmentWriteProvider>
       </FilteredAssignmentsProvider>
       <FilteredClaimantsProvider>
-        <ClaimantsDirectory />
+        <ClaimantWriteProvider>
+          <ClaimantsDirectory />
+        </ClaimantWriteProvider>
       </FilteredClaimantsProvider>
     </Stack>
   );
