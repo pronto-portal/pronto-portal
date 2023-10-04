@@ -46,6 +46,7 @@ export const claimantApi = api.injectEndpoints({
       invalidatesTags: [
         { type: "Claimants", id: "current" },
         { type: "Claimant", id: "current" },
+        { type: "Assignments", id: "current" },
       ],
     }),
     getClaimant: builder.query<GetClaimantResponse, GetClaimantInput>({

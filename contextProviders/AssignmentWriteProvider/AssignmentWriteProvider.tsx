@@ -9,8 +9,8 @@ import { UpdateAssignment } from "../../types/InputTypes";
 import { useSnackbar } from "notistack";
 import { Assignment } from "../../types/ObjectTypes";
 import { ClaimantSelect } from "../../components/ClaimantSelect";
-import { AddressSelect } from "../../components/AddressSelect";
 import Typography from "@mui/material/Typography";
+import { AddEditAddressForm } from "../../components/AddEditAddressForm";
 
 interface AssignmentWriteContextProps {
   assignment: Assignment;
@@ -125,12 +125,10 @@ export const AssignmentWriteProvider: React.FC<Wrapper> = ({ children }) => {
           <Typography textAlign="center">Change Address</Typography>
         </DialogTitle>
         <DialogContent>
-          <AddressSelect
-            enableForm
-            onConfirm={(address) => {
-              handleUpdateAssignment("addressId", address.id);
-            }}
-            defaultValue={assignment.address}
+          <AddEditAddressForm
+            mode="edit"
+            onSuccess={(_) => {}}
+            id={assignment && assignment.address ? assignment.address.id : ""}
           />
         </DialogContent>
       </Dialog>

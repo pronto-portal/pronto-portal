@@ -44,6 +44,7 @@ export type UpdateAssignment = Pick<Assignment, "id"> &
       Assignment,
       | "assignedToId"
       | "claimantId"
+      | "address"
       | "addressId"
       | "dateTime"
       | "claimantNoShow"

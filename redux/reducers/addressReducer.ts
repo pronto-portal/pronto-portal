@@ -43,7 +43,10 @@ export const addresses = api.injectEndpoints({
         document: updateAddress,
         variables,
       }),
-      invalidatesTags: [{ type: "Addresses", id: "current" }],
+      invalidatesTags: [
+        { type: "Addresses", id: "current" },
+        { type: "Assignments", id: "current" },
+      ],
     }),
   }),
 });
