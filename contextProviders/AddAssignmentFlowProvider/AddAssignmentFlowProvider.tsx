@@ -98,6 +98,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                 mode="edit"
                 id={address.id}
                 selectExisting
+                defaultValue={address}
                 onSuccess={(data) => {
                   if (data) {
                     setAddress(data);
@@ -110,6 +111,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
               <AddEditClaimantForm
                 mode="edit"
                 id={claimant.id}
+                defaultValue={claimant}
                 selectExisting
                 onSuccess={(data) => {
                   if (data) {
@@ -128,6 +130,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
             )}
             {editing === "translator" && (
               <TranslatorSelect
+                defaultValue={translator}
                 onConfirm={(data) => {
                   if (data) {
                     setTranslator(data);
@@ -139,6 +142,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
             {editing === "date" && (
               <DateTimeForm
                 mode="edit"
+                defaultValue={date}
                 onSuccess={(data) => {
                   if (data) {
                     setDate(data);

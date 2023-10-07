@@ -20,6 +20,9 @@ export const TranslatorForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       buttonText="Next"
       buttonDisabled={!Object.keys(translator).length}
       onChange={(translator) => setTranslator(translator)}
+      defaultValue={
+        translator && Object.keys(translator).length ? translator : undefined
+      }
     />
   );
 };

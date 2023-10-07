@@ -24,10 +24,6 @@ import { ResponsiveForm } from "../ResponsiveForm/ResponsiveForm";
 import { LanguagesAutocomplete } from "../LanguagesAutocomplete";
 import { ClaimantSelect } from "../ClaimantSelect";
 
-interface AddEditClaimantFormProps extends ModelForm<Claimant> {
-  onSuccess: (data?: Claimant) => void;
-}
-
 interface AddEditClaimantFormInputs {
   firstName: string;
   lastName: string;
@@ -37,11 +33,12 @@ interface AddEditClaimantFormInputs {
   languages: string[];
 }
 
-export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
+export const AddEditClaimantForm: React.FC<ModelForm<Claimant>> = ({
   id = "",
   onSuccess,
   mode = "create",
   selectExisting = false,
+  defaultValue,
 }) => {
   const { data } = useGetClaimantQuery(
     { input: { id } },
@@ -285,6 +282,7 @@ export const AddEditClaimantForm: React.FC<AddEditClaimantFormProps> = ({
             </Grid>
             <Grid item width="100%">
               <ClaimantSelect
+                defaultValue={defaultValue}
                 onChange={(data) => {
                   if (data) setClaimant(data);
                 }}

@@ -19,6 +19,7 @@ export const AddressForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
   const [_, { isLoading }] = useCreateAddressMutation();
 
   const { address, setAddress } = useAddAssignmentFlow();
+  console.log(address);
 
   const addressExists = !!Object.keys(address).length;
 
@@ -37,6 +38,7 @@ export const AddressForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
             onSuccess();
           }
         }}
+        defaultValue={address}
       />
       <Grid xs={1} item width={0.75}>
         <Divider />
@@ -46,6 +48,7 @@ export const AddressForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       </Grid>
       <Grid item xs={2} width={0.75}>
         <Autocomplete
+          {...(addressExists ? { defaultValue: address } : {})}
           options={data ? data.getAddresses.addresses : []}
           getOptionLabel={(option) =>
             `${option.address1}, ${

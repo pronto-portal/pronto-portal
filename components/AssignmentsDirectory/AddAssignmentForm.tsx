@@ -13,6 +13,9 @@ import { DateTimeForm } from "../DateTimeForm";
 import { ReminderForm } from "../ReminderForm";
 import { ConfirmAssignmentForm } from "../ConfirmAssignmentForm";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
+import { DialogActions, IconButton } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 interface AddAssignmentsFormProps {
   open: boolean;
@@ -33,7 +36,7 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const { reset } = useAddAssignmentFlow();
+  const { reset, date, setDate } = useAddAssignmentFlow();
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
@@ -79,7 +82,15 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
             <TranslatorForm onSuccess={() => setActiveStep(3)} />
           )}
           {activeStep === 3 && (
-            <DateTimeForm onSuccess={() => setActiveStep(4)} />
+            <DateTimeForm
+              onSuccess={(newDate) => {
+                if (newDate) {
+                  setDate(newDate);
+                  setActiveStep(4);
+                }
+              }}
+              {...(date ? { defaultValue: date } : {})}
+            />
           )}
           {activeStep === 4 && (
             <ReminderForm onSuccess={() => setActiveStep(5)} />
@@ -95,6 +106,21 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({
           )}
         </Stack>
       </DialogContent>
+      <DialogActions>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          width="100%"
+        >
+          <IconButton onClick={handlePrevStep} disabled={activeStep === 0}>
+            <ArrowBackIosNewIcon />
+          </IconButton>
+          <IconButton onClick={handleNextStep} disabled={activeStep === 5}>
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </Stack>
+      </DialogActions>
     </Dialog>
   );
 };

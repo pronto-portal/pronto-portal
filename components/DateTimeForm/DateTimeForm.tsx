@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 import Button from "@mui/material/Button";
 import { ModelForm } from "../../types/PropTypes/AssignmentFlowForm";
 import Grid from "@mui/material/Grid";
@@ -11,22 +10,16 @@ import Typography from "@mui/material/Typography";
 export const DateTimeForm: React.FC<ModelForm<Date>> = ({
   onSuccess,
   mode = "create",
+  defaultValue = new Date(),
 }) => {
-  const { setDate: setFlowDate } = useAddAssignmentFlow();
-  const defaultValue = moment();
-
-  const [date, setDate] = useState<moment.Moment>(defaultValue);
-
-  useEffect(() => {
-    if (defaultValue && mode === "create") setDate(defaultValue);
-    else if (mode === "edit" && date) setDate(date);
-  }, [defaultValue, setDate, mode, date]);
+  const [date, setDate] = useState<moment.Moment>();
 
   const handleOnSubmit = () => {
-    if (date && mode === "edit") onSuccess(date.toDate());
-    else if (date && mode === "create") {
-      setFlowDate(date.toDate());
-      onSuccess(date.toDate());
+    if (date) {
+      if (mode === "edit") onSuccess(date.toDate());
+      else if (mode === "create") {
+        onSuccess(date.toDate());
+      }
     }
   };
 
@@ -47,13 +40,13 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({
         <DateTimePicker
           label="Date Time"
           orientation="landscape"
-          defaultValue={defaultValue}
+          defaultValue={defaultValue ? moment(defaultValue) : undefined}
           viewRenderers={{
             hours: renderTimeViewClock,
             minutes: renderTimeViewClock,
           }}
           onChange={(newValue) => {
-            if (newValue && setDate) setDate(newValue);
+            if (newValue) setDate(newValue);
           }}
         />
       </Grid>

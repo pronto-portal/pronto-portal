@@ -44,7 +44,10 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
       alignContent="center"
     >
       <Grid item width={1}>
-        <AddEditClaimantForm onSuccess={onClaimantFormSubmit} />
+        <AddEditClaimantForm
+          onSuccess={onClaimantFormSubmit}
+          id={claimant ? claimant.id : ""}
+        />
       </Grid>
       <Grid item width={1} xs={2}>
         <Divider sx={{ paddingBottom: 1 }} />
@@ -57,6 +60,7 @@ export const ClaimantForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
 
       <Grid item width={1} xs={1}>
         <Autocomplete
+          {...(claimantExists ? { defaultValue: claimant } : {})}
           options={data?.getClaimants?.claimants || []}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
           onChange={(_, newValue) => {

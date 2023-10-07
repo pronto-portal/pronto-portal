@@ -37,10 +37,11 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
   mode = "create",
   id = "",
   selectExisting = false,
+  defaultValue,
 }) => {
   const { control, handleSubmit, setValue } = useForm<AddressFormState>({
     defaultValues: {
-      apt: "",
+      apt: defaultValue?.address2 || "",
     },
   });
 
@@ -125,14 +126,20 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
   };
 
   useEffect(() => {
-    if (data && data.getAddress) {
-      const existingAddress: Address = data.getAddress;
-      const googleAddress = `${existingAddress.address1} ${existingAddress.city} ${existingAddress.state} ${existingAddress.zipCode}`;
+    if ((data && data.getAddress) || defaultValue) {
+      const existingAddress: Address | undefined = data
+        ? data.getAddress
+        : defaultValue;
 
-      setGoogleAddress(googleAddress);
-      setValue("apt", existingAddress.address2 || "");
+      if (existingAddress) {
+        const googleAddress = `${existingAddress.address1} ${existingAddress.city} ${existingAddress.state} ${existingAddress.zipCode}`;
+
+        setAddress(existingAddress);
+        setGoogleAddress(googleAddress);
+        setValue("apt", existingAddress.address2 || "");
+      }
     }
-  }, [data, setGoogleAddress, setValue]);
+  }, [data, setGoogleAddress, setValue, defaultValue]);
 
   return (
     <ResponsiveForm onSubmit={handleSubmit(onSubmit)}>
@@ -190,6 +197,7 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({
             </Grid>
             <Grid item xs={2} width={0.75}>
               <AddressSelect
+                defaultValue={defaultValue}
                 onChange={(data: Address) => {
                   setGoogleAddress(
                     `${data.address1} ${data.city} ${data.state} ${data.zipCode}`

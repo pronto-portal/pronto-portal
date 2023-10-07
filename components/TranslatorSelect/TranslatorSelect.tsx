@@ -13,6 +13,7 @@ interface TranslatorSelectProps {
   onChange?: (translator: Translator) => void;
   buttonText?: string;
   buttonDisabled?: boolean;
+  defaultValue?: Translator;
 }
 
 export const TranslatorSelect: React.FC<TranslatorSelectProps> = ({
@@ -20,6 +21,7 @@ export const TranslatorSelect: React.FC<TranslatorSelectProps> = ({
   onChange,
   buttonText = "Confirm",
   buttonDisabled = false,
+  defaultValue,
 }) => {
   const { data } = useGetNonUserTranslatorsQuery({});
   const [translator, setTranslator] = useState<Translator>();
@@ -37,6 +39,7 @@ export const TranslatorSelect: React.FC<TranslatorSelectProps> = ({
     >
       <Typography variant="h6">Assign to Translator</Typography>
       <Autocomplete
+        {...(defaultValue ? { defaultValue } : {})}
         fullWidth
         options={data?.getNonUserTranslators?.translators || []}
         getOptionLabel={(option) =>
@@ -59,7 +62,7 @@ export const TranslatorSelect: React.FC<TranslatorSelectProps> = ({
         )}
       />
       <Button
-        disabled={buttonDisabled !== undefined ? buttonDisabled : !translator}
+        disabled={disable}
         variant="contained"
         onClick={() => {
           if (translator) onConfirm(translator);

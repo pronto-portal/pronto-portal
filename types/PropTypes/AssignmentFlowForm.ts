@@ -5,6 +5,7 @@ export interface ModelForm<T = undefined> {
   onSuccess: (data?: T) => void;
   mode?: CreateEdit;
   selectExisting?: boolean;
+  defaultValue?: T;
 }
 
 export interface AssignmentFlowForm extends ModelForm {
