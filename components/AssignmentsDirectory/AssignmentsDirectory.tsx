@@ -15,6 +15,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { AddAssignmentFlowProvider } from "../../contextProviders/AddAssignmentFlowProvider";
 import { AddAssignmentsForm } from "./AddAssignmentForm";
+import { dateToString } from "../../utils/dateFormat";
 
 export const AssignmentDirectory: React.FC = () => {
   const {
@@ -77,6 +78,10 @@ export const AssignmentDirectory: React.FC = () => {
           expandObjectDepth: 1,
           expandObjects: true,
           nestedRowActions,
+          fieldFormatters: {
+            createdAt: (date) => dateToString(date),
+            dateTime: (date) => dateToString(date),
+          },
         }}
         isLoading={isLoading}
         page={page}
