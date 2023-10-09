@@ -16,6 +16,8 @@ import Button from "@mui/material/Button";
 import { AddAssignmentFlowProvider } from "../../contextProviders/AddAssignmentFlowProvider";
 import { AddAssignmentsForm } from "./AddAssignmentForm";
 import { dateToString } from "../../utils/dateFormat";
+import Checkbox from "@mui/material/Checkbox";
+import { StaticCheckbox } from "../StaticCheckbox";
 
 export const AssignmentDirectory: React.FC = () => {
   const {
@@ -81,6 +83,8 @@ export const AssignmentDirectory: React.FC = () => {
           fieldFormatters: {
             createdAt: (date) => dateToString(date),
             dateTime: (date) => dateToString(date),
+            translatorNoShow: (value) => <StaticCheckbox checked={value} />,
+            claimantNoShow: (value) => <StaticCheckbox checked={value} />,
           },
         }}
         isLoading={isLoading}
