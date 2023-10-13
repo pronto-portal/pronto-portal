@@ -20,6 +20,8 @@ export const api = createApi({
     "Reminder",
     "Reminders",
     "Languages",
+    "Roles",
+    "Role",
   ],
   endpoints: (builder) => ({
     languages: builder.query<GetLanguagesResponse, {}>({
