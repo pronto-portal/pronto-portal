@@ -13,6 +13,7 @@ import { SnackbarProvider } from "notistack";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
+import { StripeProvider } from "../contextProviders/StripeProvider";
 
 const roboto = Roboto({
   weight: "400",
@@ -41,7 +42,9 @@ function App({ Component, ...rest }: AppProps) {
                 <PageWrapper>
                   <AuthorizedGridLayout>
                     <LanguagesProvider>
-                      <Component {...pageProps} />
+                      <StripeProvider>
+                        <Component {...pageProps} />
+                      </StripeProvider>
                     </LanguagesProvider>
                   </AuthorizedGridLayout>
                 </PageWrapper>
