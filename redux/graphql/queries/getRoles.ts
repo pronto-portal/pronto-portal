@@ -5,6 +5,8 @@ export const getRoles = gql`
     getRoles {
       name
       description
+      features
+      stripePriceId
       priceCents
     }
   }

@@ -19,9 +19,16 @@ const StripeContext = createContext({} as StripeContextProps);
 
 export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
   const createCheckoutSession = async (priceId: string) => {
-    stripeAxiosInstance.post("/create-checkout-session", {
-      priceId,
-    });
+    console.log("priceID", priceId);
+    await stripeAxiosInstance
+      .post("/create-checkout-session", {
+        priceId,
+      })
+      .then((res) => {
+        console.log("STRIPE RES", res.data);
+        return res.data;
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <Elements stripe={stripePromise}>
