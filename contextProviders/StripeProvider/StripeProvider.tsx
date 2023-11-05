@@ -1,6 +1,6 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { stripeAxiosInstance } from "../../utils/axiosInstances";
 
 interface StripeContextProps {
@@ -26,6 +26,9 @@ export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
       })
       .then((res) => {
         console.log("STRIPE RES", res.data);
+        if (res && res.data && res.data.checkoutUrl) {
+          window.location.href = res.data.checkoutUrl;
+        }
         return res.data;
       })
       .catch((err) => console.log(err));
