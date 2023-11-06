@@ -1,8 +1,6 @@
 import React from "react";
 import { Role } from "../../types/ObjectTypes";
-import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { SubscriptionCard } from "../SubscriptionCard/SubscriptionCard";
 import { useGetRolesQuery } from "../../redux/reducers/subscriptionsReducer";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -16,12 +14,9 @@ export const SubscriptionCards: React.FC = () => {
     <Box
       sx={{
         display: "flex",
-        xs: { flexDirection: "column" },
-        sm: { flexDirection: "column" },
-        md: { flexDirection: "row" },
-        lg: { flexDirection: "row" },
-        xl: {
-          flexDirection: "row",
+        flexDirection: {
+          xs: "column", // flexDirection: 'column' for xs and sm breakpoints
+          md: "row", // flexDirection: 'row' for md, lg, and xl breakpoints
         },
         alignItems: "center",
         justifyContent: "space-evenly",
@@ -34,11 +29,7 @@ export const SubscriptionCards: React.FC = () => {
       {isLoading ? (
         <CircularProgress />
       ) : (
-        roles.map((role) => (
-          <Box key={role.name} flex={1}>
-            <SubscriptionCard role={role} />
-          </Box>
-        ))
+        roles.map((role) => <SubscriptionCard role={role} key={role.name} />)
       )}
     </Box>
   );
