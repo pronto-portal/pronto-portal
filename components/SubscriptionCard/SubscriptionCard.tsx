@@ -32,7 +32,9 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ role }) => {
   const theme = useTheme();
 
   return (
-    <Paper sx={{ width: "100%", height: "100%", padding: 0 }}>
+    <Paper
+      sx={{ width: "100%", height: "100%", padding: 0, borderRadius: "50px" }}
+    >
       <Grid
         container
         direction="column"
@@ -42,7 +44,11 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ role }) => {
         <Grid
           item
           xs={2}
-          sx={{ backgroundColor: theme.palette.primary.dark }}
+          sx={{
+            backgroundColor: theme.palette.primary.dark,
+            borderTopLeftRadius: "50px",
+            borderTopRightRadius: "50px",
+          }}
           display="flex"
           alignItems="center"
           justifyContent="center"
