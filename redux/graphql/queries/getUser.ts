@@ -17,6 +17,15 @@ export const getUser = gql`
       city
       state
       languages
+      role {
+        name
+        description
+        priceCents
+        features
+        stripePriceId
+        remindersLimit
+        translatorsLimit
+      }
     }
   }
 `;

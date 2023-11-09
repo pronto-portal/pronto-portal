@@ -8,6 +8,8 @@ export const getRoles = gql`
       features
       stripePriceId
       priceCents
+      translatorsLimit
+      remindersLimit
     }
   }
 `;

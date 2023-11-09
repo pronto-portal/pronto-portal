@@ -48,7 +48,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ ownerState }) => ({
           ...(ownerState.variant === "contained" && {
-            backgroundColor: primary.main,
+            backgroundColor: ownerState.color || primary.main,
             color: "#FFF",
           }),
         }),
