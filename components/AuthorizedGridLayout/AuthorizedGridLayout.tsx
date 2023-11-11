@@ -25,7 +25,7 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
       sx={{
         width: "100vw",
         height: "100vh",
-        backgroundColor: "primary.light",
+        backgroundColor: "#fff",
       }}
     >
       <NavBar
@@ -38,7 +38,8 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
         sx={{
           width: "100%",
           height: "92vh",
-          overflowY: "scroll",
+          overflowY: "auto",
+          borderRadius: 0,
         }}
       >
         {children}

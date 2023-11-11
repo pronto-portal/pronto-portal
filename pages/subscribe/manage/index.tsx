@@ -75,7 +75,7 @@ const Subscribe: React.FC = () => {
         paddingLeft={1}
         paddingRight={1}
       >
-        <Paper
+        <Box
           sx={{
             width: "60%",
             height: "100%",
@@ -190,7 +190,7 @@ const Subscribe: React.FC = () => {
               </Button>
             </FlexRowGridItem>
           </Grid>
-        </Paper>
+        </Box>
       </Stack>
       <ConfirmationModal
         buttonText={`${

@@ -104,7 +104,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ role }) => {
               textAlign="center"
               color={theme.palette.primary.dark}
             >
-              {formatCurrency(priceCents)}
+              {formatCurrency(priceCents)} / month
             </Typography>
           </Grid>
 

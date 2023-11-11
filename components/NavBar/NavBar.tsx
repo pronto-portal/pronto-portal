@@ -12,25 +12,21 @@ import {
   Avatar,
   SxProps,
   Theme,
+  useTheme,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import PeopleIcon from "@mui/icons-material/People";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
-import Link from "next/link";
 import { IconLabel } from "../IconLabel/IconLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ShopIcon from "@mui/icons-material/Shop";
+import router, { useRouter } from "next/router";
 
 const navItems = [
   {
     name: "home",
     icon: <HomeIcon />,
-    to: "/",
-  },
-  {
-    name: "network",
-    icon: <PeopleIcon />,
     to: "/",
   },
 ];
@@ -41,6 +37,7 @@ interface NavBarProps {
 
 export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -54,30 +51,44 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   if (!session) return null;
 
   return (
-    <AppBar position="static" sx={sx}>
-      <Toolbar>
+    <Box
+      sx={{
+        color: "primary.main",
+        width: "100%",
+        position: "static",
+        borderRadius: 0,
+        backgroundColor: "#fff",
+      }}
+      //backgroundColor="primary.dark"
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="nowrap"
+        flexGrow={1}
+        padding={1}
+      >
+        <Typography variant="h4" color="inherit">
+          PRONTO
+        </Typography>
         <Stack
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
           flexWrap="nowrap"
-          flexGrow={1}
+          spacing={1}
+          alignItems="center"
+          justifyContent="flex-start"
         >
-          <Stack
-            direction="row"
-            flexWrap="nowrap"
-            spacing={1}
-            alignItems="center"
-            justifyContent="flex-start"
-          >
-            <Typography variant="h4">PRONTO</Typography>
-            {navItems.map((item) => (
-              <Button key={item.name}>
-                <Typography>{item.icon}</Typography>
-              </Button>
-            ))}
-          </Stack>
-
+          {navItems.map((item) => (
+            <Button
+              key={item.name}
+              onClick={() => {
+                router.push(item.to);
+              }}
+            >
+              <Typography>{item.icon}</Typography>
+            </Button>
+          ))}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -103,6 +114,25 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem>
+                <IconLabel
+                  text="Profile"
+                  icon={<AccountCircle />}
+                  onClick={() => {
+                    router.push("/profile");
+                  }}
+                />
+              </MenuItem>
+              <MenuItem>
+                <IconLabel
+                  text="Subscriptions"
+                  icon={<ShopIcon />}
+                  onClick={() => {
+                    router.push("/subscribe/manage");
+                    handleCloseUserMenu();
+                  }}
+                />
+              </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
                 <IconLabel
                   text="Sign Out"
@@ -110,17 +140,10 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                   icon={<LogoutIcon />}
                 />
               </MenuItem>
-              <MenuItem>
-                <IconLabel
-                  text="Profile"
-                  icon={<AccountCircle />}
-                  to="/profile"
-                />
-              </MenuItem>
             </Menu>
           </Box>
         </Stack>
-      </Toolbar>
-    </AppBar>
+      </Stack>
+    </Box>
   );
 };
