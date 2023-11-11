@@ -14,11 +14,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { useStripeProvider } from "../../contextProviders/StripeProvider";
 import { useTheme } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import CardActions from "@mui/material/CardActions";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
+import useUser from "../../hooks/useUser";
 
 interface SubscriptionCardProps {
   role: Role;
@@ -26,6 +27,7 @@ interface SubscriptionCardProps {
 
 export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ role }) => {
   const { name, description, priceCents, features, stripePriceId } = role;
+  const { user } = useUser();
   console.log(role);
 
   const { createCheckoutSession } = useStripeProvider();
@@ -117,9 +119,14 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ role }) => {
               variant="contained"
               color="primary"
               onClick={() => createCheckoutSession(stripePriceId)}
-              disabled={!stripePriceId}
+              disabled={
+                !stripePriceId ||
+                (user && user.role.name.toLowerCase() === name.toLowerCase())
+              }
             >
-              Subscribe
+              {user && user.role.name.toLowerCase() === name.toLowerCase()
+                ? "Current Plan"
+                : "Subscribe"}
             </Button>
           </Grid>
         </Grid>

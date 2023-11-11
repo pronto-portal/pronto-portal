@@ -1,4 +1,5 @@
 import { Person } from "./Person";
+import { Role } from "./Role";
 
 export interface User extends Person {
   createdAt: Date;
@@ -10,4 +11,9 @@ export interface User extends Person {
   isProfileComplete: boolean;
   city: string;
   state: string;
+  autoRenewSubscription: boolean;
+  subscriptionEndDate: Date;
+  role: Role;
+  translatorsCount: number;
+  remindersCount: number;
 }

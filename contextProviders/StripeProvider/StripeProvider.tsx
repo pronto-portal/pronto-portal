@@ -2,9 +2,12 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { createContext, useContext, useState } from "react";
 import { stripeAxiosInstance } from "../../utils/axiosInstances";
+import { useSnackbar } from "notistack";
 
 interface StripeContextProps {
   createCheckoutSession: (priceId: string) => Promise<void>;
+  toggleAutoRenewal: (callback?: () => void) => Promise<void>;
+  isToggleAutoRenewalLoading: boolean;
 }
 
 interface StripeProviderProps {
@@ -18,6 +21,11 @@ const stripePromise = loadStripe(
 const StripeContext = createContext({} as StripeContextProps);
 
 export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [isToggleAutoRenewalLoading, setIsToggleAutoRenewalLoading] =
+    useState(false);
+
   const createCheckoutSession = async (priceId: string) => {
     console.log("priceID", priceId);
     await stripeAxiosInstance
@@ -33,9 +41,36 @@ export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
       })
       .catch((err) => console.log(err));
   };
+
+  const toggleAutoRenewal = async (callback?: () => void) => {
+    setIsToggleAutoRenewalLoading(true);
+
+    await stripeAxiosInstance
+      .post("/toggle-autorenewal")
+      .then((res) => {
+        console.log("STRIPE RES", res.data);
+        enqueueSnackbar(res.data.message, { variant: "success" });
+        return res.data;
+      })
+      .catch((err) => {
+        enqueueSnackbar("Error cancelling subscription", { variant: "error" });
+        console.log(err);
+      })
+      .finally(() => {
+        setIsToggleAutoRenewalLoading(false);
+        if (callback) callback();
+      });
+  };
+
   return (
     <Elements stripe={stripePromise}>
-      <StripeContext.Provider value={{ createCheckoutSession }}>
+      <StripeContext.Provider
+        value={{
+          createCheckoutSession,
+          toggleAutoRenewal,
+          isToggleAutoRenewalLoading,
+        }}
+      >
         {children}
       </StripeContext.Provider>
     </Elements>

@@ -3,7 +3,7 @@ import { getUser } from "../graphql/queries";
 import { api } from "./apiReducer";
 import { UpdateUserInput } from "../../types/InputTypes";
 import { updateUser } from "../graphql/mutations/updateUser";
-import { UpdateUserResponse } from "../../types/ResponseTypes";
+import { GetUserResponse, UpdateUserResponse } from "../../types/ResponseTypes";
 
 const userReducer = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ const userReducer = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "User", id: "current" }],
     }),
-    getUser: builder.query({
+    getUser: builder.query<GetUserResponse, {}>({
       query: () => ({
         document: getUser,
       }),

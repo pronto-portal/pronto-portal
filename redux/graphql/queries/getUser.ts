@@ -17,6 +17,10 @@ export const getUser = gql`
       city
       state
       languages
+      autoRenewSubscription
+      subscriptionEndDate
+      translatorsCount
+      remindersCount
       role {
         name
         description

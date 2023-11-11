@@ -5,4 +5,6 @@ export interface Role {
   features: string[];
   priceCents: number;
   stripePriceId: string;
+  remindersLimit: number;
+  translatorsLimit: number;
 }
