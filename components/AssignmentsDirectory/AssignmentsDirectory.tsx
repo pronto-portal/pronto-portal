@@ -18,6 +18,9 @@ import { AddAssignmentsForm } from "./AddAssignmentForm";
 import { dateToString } from "../../utils/dateFormat";
 import Checkbox from "@mui/material/Checkbox";
 import { StaticCheckbox } from "../StaticCheckbox";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import { EditAssignmentForm } from "../EditAssignmentForm";
 
 export const AssignmentDirectory: React.FC = () => {
   const {
@@ -69,8 +72,30 @@ export const AssignmentDirectory: React.FC = () => {
     ),
   });
 
+  const [isEditAssignmentOpen, setIsEditAssignmentOpen] =
+    useState<boolean>(false);
+  const [editingAssignment, setEditingAssignment] = useState<Assignment>(
+    {} as Assignment
+  );
+
+  console.log(editingAssignment);
   return (
     <>
+      <EditAssignmentForm
+        open={isEditAssignmentOpen}
+        handleClose={() => {
+          setIsEditAssignmentOpen(false);
+        }}
+        id={editingAssignment.id}
+        defaultValues={{
+          isComplete: editingAssignment.isComplete,
+          translatorNoShow: editingAssignment.translatorNoShow,
+          claimantNoShow: editingAssignment.claimantNoShow,
+        }}
+        onSubmit={() => {
+          setIsEditAssignmentOpen(false);
+        }}
+      />
       <ModelDirectoryLayout<Assignment>
         titleText="Assignments"
         tableProps={{
@@ -80,11 +105,25 @@ export const AssignmentDirectory: React.FC = () => {
           expandObjectDepth: 1,
           expandObjects: true,
           nestedRowActions,
+          rowActions: (data) => (
+            <Stack direction="row" spacing={1}>
+              <IconButton
+                size="small"
+                onClick={() => {
+                  setEditingAssignment(data);
+                  setIsEditAssignmentOpen(true);
+                }}
+              >
+                <EditIcon />
+              </IconButton>
+            </Stack>
+          ),
           fieldFormatters: {
             createdAt: (date) => dateToString(date),
             dateTime: (date) => dateToString(date),
             translatorNoShow: (value) => <StaticCheckbox checked={value} />,
             claimantNoShow: (value) => <StaticCheckbox checked={value} />,
+            isComplete: (value) => <StaticCheckbox checked={value} />,
           },
         }}
         isLoading={isLoading}

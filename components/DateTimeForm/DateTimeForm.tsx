@@ -12,9 +12,10 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({
   mode = "create",
   defaultValue = new Date(),
 }) => {
-  const [date, setDate] = useState<moment.Moment>();
+  const [date, setDate] = useState<moment.Moment>(moment(defaultValue));
 
   const handleOnSubmit = () => {
+    console.log(date);
     if (date) {
       if (mode === "edit") onSuccess(date.toDate());
       else if (mode === "create") {

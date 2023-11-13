@@ -49,6 +49,7 @@ export type UpdateAssignment = Pick<Assignment, "id"> &
       | "dateTime"
       | "claimantNoShow"
       | "translatorNoShow"
+      | "isComplete"
     >
   >;
 

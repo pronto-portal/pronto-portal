@@ -67,14 +67,7 @@ export const ModelDirectoryLayout = <T extends {}>({
               </Collapsable>
             </Box>
           ) : null}
-          <Stack
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-            spacing={1}
-          >
-            {actions}
-          </Stack>
+
           {tableProps.data.length ? (
             <>
               <Box
@@ -119,6 +112,14 @@ export const ModelDirectoryLayout = <T extends {}>({
               </Typography>
             </Stack>
           )}
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+            spacing={1}
+          >
+            {actions}
+          </Stack>
         </Stack>
       ) : (
         <LinearProgress sx={{ width: "100%", height: "100%" }} />

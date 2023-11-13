@@ -107,7 +107,7 @@ export const ModelsTable = <T extends {}>({
                     )}
                   </TableCell>
                 ))}
-                {rowActions !== undefined ? <TableCell /> : null}
+                {rowActions !== undefined ? <TableCell>Test</TableCell> : null}
                 {showExpandedObjects ? <TableCell /> : null}
               </TableRow>
             ))}
@@ -130,6 +130,7 @@ export const ModelsTable = <T extends {}>({
                     flexDirection: "column",
                     backgroundColor: grey[100],
                   }}
+                  actions={rowActions && depth === 0 ? rowActions : undefined}
                 >
                   {
                     // This will render every expanded object as a new table recursively
@@ -146,9 +147,11 @@ export const ModelsTable = <T extends {}>({
                         ? value
                         : [value];
 
-                      const rowActions =
-                        nestedRowActions !== undefined
+                      const renderRowActions =
+                        nestedRowActions !== undefined && depth > 0
                           ? nestedRowActions(row.original)[key as keyof T]
+                          : rowActions
+                          ? rowActions(row.original)
                           : undefined;
 
                       return (
@@ -172,7 +175,7 @@ export const ModelsTable = <T extends {}>({
                               expandObjectDepth={expandObjectDepth}
                               depth={depth + 1}
                               omitFields={omitFields}
-                              rowActions={(_) => rowActions}
+                              rowActions={(_) => renderRowActions}
                             />
                           </TableCell>
                         )

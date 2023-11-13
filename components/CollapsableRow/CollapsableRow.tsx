@@ -14,12 +14,14 @@ interface CollapsableRowProps<T extends {}> {
   row: Row<T>;
   children?: React.ReactNode;
   expandableSx?: SxProps<Theme>;
+  actions?: (datum: T) => React.ReactNode;
 }
 
 export const CollapsableRow = <T extends {}>({
   row,
   expandableSx = {},
   children,
+  actions,
 }: CollapsableRowProps<T>) => {
   const [open, setOpen] = useState(false);
 
@@ -33,6 +35,7 @@ export const CollapsableRow = <T extends {}>({
             </Typography>
           </TableCell>
         ))}
+        {actions ? <TableCell>{actions(row.original as T)}</TableCell> : null}
         <TableCell>
           <IconButton
             aria-label="expand row"
