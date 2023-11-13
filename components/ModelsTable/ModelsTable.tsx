@@ -96,9 +96,12 @@ export const ModelsTable = <T extends {}>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableCell key={header.id}>
+                  <TableCell
+                    key={header.id}
+                    sx={{ backgroundColor: "primary.dark" }}
+                  >
                     {header.isPlaceholder ? null : (
-                      <Typography>
+                      <Typography fontWeight="bold" color="#fff">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -107,8 +110,12 @@ export const ModelsTable = <T extends {}>({
                     )}
                   </TableCell>
                 ))}
-                {rowActions !== undefined ? <TableCell>Test</TableCell> : null}
-                {showExpandedObjects ? <TableCell /> : null}
+                {rowActions !== undefined ? (
+                  <TableCell sx={{ backgroundColor: "primary.dark" }} />
+                ) : null}
+                {showExpandedObjects ? (
+                  <TableCell sx={{ backgroundColor: "primary.dark" }} />
+                ) : null}
               </TableRow>
             ))}
           </TableHead>
