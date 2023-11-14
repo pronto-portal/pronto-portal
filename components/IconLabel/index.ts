@@ -1,1 +1,1 @@
-export * from "../TranslatorDirectory/TranslatorDirectory";
+export * from "./IconLabel";

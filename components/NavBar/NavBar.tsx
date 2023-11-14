@@ -22,6 +22,10 @@ import { IconLabel } from "../IconLabel/IconLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShopIcon from "@mui/icons-material/Shop";
 import router, { useRouter } from "next/router";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import BarChart from "@mui/icons-material/BarChart";
+import { styled } from "@mui/material/styles";
 
 const navItems = [
   {
@@ -34,6 +38,24 @@ const navItems = [
 interface NavBarProps {
   sx?: SxProps<Theme>;
 }
+
+const StyledTab = styled(Tab)(({ theme }) => ({
+  textTransform: "none",
+  fontWeight: theme.typography.fontWeightRegular,
+  fontSize: theme.typography.pxToRem(15),
+  marginRight: theme.spacing(1),
+  "&:hover": {
+    color: theme.palette.primary.main,
+    opacity: 1,
+  },
+  "&.Mui-selected": {
+    color: theme.palette.primary.main,
+    fontWeight: theme.typography.fontWeightMedium,
+  },
+  "&.Mui-focusVisible": {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
 
 export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
@@ -58,8 +80,9 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
         position: "static",
         borderRadius: 0,
         backgroundColor: "#fff",
+        borderBottom: 1,
+        borderColor: "divider",
       }}
-      //backgroundColor="primary.dark"
     >
       <Stack
         direction="row"
@@ -67,11 +90,31 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
         alignItems="center"
         flexWrap="nowrap"
         flexGrow={1}
-        padding={1}
+        padding={0}
       >
-        <Typography variant="h4" color="inherit">
-          PRONTO
-        </Typography>
+        <Stack
+          direction="row"
+          flexWrap="nowrap"
+          spacing={1}
+          alignItems="center"
+          justifyContent="flex-start"
+          height="100%"
+          padding={0}
+        >
+          <Typography variant="h4" color="inherit" paddingLeft={1}>
+            PRONTO
+          </Typography>
+          <Tabs
+            value={router.pathname.split("/")[1]}
+            onChange={(e, value: string) => router.push(value)}
+            sx={{ height: "100%", padding: 0 }}
+          >
+            <StyledTab label="Translators" value="translators" />
+            <StyledTab label="Assignments" value="assignments" />
+            <StyledTab label="Claimants" value="claimants" />
+            <StyledTab icon={<BarChart />} value="analytics" />
+          </Tabs>
+        </Stack>
         <Stack
           direction="row"
           flexWrap="nowrap"
