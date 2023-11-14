@@ -1,4 +1,5 @@
 import { useGetAssignmentsQuery } from "../../redux/reducers";
+import moment from "moment";
 
 export const useAssignmentCountPerMonth = () => {
   const { data, isError, isLoading } = useGetAssignmentsQuery({});
@@ -6,9 +7,9 @@ export const useAssignmentCountPerMonth = () => {
   const reducedData =
     data &&
     data.getAssignments.assignments.reduce((acc, assignment) => {
-      const date = new Date(assignment.createdAt);
-      const month = date.getMonth();
-      const year = date.getFullYear();
+      const momentDate = moment(new Date(assignment.createdAt));
+      const month = momentDate.month() + 1;
+      const year = momentDate.year();
       const key = `${month}/${year}`;
       if (!acc[key]) {
         acc[key] = 0;

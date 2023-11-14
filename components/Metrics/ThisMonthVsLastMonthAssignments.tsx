@@ -4,7 +4,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { MetricLoadingStates } from "../MetricLoadingStates";
 import dynamic from "next/dynamic";
 import { max } from "d3-array";
-import { useTheme } from "@mui/material/styles";
 
 const ResponsiveBar = dynamic(
   () => import("@nivo/bar").then((m) => m.ResponsiveBar),
@@ -12,11 +11,7 @@ const ResponsiveBar = dynamic(
 );
 
 const ThisMonthVsLastMonthAssignments: React.FC = () => {
-  const theme = useTheme();
-
   const { data, isError, isLoading } = useAssignmentCountPerMonth();
-  if (isLoading) return <CircularProgress />;
-
   const maxValue = data && data.length > 0 ? max(data, (d) => d.value) || 1 : 1;
 
   const tickInterval = Math.ceil(maxValue / 10);

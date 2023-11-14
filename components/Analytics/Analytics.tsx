@@ -2,6 +2,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import { Metric } from "../Metric";
 import ThisMonthVsLastMonthAssignments from "../Metrics/ThisMonthVsLastMonthAssignments";
+import { AssignmentsStatusComparison } from "../Metrics/AssignmentsStatusComparison";
 
 export const Analytics: React.FC = () => {
   console.log("Analytics");
@@ -18,6 +19,11 @@ export const Analytics: React.FC = () => {
       <Grid item height="50%">
         <Metric titleText="Assignments This Month vs Last Month">
           <ThisMonthVsLastMonthAssignments />
+        </Metric>
+      </Grid>
+      <Grid item height="50%">
+        <Metric titleText="Assignment Completion">
+          <AssignmentsStatusComparison />
         </Metric>
       </Grid>
     </Grid>

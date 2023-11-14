@@ -12,7 +12,12 @@ interface MetricProps {
 export const Metric: React.FC<MetricProps> = ({ titleText, children }) => {
   return (
     <Card sx={{ width: "100%", height: "100%" }}>
-      <CardHeader title={<Typography>{titleText}</Typography>} />
+      <CardHeader
+        sx={{
+          padding: "0.5rem",
+        }}
+        title={<Typography fontWeight="bold">{titleText}</Typography>}
+      />
       <CardContent sx={{ width: "100%", height: "100%" }}>
         {children}
       </CardContent>
