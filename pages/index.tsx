@@ -11,9 +11,11 @@ import { ClaimantWriteProvider } from "../contextProviders/ClaimantWriteProvider
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import React, { useState } from "react";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import { Analytics } from "../components/Analytics";
 
 export default function Home() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -25,7 +27,10 @@ export default function Home() {
     0: <TranslatorDirectory />,
     1: <AssignmentDirectory />,
     2: <ClaimantsDirectory />,
+    3: <Analytics />,
   };
+
+  console.log("value", value);
 
   return (
     <FilteredTranslatorsProvider>
@@ -53,6 +58,7 @@ export default function Home() {
                         <Tab label="Translators" />
                         <Tab label="Assignments" />
                         <Tab label="Claimants" />
+                        <Tab icon={<BarChartIcon />} />
                       </Tabs>
                     </Box>
                   </Box>

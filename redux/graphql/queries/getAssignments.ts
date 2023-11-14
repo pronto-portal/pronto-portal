@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
 export const getAssignments = gql`
-  query GetAssignments($input: PaginatedInput!) {
+  query GetAssignments($input: PaginatedInput) {
     getAssignments(input: $input) {
       assignments {
         id

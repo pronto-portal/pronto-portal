@@ -14,7 +14,7 @@ export interface GetAssignmentsFilter {
 }
 
 export interface GetAssignmentsInput {
-  input: PaginatedInput;
+  input?: PaginatedInput;
   where?: GetAssignmentsFilter;
 }
 
