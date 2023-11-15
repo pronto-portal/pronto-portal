@@ -111,9 +111,9 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
             >
               <Tab
                 label="Translators"
-                value="translators"
+                value=""
                 LinkComponent={Link}
-                href="/translators"
+                href="/"
                 sx={sxTabStyling}
               />
               <Tab
