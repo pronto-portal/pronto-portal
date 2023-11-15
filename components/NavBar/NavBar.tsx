@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Box,
   Stack,
@@ -12,7 +10,6 @@ import {
   Avatar,
   SxProps,
   Theme,
-  useTheme,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -21,11 +18,11 @@ import { signOut } from "next-auth/react";
 import { IconLabel } from "../IconLabel/IconLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShopIcon from "@mui/icons-material/Shop";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import BarChart from "@mui/icons-material/BarChart";
-import { styled } from "@mui/material/styles";
+import Link from "next/link";
 
 const navItems = [
   {
@@ -39,28 +36,28 @@ interface NavBarProps {
   sx?: SxProps<Theme>;
 }
 
-const StyledTab = styled(Tab)(({ theme }) => ({
-  textTransform: "none",
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: theme.typography.pxToRem(15),
-  marginRight: theme.spacing(1),
+const sxTabStyling = {
   "&:hover": {
-    color: theme.palette.primary.main,
+    color: "primary.main",
     opacity: 1,
   },
   "&.Mui-selected": {
-    color: theme.palette.primary.main,
-    fontWeight: theme.typography.fontWeightMedium,
+    color: "primary.main",
+    fontWeight: "typography.fontWeightMedium",
   },
   "&.Mui-focusVisible": {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "primary.main",
   },
-}));
+};
 
 export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
-  const router = useRouter();
+  const path =
+    typeof window !== "undefined"
+      ? window.location.pathname.replaceAll("/", "")
+      : "";
 
+  console.log(path);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleCloseUserMenu = () => {
@@ -104,15 +101,35 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
           <Typography variant="h4" color="inherit" paddingLeft={1}>
             PRONTO
           </Typography>
-          <Tabs
-            value={router.pathname.split("/")[1]}
-            onChange={(e, value: string) => router.push(value)}
-            sx={{ height: "100%", padding: 0 }}
-          >
-            <StyledTab label="Translators" value="translators" />
-            <StyledTab label="Assignments" value="assignments" />
-            <StyledTab label="Claimants" value="claimants" />
-            <StyledTab icon={<BarChart />} value="analytics" />
+          <Tabs value={path.toLowerCase()} sx={{ height: "100%", padding: 0 }}>
+            <Tab
+              label="Translators"
+              value="translators"
+              LinkComponent={Link}
+              href="/translators"
+              sx={sxTabStyling}
+            />
+            <Tab
+              label="Assignments"
+              value="assignments"
+              LinkComponent={Link}
+              href="/assignments"
+              sx={sxTabStyling}
+            />
+            <Tab
+              label="Claimants"
+              value="claimants"
+              LinkComponent={Link}
+              href="/claimants"
+              sx={sxTabStyling}
+            />
+            <Tab
+              icon={<BarChart />}
+              value="analytics"
+              LinkComponent={Link}
+              href="/analytics"
+              sx={sxTabStyling}
+            />
           </Tabs>
         </Stack>
         <Stack
@@ -123,12 +140,7 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
           justifyContent="flex-start"
         >
           {navItems.map((item) => (
-            <Button
-              key={item.name}
-              onClick={() => {
-                router.push(item.to);
-              }}
-            >
+            <Button key={item.name} LinkComponent={Link} href={item.to}>
               <Typography>{item.icon}</Typography>
             </Button>
           ))}
@@ -157,21 +169,14 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem>
-                <IconLabel
-                  text="Profile"
-                  icon={<AccountCircle />}
-                  onClick={() => {
-                    router.push("/profile");
-                  }}
-                />
+              <MenuItem LinkComponent={Link} href="/profile">
+                <IconLabel text="Profile" icon={<AccountCircle />} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem LinkComponent={Link} href="/subscribe/manage">
                 <IconLabel
                   text="Subscriptions"
                   icon={<ShopIcon />}
                   onClick={() => {
-                    router.push("/subscribe/manage");
                     handleCloseUserMenu();
                   }}
                 />
