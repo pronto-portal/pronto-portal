@@ -10,6 +10,7 @@ import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { FilteredObjects } from "../../types/FilteredObjectsType";
 import { useGetNonUserTranslatorsQuery } from "../../redux/reducers/nonUserTranslatorReducer";
+import { CustomPageSuspense } from "../../components/CustomPageSuspense";
 
 type FilteredTranslatorsContextProps = FilteredObjects<
   GetTranslatorsFilters,
@@ -59,7 +60,7 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
         totalRowCount,
       }}
     >
-      {children}
+      <CustomPageSuspense isLoading={isLoading}>{children}</CustomPageSuspense>
     </FilteredTranslatorsContext.Provider>
   );
 };

@@ -5,6 +5,7 @@ import { Wrapper } from "../../types/PropTypes/Wrapper";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { useGetAssignmentsQuery } from "../../redux/reducers/assignmentsReducer";
 import { FilteredObjects } from "../../types/FilteredObjectsType";
+import { CustomPageSuspense } from "../../components/CustomPageSuspense";
 
 type FilteredAssignmentsContextProps = FilteredObjects<
   GetAssignmentsFilter,
@@ -54,7 +55,7 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
         totalRowCount,
       }}
     >
-      {children}
+      <CustomPageSuspense isLoading={isLoading}>{children}</CustomPageSuspense>
     </FilteredAssignmentsContext.Provider>
   );
 };
