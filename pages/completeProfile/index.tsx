@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Stack,
-  Paper,
+  Box,
   Typography,
   Grid,
   TextField,
@@ -15,8 +15,6 @@ import {
 } from "@mui/material";
 import { PhoneResult, phone } from "phone";
 import { User } from "../../types/ObjectTypes";
-import { State, City } from "country-state-city";
-import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { useRouter } from "next/router";
 import {
   useCompleteProfileMutation,
@@ -43,10 +41,8 @@ export default function CompleteProfile() {
   const [isManager, setIsManager] = useState<boolean>(false);
   const [languages, setLanguages] = useState<string[]>([]);
 
-  const { city, setCity, state, setState, states, stateISOCodes, cities } =
+  const { city, setCity, state, setState, stateISOCodes, cities } =
     useSelectCityState();
-
-  const { languages: langs } = useLanguages();
 
   const [saveChanges] = useCompleteProfileMutation();
 
@@ -68,6 +64,9 @@ export default function CompleteProfile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  console.log("city", city);
+  console.log("state", state);
+
   const isPhoneNumberValid = phone(phoneNumber.phoneNumber ?? "").isValid;
 
   const isInputValid =
@@ -82,7 +81,15 @@ export default function CompleteProfile() {
       justifyContent="center"
       alignItems="center"
     >
-      <Paper sx={{ p: 2, width: "auto", height: "80%", maxWidth: "60%" }}>
+      <Box
+        sx={{
+          p: 2,
+          width: "auto",
+          height: "80%",
+          maxWidth: "60%",
+          borderRadius: "20px",
+        }}
+      >
         <Grid
           container
           width="100%"
@@ -114,6 +121,7 @@ export default function CompleteProfile() {
               <TextField
                 label="Phone *"
                 value={phoneNumber.phoneNumber}
+                variant="standard"
                 fullWidth
                 onChange={(e) => setPhoneNumber(phone(e.target.value))}
                 error={!isPhoneNumberValid}
@@ -124,6 +132,7 @@ export default function CompleteProfile() {
               <TextField
                 label="First Name *"
                 value={firstName}
+                variant="standard"
                 fullWidth
                 inputProps={{ maxLength: 32 }}
                 onChange={(e) =>
@@ -137,6 +146,7 @@ export default function CompleteProfile() {
               <TextField
                 label="Last Name *"
                 value={lastName}
+                variant="standard"
                 fullWidth
                 inputProps={{ maxLength: 32 }}
                 onChange={(e) =>
@@ -163,6 +173,7 @@ export default function CompleteProfile() {
                     <TextField
                       {...params}
                       label="State *"
+                      variant="standard"
                       inputProps={{ ...params.inputProps, maxLength: 10 }}
                       error={!state}
                       helperText={!state ? "State is required" : " "}
@@ -182,6 +193,7 @@ export default function CompleteProfile() {
                       <TextField
                         {...params}
                         label="City *"
+                        variant="standard"
                         inputProps={{ ...params.inputProps, maxLength: 85 }}
                         error={!city}
                         helperText={!city ? "City is required" : " "}
@@ -227,10 +239,18 @@ export default function CompleteProfile() {
                 </RadioGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
               <LanguagesAutocomplete
                 value={languages}
+                variant="standard"
                 multiple
+                sx={{ width: "50%" }}
                 label="Spoken Languages"
                 onChange={(val) => {
                   setLanguages(val as string[]);
@@ -240,6 +260,7 @@ export default function CompleteProfile() {
           </Grid>
           <Grid item xs={1}>
             <Button
+              variant="contained"
               onClick={() => {
                 saveChanges({
                   firstName,
@@ -249,6 +270,8 @@ export default function CompleteProfile() {
                   isTranslator:
                     isTranslator !== undefined ? isTranslator : false,
                   languages,
+                  city,
+                  state,
                 }).then(() => {
                   router.push("/");
                 });
@@ -259,7 +282,7 @@ export default function CompleteProfile() {
             </Button>
           </Grid>
         </Grid>
-      </Paper>
+      </Box>
     </Stack>
   );
 }

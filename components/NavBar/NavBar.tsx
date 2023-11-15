@@ -22,6 +22,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import BarChart from "@mui/icons-material/BarChart";
 import Link from "next/link";
+import { useGetUserQuery } from "../../redux/reducers";
 
 const navItems = [
   {
@@ -51,12 +52,15 @@ const sxTabStyling = {
 
 export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
+  const { data, isLoading, isError } = useGetUserQuery({});
+  const user = data?.getUser;
+
   const path =
     typeof window !== "undefined"
       ? window.location.pathname.replaceAll("/", "")
       : "";
 
-  console.log(path);
+  console.log(session);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleCloseUserMenu = () => {
@@ -66,7 +70,7 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  if (!session) return null;
+  if (!session || !user || isError) return null;
 
   return (
     <Box
@@ -100,36 +104,41 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
           <Typography variant="h4" color="inherit" paddingLeft={1}>
             PRONTO
           </Typography>
-          <Tabs value={path.toLowerCase()} sx={{ height: "100%", padding: 0 }}>
-            <Tab
-              label="Translators"
-              value="translators"
-              LinkComponent={Link}
-              href="/translators"
-              sx={sxTabStyling}
-            />
-            <Tab
-              label="Assignments"
-              value="assignments"
-              LinkComponent={Link}
-              href="/assignments"
-              sx={sxTabStyling}
-            />
-            <Tab
-              label="Claimants"
-              value="claimants"
-              LinkComponent={Link}
-              href="/claimants"
-              sx={sxTabStyling}
-            />
-            <Tab
-              icon={<BarChart />}
-              value="analytics"
-              LinkComponent={Link}
-              href="/analytics"
-              sx={sxTabStyling}
-            />
-          </Tabs>
+          {user.isProfileComplete ? (
+            <Tabs
+              value={path.toLowerCase()}
+              sx={{ height: "100%", padding: 0 }}
+            >
+              <Tab
+                label="Translators"
+                value="translators"
+                LinkComponent={Link}
+                href="/translators"
+                sx={sxTabStyling}
+              />
+              <Tab
+                label="Assignments"
+                value="assignments"
+                LinkComponent={Link}
+                href="/assignments"
+                sx={sxTabStyling}
+              />
+              <Tab
+                label="Claimants"
+                value="claimants"
+                LinkComponent={Link}
+                href="/claimants"
+                sx={sxTabStyling}
+              />
+              <Tab
+                icon={<BarChart />}
+                value="analytics"
+                LinkComponent={Link}
+                href="/analytics"
+                sx={sxTabStyling}
+              />
+            </Tabs>
+          ) : null}
         </Stack>
         <Stack
           direction="row"
@@ -138,11 +147,13 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
           alignItems="center"
           justifyContent="flex-start"
         >
-          {navItems.map((item) => (
-            <Button key={item.name} LinkComponent={Link} href={item.to}>
-              <Typography>{item.icon}</Typography>
-            </Button>
-          ))}
+          {user.isProfileComplete
+            ? navItems.map((item) => (
+                <Button key={item.name} LinkComponent={Link} href={item.to}>
+                  <Typography>{item.icon}</Typography>
+                </Button>
+              ))
+            : null}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -152,42 +163,45 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                 />
               </Button>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem LinkComponent={Link} href="/profile">
-                <IconLabel text="Profile" icon={<AccountCircle />} />
-              </MenuItem>
-              <MenuItem LinkComponent={Link} href="/subscribe/manage">
-                <IconLabel
-                  text="Subscriptions"
-                  icon={<ShopIcon />}
-                  onClick={() => {
-                    handleCloseUserMenu();
-                  }}
-                />
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <IconLabel
-                  text="Sign Out"
-                  onClick={() => signOut()}
-                  icon={<LogoutIcon />}
-                />
-              </MenuItem>
-            </Menu>
+
+            {user.isProfileComplete ? (
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem LinkComponent={Link} href="/profile">
+                  <IconLabel text="Profile" icon={<AccountCircle />} />
+                </MenuItem>
+                <MenuItem LinkComponent={Link} href="/subscribe/manage">
+                  <IconLabel
+                    text="Subscriptions"
+                    icon={<ShopIcon />}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                    }}
+                  />
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <IconLabel
+                    text="Sign Out"
+                    onClick={() => signOut()}
+                    icon={<LogoutIcon />}
+                  />
+                </MenuItem>
+              </Menu>
+            ) : null}
           </Box>
         </Stack>
       </Stack>

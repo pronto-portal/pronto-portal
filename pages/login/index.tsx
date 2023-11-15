@@ -27,8 +27,11 @@ export default function Login() {
       justifyContent="center"
       alignItems="center"
       sx={{
-        width: "100%",
-        height: "100%",
+        width: "100vw",
+        height: "100vh",
+        position: "absolute",
+        top: 0,
+        left: 0,
         backgroundColor: "primary.light",
       }}
     >

@@ -2,7 +2,7 @@ import React from "react";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { Language } from "../../types/ObjectTypes";
 import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import TextField, { TextFieldVariants } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { SxProps, Theme } from "@mui/material";
 
@@ -13,6 +13,7 @@ interface LanguagesAutocompleteProps {
   label: string;
   ref?: React.ForwardedRef<HTMLInputElement>;
   sx?: SxProps<Theme>;
+  variant?: TextFieldVariants;
 }
 
 export const LanguagesAutocomplete = React.forwardRef(
@@ -22,6 +23,7 @@ export const LanguagesAutocomplete = React.forwardRef(
       onChange,
       multiple = false,
       label,
+      variant,
       sx,
     }: LanguagesAutocompleteProps,
     ref: React.ForwardedRef<HTMLInputElement>
@@ -52,7 +54,7 @@ export const LanguagesAutocomplete = React.forwardRef(
         renderInput={(params) => (
           <TextField
             {...params}
-            variant="outlined"
+            variant={variant || "outlined"}
             fullWidth
             label={label}
             placeholder={label}

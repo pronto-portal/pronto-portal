@@ -45,24 +45,16 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             const firstName = name[0];
             const lastName = name[1];
 
-            const requestBody = {
-              query: login,
-              variables: {
-                email: user.email,
-                firstName,
-                lastName,
-              },
-            };
-
             let tokens;
 
-            // console.log("API URL", process.env.NEXT_PUBLIC_API_URL);
-
-            // console.log("Logging in");
             const existingUser = await axios
               .post(
-                process.env.NEXT_PUBLIC_API_URL! + "/graphql",
-                requestBody,
+                process.env.NEXT_PUBLIC_API_URL! + "/login",
+                {
+                  email: user.email,
+                  firstName,
+                  lastName,
+                },
                 {
                   headers: {
                     Authorization: `Bearer ${account.id_token}`,
@@ -97,7 +89,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                   // );
                 }
 
-                return dataRes.data.data.login;
+                console.log("dataRes", dataRes.data);
+                console.log(dataRes.data.errors);
+                return dataRes.data;
               })
               .catch((err) => {
                 console.log("Error", err);
