@@ -18,7 +18,6 @@ import { signOut } from "next-auth/react";
 import { IconLabel } from "../IconLabel/IconLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShopIcon from "@mui/icons-material/Shop";
-import { useRouter } from "next/router";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import BarChart from "@mui/icons-material/BarChart";
