@@ -16,7 +16,11 @@ export const Metric: React.FC<MetricProps> = ({ titleText, children }) => {
         sx={{
           padding: "0.5rem",
         }}
-        title={<Typography fontWeight="bold">{titleText}</Typography>}
+        title={
+          <Typography fontWeight="bold" textAlign="center">
+            {titleText}
+          </Typography>
+        }
       />
       <CardContent sx={{ width: "100%", height: "100%" }}>
         {children}

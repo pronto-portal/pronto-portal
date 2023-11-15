@@ -1,4 +1,4 @@
-import { createTheme, PaletteColorOptions } from "@mui/material";
+import { createTheme } from "@mui/material";
 
 const primary = {
   main: "#009dff",

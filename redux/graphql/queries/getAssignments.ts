@@ -41,6 +41,7 @@ export const getAssignments = gql`
           email
           phone
           languages
+          primaryLanguage
         }
         assignedTo {
           id

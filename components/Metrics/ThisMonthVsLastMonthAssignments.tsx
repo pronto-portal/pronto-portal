@@ -1,9 +1,9 @@
 import React from "react";
 import { useAssignmentCountPerMonth } from "../MetricFormatters/AssignmentCountPerMonth";
-import CircularProgress from "@mui/material/CircularProgress";
 import { MetricLoadingStates } from "../MetricLoadingStates";
 import dynamic from "next/dynamic";
 import { max } from "d3-array";
+import nivoChartColors from "../../theme/nivoChartColor";
 
 const ResponsiveBar = dynamic(
   () => import("@nivo/bar").then((m) => m.ResponsiveBar),
@@ -26,7 +26,7 @@ const ThisMonthVsLastMonthAssignments: React.FC = () => {
         padding={0.5}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
-        enableGridY={false}
+        enableGridY={true}
         axisBottom={{
           tickSize: 5,
           tickPadding: 20,
@@ -35,6 +35,7 @@ const ThisMonthVsLastMonthAssignments: React.FC = () => {
           legend: "Month",
           legendPosition: "middle",
         }}
+        borderWidth={1}
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,
@@ -44,7 +45,7 @@ const ThisMonthVsLastMonthAssignments: React.FC = () => {
           legend: "Value",
           legendPosition: "middle",
         }}
-        colors={{ scheme: "pastel2" }}
+        colors={nivoChartColors}
       />
     </MetricLoadingStates>
   );

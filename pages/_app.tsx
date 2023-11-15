@@ -14,6 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { StripeProvider } from "../contextProviders/StripeProvider";
+import React, { Suspense } from "react";
 
 const roboto = Roboto({
   weight: "400",

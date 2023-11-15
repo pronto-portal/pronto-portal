@@ -3,10 +3,10 @@ import dynamic from "next/dynamic";
 import { MetricLoadingStates } from "../MetricLoadingStates";
 import { useAssignmentStatusComparison } from "../MetricFormatters/AssignmentStatusComparison";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import TimePeriodSelect from "../../types/timeperiodSelect";
-import { TimeRangeSelectButtons } from "../TimeRangeSelectButtons";
+import { RangeSelectTabs } from "../RangeSelectTabs";
 import { max } from "d3-array";
+import nivoChartColors from "../../theme/nivoChartColor";
 
 const ResponsiveLine = dynamic(
   () => import("@nivo/line").then((m) => m.ResponsiveLine),
@@ -29,8 +29,17 @@ export const AssignmentsStatusComparison: React.FC = () => {
 
   return (
     <MetricLoadingStates isError={isError} isLoading={isLoading}>
-      <Stack direction="column" spacing={2} width="100%" height="100%">
-        <TimeRangeSelectButtons onChange={setTimePeriod} />
+      <Stack
+        direction="column"
+        spacing={2}
+        width="100%"
+        height="100%"
+        alignItems="center"
+      >
+        <RangeSelectTabs
+          onChange={setTimePeriod}
+          options={["1 Month", "3 Month", "6 Month", "1 Year", "All"]}
+        />
         <ResponsiveLine
           data={data || []}
           margin={{ top: 40, right: 150, bottom: 150, left: 30 }}
@@ -62,13 +71,14 @@ export const AssignmentsStatusComparison: React.FC = () => {
             legend: "Count",
             legendPosition: "middle",
           }}
-          colors={{ scheme: "pastel2" }}
+          colors={nivoChartColors}
           pointSize={10}
           pointColor={{ theme: "background" }}
           pointBorderWidth={2}
           pointBorderColor={{ from: "serieColor" }}
           useMesh={true}
           enablePoints={false}
+          enableGridY={true}
           legends={[
             {
               anchor: "bottom-right",
