@@ -60,5 +60,7 @@ export const useTranslatorNoShowToCompletionRatio = (sortBy: string) => {
     data: formattedData,
     isError,
     isLoading,
+    isEmpty:
+      data && data.getAssignments.assignments.length === 0 ? true : false,
   };
 };

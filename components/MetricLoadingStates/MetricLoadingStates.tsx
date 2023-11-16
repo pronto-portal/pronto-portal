@@ -4,14 +4,17 @@ import Typography from "@mui/material/Typography";
 import ErrorIcon from "@mui/icons-material/Error";
 import CircularProgress from "@mui/material/CircularProgress";
 import React from "react";
+import Warning from "@mui/icons-material/Warning";
 
 interface MetricLoadingStatesProps {
+  isEmpty: boolean;
   isError: boolean;
   isLoading: boolean;
   children: React.ReactNode;
 }
 
 export const MetricLoadingStates: React.FC<MetricLoadingStatesProps> = ({
+  isEmpty,
   isError,
   isLoading,
   children,
@@ -24,16 +27,26 @@ export const MetricLoadingStates: React.FC<MetricLoadingStatesProps> = ({
       justifyContent="center"
       direction="column"
       spacing={2}
-      sx={isError ? { backgroundColor: "error.main" } : {}}
+      sx={isError ? { backgroundColor: "#fff" } : {}}
     >
-      {isError && (
+      {isLoading ? (
+        <CircularProgress />
+      ) : isError ? (
         <>
-          <ErrorIcon sx={{ color: "#fff" }} />
-          <Typography sx={{ color: "#fff" }}>Error fetching data</Typography>
+          <ErrorIcon sx={{ color: "error.main" }} />
+          <Typography sx={{ color: "error.main" }}>
+            Error fetching data
+          </Typography>
         </>
-      )}
-      {isLoading && <CircularProgress />}
-      {!isLoading && !isError ? children : null}
+      ) : isEmpty ? (
+        <>
+          <Warning sx={{ color: "warning.main" }} />
+          <Typography sx={{ color: "warning.main" }}>
+            No data available
+          </Typography>
+        </>
+      ) : null}
+      {!isLoading && !isError && !isEmpty ? children : null}
     </Stack>
   );
 };

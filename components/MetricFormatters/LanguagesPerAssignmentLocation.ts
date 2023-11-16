@@ -64,9 +64,13 @@ const useLanguagesPerAssignmentLocation = () => {
     }
   });
 
-  console.log(formattedData);
-
-  return { data: formattedData, isError, isLoading };
+  return {
+    data: formattedData,
+    isError,
+    isLoading,
+    isEmpty:
+      data && data.getAssignments.assignments.length === 0 ? true : false,
+  };
 };
 
 export default useLanguagesPerAssignmentLocation;

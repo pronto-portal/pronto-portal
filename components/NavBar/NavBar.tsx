@@ -52,7 +52,7 @@ const sxTabStyling = {
 
 export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
-  const { data, isLoading, isError } = useGetUserQuery({});
+  const { data, isError } = useGetUserQuery({});
   const user = data?.getUser;
 
   const path =
@@ -60,7 +60,6 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
       ? window.location.pathname.replaceAll("/", "")
       : "";
 
-  console.log(session);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleCloseUserMenu = () => {

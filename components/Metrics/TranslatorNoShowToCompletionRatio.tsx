@@ -16,14 +16,18 @@ const ResponsiveBar = dynamic(
 const TranslatorNoShowToCompletionRatio: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>("isComplete");
 
-  const { data, isError, isLoading } =
+  const { data, isError, isLoading, isEmpty } =
     useTranslatorNoShowToCompletionRatio(sortBy);
   const maxValue = data && data.length > 0 ? max(data, (d) => d.total) || 1 : 1;
 
   const tickInterval = Math.ceil(maxValue / 10);
 
   return (
-    <MetricLoadingStates isError={isError} isLoading={isLoading}>
+    <MetricLoadingStates
+      isError={isError}
+      isLoading={isLoading}
+      isEmpty={isEmpty}
+    >
       <Stack
         direction="column"
         spacing={2}

@@ -10,10 +10,15 @@ const ResponsiveCirclePacking = dynamic(
 );
 
 const LanguagesPerAssignmentLocation: React.FC = () => {
-  const { data, isError, isLoading } = useLanguagesPerAssignmentLocation();
+  const { data, isError, isLoading, isEmpty } =
+    useLanguagesPerAssignmentLocation();
 
   return (
-    <MetricLoadingStates isError={isError} isLoading={isLoading}>
+    <MetricLoadingStates
+      isError={isError}
+      isLoading={isLoading}
+      isEmpty={isEmpty}
+    >
       <ResponsiveCirclePacking
         data={data || []}
         margin={{ top: 20, right: 20, bottom: 20, left: 20 }}

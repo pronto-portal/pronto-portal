@@ -93,5 +93,7 @@ export const useAssignmentStatusComparison = (timeRange: TimePeriodSelect) => {
     data: chartData,
     isError,
     isLoading,
+    isEmpty:
+      data && data.getAssignments.assignments.length === 0 ? true : false,
   };
 };

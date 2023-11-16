@@ -15,7 +15,7 @@ const ResponsiveLine = dynamic(
 
 export const AssignmentsStatusComparison: React.FC = () => {
   const [timePeriod, setTimePeriod] = useState<TimePeriodSelect>("1 Month"); // ["1 Month", "3 Month", "6 Month", "1 Year", "All"
-  const { data, isError, isLoading } =
+  const { data, isError, isLoading, isEmpty } =
     useAssignmentStatusComparison(timePeriod);
 
   const completedAssignmentsData = data.find((datum) => datum.id === "Total");
@@ -28,7 +28,11 @@ export const AssignmentsStatusComparison: React.FC = () => {
   const tickInterval = Math.ceil(maxValue / 10);
 
   return (
-    <MetricLoadingStates isError={isError} isLoading={isLoading}>
+    <MetricLoadingStates
+      isError={isError}
+      isLoading={isLoading}
+      isEmpty={isEmpty}
+    >
       <Stack
         direction="column"
         spacing={2}

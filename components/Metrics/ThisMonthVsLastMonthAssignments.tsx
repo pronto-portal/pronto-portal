@@ -11,13 +11,17 @@ const ResponsiveBar = dynamic(
 );
 
 const ThisMonthVsLastMonthAssignments: React.FC = () => {
-  const { data, isError, isLoading } = useAssignmentCountPerMonth();
+  const { data, isError, isLoading, isEmpty } = useAssignmentCountPerMonth();
   const maxValue = data && data.length > 0 ? max(data, (d) => d.value) || 1 : 1;
 
   const tickInterval = Math.ceil(maxValue / 10);
 
   return (
-    <MetricLoadingStates isError={isError} isLoading={isLoading}>
+    <MetricLoadingStates
+      isError={isError}
+      isLoading={isLoading}
+      isEmpty={isEmpty}
+    >
       <ResponsiveBar
         data={data || []}
         margin={{ top: 20, right: 30, bottom: 100, left: 30 }}

@@ -29,5 +29,7 @@ export const useAssignmentCountPerMonth = () => {
     data: formattedData,
     isError,
     isLoading,
+    isEmpty:
+      data && data.getAssignments.assignments.length === 0 ? true : false,
   };
 };
