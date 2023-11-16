@@ -5,7 +5,6 @@ import { GetClaimants } from "../../types/ResponseTypes";
 import { GetClaimantsFilter } from "../../types/InputTypes";
 import { usePaginationState } from "../../hooks/usePaginationState";
 import { FilteredObjects } from "../../types/FilteredObjectsType";
-import { CustomPageSuspense } from "../../components/CustomPageSuspense";
 
 type FilteredClaimantsContextProps = FilteredObjects<
   GetClaimantsFilter,
@@ -52,7 +51,7 @@ export const FilteredClaimantsProvider: React.FC<Wrapper> = ({ children }) => {
         totalRowCount,
       }}
     >
-      <CustomPageSuspense isLoading={isLoading}>{children}</CustomPageSuspense>
+      {children}
     </FilteredClaimantsContext.Provider>
   );
 };

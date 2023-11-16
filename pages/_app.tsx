@@ -14,7 +14,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { StripeProvider } from "../contextProviders/StripeProvider";
-import React, { Suspense } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Stack from "@mui/material/Stack";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const roboto = Roboto({
   weight: "400",
@@ -33,6 +36,24 @@ function App({ Component, ...rest }: AppProps) {
     moment.locale(locale);
   }
 
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleStart = () => setLoading(true);
+    const handleComplete = () => setLoading(false);
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={locale}>
       <Provider store={store}>
@@ -44,7 +65,15 @@ function App({ Component, ...rest }: AppProps) {
                   <AuthorizedGridLayout>
                     <LanguagesProvider>
                       <StripeProvider>
-                        <Component {...pageProps} />
+                        {loading ? (
+                          <LinearProgress
+                            sx={{
+                              width: "100%",
+                            }}
+                          />
+                        ) : (
+                          <Component {...pageProps} />
+                        )}
                       </StripeProvider>
                     </LanguagesProvider>
                   </AuthorizedGridLayout>
