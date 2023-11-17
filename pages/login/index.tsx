@@ -1,9 +1,11 @@
-import { Stack, Paper, Typography } from "@mui/material";
+import { Stack, Paper, Typography, Divider } from "@mui/material";
 import { GoogleLoginButton } from "../../components/GoogleLoginButton";
 import { signIn, useSession } from "next-auth/react";
 import { Sacramento } from "@next/font/google";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Box from "@mui/material/Box";
+import Image from "next/image";
 
 const sacramento = Sacramento({
   weight: "400",
@@ -22,10 +24,7 @@ export default function Login() {
 
   return (
     <Stack
-      direction="column"
-      spacing={2}
-      justifyContent="center"
-      alignItems="center"
+      direction="row"
       sx={{
         width: "100vw",
         height: "100vh",
@@ -35,42 +34,45 @@ export default function Login() {
         backgroundColor: "primary.light",
       }}
     >
-      <Typography
-        textAlign="center"
-        variant="h2"
-        color="#FFF"
-        fontFamily={sacramento.style.fontFamily}
-      >
-        Pronto Portal
-      </Typography>
-      <Paper
-        elevation={2}
+      <Box
         sx={{
-          borderRadius: "10px",
           width: "40%",
-          height: "40%",
+          height: "100%",
           p: 1,
           position: "relative",
+          backgroundColor: "#fff",
         }}
       >
+        {/*  */}
         <Stack
-          justifyContent="flex-start"
+          direction="column"
           alignItems="center"
-          width="100%"
+          justifyContent="center"
+          spacing={1}
           height="100%"
+          width="100%"
         >
-          <Typography textAlign="center" variant="h4">
-            Login
+          <Typography textAlign="center" variant="h2">
+            Pronto Portal
           </Typography>
-
-          <Stack flex={1} justifyContent="center" alignItems="center">
+          <Divider sx={{ width: "75%" }} />
+          <Box paddingTop={2}>
             <GoogleLoginButton
               onClick={() => signIn("google")}
               variant="contained"
             />
-          </Stack>
+          </Box>
         </Stack>
-      </Paper>
+      </Box>
+      <Box
+        sx={{
+          width: "60%",
+          height: "100%",
+          position: "relative",
+          backgroundColor: "#fff",
+          backgroundImage: "url(/images/busyCity.png)",
+        }}
+      />
     </Stack>
   );
 }
