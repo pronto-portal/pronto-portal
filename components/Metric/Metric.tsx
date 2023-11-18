@@ -22,9 +22,7 @@ export const Metric: React.FC<MetricProps> = ({ titleText, children }) => {
             direction="column"
             alignItems="center"
           >
-            <Typography fontWeight="bold" textAlign="center">
-              {titleText}
-            </Typography>
+            <Typography textAlign="center">{titleText}</Typography>
             <Divider sx={{ width: "100%" }} />
           </Stack>
         }

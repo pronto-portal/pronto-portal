@@ -48,7 +48,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ ownerState }) => ({
           ...(ownerState.variant === "contained" && {
-            backgroundColor: ownerState.color || primary.main,
+            backgroundColor: ownerState.color || primary.light,
             color: "#FFF",
           }),
         }),
@@ -74,7 +74,8 @@ export const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: "20px",
+          borderRadius: "10px",
+          boxShadow: `0 0 2px 0 rgba(0,0,0,0.3)`,
         },
       },
     },

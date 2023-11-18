@@ -22,6 +22,7 @@ import Tab from "@mui/material/Tab";
 import BarChart from "@mui/icons-material/BarChart";
 import Link from "next/link";
 import { useGetUserQuery } from "../../redux/reducers";
+import { useRouter } from "next/router";
 
 interface NavBarProps {
   sx?: SxProps<Theme>;
@@ -45,6 +46,7 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
   const { data: session } = useSession();
   const { data, isError } = useGetUserQuery({});
   const user = data?.getUser;
+  const router = useRouter();
 
   const path =
     typeof window !== "undefined"
@@ -169,17 +171,25 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem LinkComponent={Link} href="/profile">
+                <MenuItem
+                  LinkComponent={Link}
+                  href="/profile"
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    router.push("/profile");
+                  }}
+                >
                   <IconLabel text="Profile" icon={<AccountCircle />} />
                 </MenuItem>
-                <MenuItem LinkComponent={Link} href="/subscribe/manage">
-                  <IconLabel
-                    text="Subscriptions"
-                    icon={<ShopIcon />}
-                    onClick={() => {
-                      handleCloseUserMenu();
-                    }}
-                  />
+                <MenuItem
+                  LinkComponent={Link}
+                  href="/subscribe/manage"
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    router.push("/subscribe/manage");
+                  }}
+                >
+                  <IconLabel text="Subscriptions" icon={<ShopIcon />} />
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <IconLabel
