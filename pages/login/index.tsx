@@ -1,16 +1,9 @@
-import { Stack, Paper, Typography, Divider } from "@mui/material";
+import { Stack, Typography, Divider } from "@mui/material";
 import { GoogleLoginButton } from "../../components/GoogleLoginButton";
 import { signIn, useSession } from "next-auth/react";
-import { Sacramento } from "@next/font/google";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Box from "@mui/material/Box";
-import Image from "next/image";
-
-const sacramento = Sacramento({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export default function Login() {
   const { data: session } = useSession();
@@ -43,7 +36,6 @@ export default function Login() {
           backgroundColor: "#fff",
         }}
       >
-        {/*  */}
         <Stack
           direction="column"
           alignItems="center"
@@ -52,7 +44,7 @@ export default function Login() {
           height="100%"
           width="100%"
         >
-          <Typography textAlign="center" variant="h2">
+          <Typography textAlign="center" variant="h3">
             Pronto Portal
           </Typography>
           <Divider sx={{ width: "75%" }} />

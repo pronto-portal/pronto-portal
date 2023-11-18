@@ -9,8 +9,7 @@ import { grey } from "@mui/material/colors";
 import { PaginationState } from "../../hooks/usePaginationState";
 import { ModelsTableProps } from "../../types/PropTypes/ModelTableProps";
 import Typography from "@mui/material/Typography";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import Warning from "@mui/icons-material/Warning";
 
 interface ModelDirectoryLayoutProps<T extends {}> extends PaginationState {
   titleText: string;
@@ -99,8 +98,9 @@ export const ModelDirectoryLayout = <T extends {}>({
               width="100%"
               height="100%"
               direction="column"
+              sx={{ opacity: 0.5 }}
             >
-              <InfoOutlined
+              <Warning
                 sx={{
                   color: "warning.main",
                   width: "4rem",
@@ -108,7 +108,7 @@ export const ModelDirectoryLayout = <T extends {}>({
                 }}
               />
               <Typography variant="h4" textAlign="center" color="warning.main">
-                No {titleText} found
+                No {titleText} Found
               </Typography>
             </Stack>
           )}
@@ -121,9 +121,7 @@ export const ModelDirectoryLayout = <T extends {}>({
             {actions}
           </Stack>
         </Stack>
-      ) : (
-        <LinearProgress sx={{ width: "100%", height: "100%" }} />
-      )}
+      ) : null}
     </Box>
   );
 };

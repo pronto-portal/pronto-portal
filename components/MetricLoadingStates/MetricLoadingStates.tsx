@@ -26,7 +26,6 @@ export const MetricLoadingStates: React.FC<MetricLoadingStatesProps> = ({
       justifyContent="center"
       direction="column"
       spacing={2}
-      sx={isError ? { backgroundColor: "#fff" } : {}}
     >
       {isLoading ? (
         <CircularProgress />
@@ -39,8 +38,8 @@ export const MetricLoadingStates: React.FC<MetricLoadingStatesProps> = ({
         </>
       ) : isEmpty ? (
         <>
-          <Warning sx={{ color: "warning.main" }} />
-          <Typography sx={{ color: "warning.main" }}>
+          <Warning sx={{ color: "warning.main", opacity: 0.5 }} />
+          <Typography sx={{ color: "warning.main", opacity: 0.5 }}>
             No data available
           </Typography>
         </>

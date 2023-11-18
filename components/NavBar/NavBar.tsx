@@ -11,7 +11,6 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
@@ -23,14 +22,6 @@ import Tab from "@mui/material/Tab";
 import BarChart from "@mui/icons-material/BarChart";
 import Link from "next/link";
 import { useGetUserQuery } from "../../redux/reducers";
-
-const navItems = [
-  {
-    name: "home",
-    icon: <HomeIcon />,
-    to: "/",
-  },
-];
 
 interface NavBarProps {
   sx?: SxProps<Theme>;
@@ -100,7 +91,12 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
           height="100%"
           padding={0}
         >
-          <Typography variant="h4" color="inherit" paddingLeft={1}>
+          <Typography
+            variant="h4"
+            color="inherit"
+            paddingLeft={1}
+            fontWeight={100}
+          >
             PRONTO
           </Typography>
           {user.isProfileComplete ? (
@@ -146,13 +142,6 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
           alignItems="center"
           justifyContent="flex-start"
         >
-          {user.isProfileComplete
-            ? navItems.map((item) => (
-                <Button key={item.name} LinkComponent={Link} href={item.to}>
-                  <Typography>{item.icon}</Typography>
-                </Button>
-              ))
-            : null}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
