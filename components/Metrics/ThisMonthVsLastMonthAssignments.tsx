@@ -30,7 +30,7 @@ const ThisMonthVsLastMonthAssignments: React.FC = () => {
         padding={0.5}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
-        enableGridY={true}
+        enableGridY={false}
         axisBottom={{
           tickSize: 5,
           tickPadding: 20,

@@ -82,7 +82,7 @@ export const AssignmentsStatusComparison: React.FC = () => {
           pointBorderColor={{ from: "serieColor" }}
           useMesh={true}
           enablePoints={false}
-          enableGridY={true}
+          enableGridY={false}
           legends={[
             {
               anchor: "bottom-right",

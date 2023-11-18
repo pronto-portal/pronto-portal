@@ -4,6 +4,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import CircularProgress from "@mui/material/CircularProgress";
 import React from "react";
 import Warning from "@mui/icons-material/Warning";
+import Info from "@mui/icons-material/Info";
 
 interface MetricLoadingStatesProps {
   isEmpty: boolean;
@@ -25,7 +26,7 @@ export const MetricLoadingStates: React.FC<MetricLoadingStatesProps> = ({
       alignItems="center"
       justifyContent="center"
       direction="column"
-      spacing={2}
+      spacing={1}
     >
       {isLoading ? (
         <CircularProgress />
@@ -38,7 +39,7 @@ export const MetricLoadingStates: React.FC<MetricLoadingStatesProps> = ({
         </>
       ) : isEmpty ? (
         <>
-          <Warning sx={{ color: "warning.main", opacity: 0.5 }} />
+          <Info sx={{ color: "warning.main", opacity: 0.5 }} />
           <Typography sx={{ color: "warning.main", opacity: 0.5 }}>
             No data available
           </Typography>

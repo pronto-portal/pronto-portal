@@ -33,7 +33,8 @@ export const theme = createTheme({
   },
   typography: {
     allVariants: {
-      color: primary.main,
+      color: "rgba(0, 0, 0, 0.6)",
+      fontFamily: `'Montserrat', sans-serif`,
     },
   },
   components: {
@@ -75,7 +76,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: "10px",
-          boxShadow: `0 0 2px 0 rgba(0,0,0,0.3)`,
+          boxShadow: `0 0 5px 0 rgba(0,0,0,0.2)`,
         },
       },
     },

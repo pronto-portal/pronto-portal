@@ -5,6 +5,7 @@ import ThisMonthVsLastMonthAssignments from "../Metrics/ThisMonthVsLastMonthAssi
 import { AssignmentsStatusComparison } from "../Metrics/AssignmentsStatusComparison";
 import LanguagesPerAssignmentLocation from "../Metrics/LanguagesPerAssignmentLocation";
 import TranslatorNoShowToCompletionRatio from "../Metrics/TranslatorNoShowToCompletionRatio";
+import { motion } from "framer-motion";
 
 export const Analytics: React.FC = () => {
   const gridBreakPoints = {
@@ -15,36 +16,61 @@ export const Analytics: React.FC = () => {
     xl: 6,
   };
 
+  // Variants for the parent container to stagger the children animations
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1, // This staggers the animation of children, with a half-second delay between each.
+        when: "beforeChildren", // Start the stagger effect before animating the children
+      },
+    },
+  };
+
+  // Variants for the children
+  const itemVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        duration: 1, // The fade animation will take 2 seconds for each child.
+      },
+    },
+  };
+
+  const MotionGrid = motion(Grid);
+
   return (
-    <Grid
+    <MotionGrid
       container
       direction="row"
       flexWrap="wrap"
       width="100%"
       height="100%"
       spacing={2}
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
     >
-      <Grid item height="50%" {...gridBreakPoints}>
-        <Metric titleText="Assignments This Month vs Last Month">
-          <ThisMonthVsLastMonthAssignments />
-        </Metric>
-      </Grid>
-      <Grid item height="50%" {...gridBreakPoints}>
-        <Metric titleText="Assignment Completion">
-          <AssignmentsStatusComparison />
-        </Metric>
-      </Grid>
-      <Grid item height="50%" {...gridBreakPoints}>
-        <Metric titleText="Languages Per Assignment Location">
-          <LanguagesPerAssignmentLocation />
-        </Metric>
-      </Grid>
-
-      <Grid item height="50%" {...gridBreakPoints}>
-        <Metric titleText="Top 10 Translator Assignment Statistics">
-          <TranslatorNoShowToCompletionRatio />
-        </Metric>
-      </Grid>
-    </Grid>
+      {[
+        ThisMonthVsLastMonthAssignments,
+        AssignmentsStatusComparison,
+        LanguagesPerAssignmentLocation,
+        TranslatorNoShowToCompletionRatio,
+      ].map((Component, index) => (
+        <MotionGrid
+          item
+          height="50%"
+          {...gridBreakPoints}
+          key={`${Component.name}-${index}}`}
+          variants={itemVariants}
+        >
+          <Metric titleText={`Metric ${index + 1}`}>
+            <Component />
+          </Metric>
+        </MotionGrid>
+      ))}
+    </MotionGrid>
   );
 };

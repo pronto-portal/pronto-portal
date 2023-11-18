@@ -3,10 +3,11 @@ import { FilteredTranslatorsProvider } from "../contextProviders/FilteredTransla
 import { TranslatorWriteProvider } from "../contextProviders/TranslatorWriteProvider";
 import React from "react";
 import { TranslatorDirectory } from "../components/TranslatorDirectory/TranslatorDirectory";
+import useDetectRouteChange from "../hooks/useDetectRouteChange";
 
 export default function Translators() {
   return (
-    <FilteredTranslatorsProvider>
+    <FilteredTranslatorsProvider key="translatorPage">
       <TranslatorWriteProvider>
         <Stack
           direction="column"

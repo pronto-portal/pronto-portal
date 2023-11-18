@@ -14,6 +14,9 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { StripeProvider } from "../contextProviders/StripeProvider";
 import React from "react";
+import { AnimatedLayout } from "../components/Animated/AnimatedLayout";
+import { AnimatedPage } from "../components/Animated/AnimatedPage";
+import { useRouter } from "next/router";
 
 function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -27,6 +30,8 @@ function App({ Component, ...rest }: AppProps) {
     moment.locale(locale);
   }
 
+  const router = useRouter();
+
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={locale}>
       <Provider store={store}>
@@ -37,7 +42,11 @@ function App({ Component, ...rest }: AppProps) {
                 <AuthorizedGridLayout>
                   <LanguagesProvider>
                     <StripeProvider>
-                      <Component {...pageProps} />
+                      <AnimatedLayout>
+                        <AnimatedPage key={router.route}>
+                          <Component {...pageProps} />
+                        </AnimatedPage>
+                      </AnimatedLayout>
                     </StripeProvider>
                   </LanguagesProvider>
                 </AuthorizedGridLayout>
