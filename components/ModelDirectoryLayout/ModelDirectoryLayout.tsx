@@ -49,7 +49,7 @@ export const ModelDirectoryLayout = <T extends {}>({
         }}
         transition={{ duration: 0.5 }}
       >
-        {!isLoading && tableProps.data ? (
+        {!isLoading ? (
           <Stack
             direction="column"
             flexWrap="nowrap"
@@ -58,9 +58,7 @@ export const ModelDirectoryLayout = <T extends {}>({
             sx={{ width: "100%", height: "100%" }}
             spacing={1}
           >
-            {!isLoading &&
-            tableProps.data.length &&
-            renderFilters !== undefined ? (
+            {!isLoading && renderFilters !== undefined ? (
               <Box sx={{ width: "100%", flex: 0.25 }}>
                 <Collapsable
                   sx={{

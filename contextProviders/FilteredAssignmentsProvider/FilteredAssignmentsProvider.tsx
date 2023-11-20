@@ -22,6 +22,7 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
   const { page, setPage, countPerPage, setCountPerPage } =
     usePaginationState(20);
 
+  console.log(filters);
   const { data, isLoading, error } = useGetAssignmentsQuery(
     {
       input: {
@@ -29,7 +30,7 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
         countPerPage,
       },
 
-      ...(Object.keys(filters).length ? { where: filters } : {}),
+      ...(filters && Object.keys(filters).length ? { where: filters } : {}),
     },
     {
       refetchOnMountOrArgChange: true,

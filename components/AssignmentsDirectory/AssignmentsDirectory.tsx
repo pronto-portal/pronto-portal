@@ -78,7 +78,6 @@ export const AssignmentDirectory: React.FC = () => {
     {} as Assignment
   );
 
-  console.log(editingAssignment);
   return (
     <>
       <EditAssignmentForm

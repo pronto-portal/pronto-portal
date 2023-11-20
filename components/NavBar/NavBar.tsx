@@ -194,7 +194,10 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                 <MenuItem onClick={handleCloseUserMenu}>
                   <IconLabel
                     text="Sign Out"
-                    onClick={() => signOut()}
+                    onClick={() => {
+                      signOut();
+                      router.push("/login");
+                    }}
                     icon={<LogoutIcon />}
                   />
                 </MenuItem>
