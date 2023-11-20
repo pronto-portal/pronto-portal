@@ -7,19 +7,27 @@ import Router, { useRouter } from "next/router";
 import { User } from "../../types/ObjectTypes";
 import { useGetUserQuery } from "../../redux/reducers";
 import LinearProgress from "@mui/material/LinearProgress";
+import { signOut } from "next-auth/react";
 
 export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
-  const { data } = useGetUserQuery({});
+  const { data, error } = useGetUserQuery({});
   const router = useRouter();
 
   useEffect(() => {
-    if (data && data.getUser) {
+    if (error && "status" in error && error.status === 401) {
+      signOut();
+      Router.push("/login");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!error && data && data.getUser) {
       const user: User = data.getUser;
       if (!user.isProfileComplete && router.pathname !== "/login") {
         Router.push("/completeProfile");
       }
     }
-  }, [data, router.pathname]);
+  }, [data, router.pathname, error]);
 
   const [loading, setLoading] = useState(false);
 

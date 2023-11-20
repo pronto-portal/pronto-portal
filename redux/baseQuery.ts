@@ -13,4 +13,12 @@ const prepareHeaders = (headers: Headers) => {
 export const baseQuery = graphqlRequestBaseQuery({
   url: process.env.NEXT_PUBLIC_API_URL! + "/graphql",
   prepareHeaders,
+  customErrors: (error) => {
+    return {
+      status: error.response.status,
+      message: error.response.errors
+        ? error.response.errors[0].message
+        : error.response.error.message,
+    };
+  },
 });
