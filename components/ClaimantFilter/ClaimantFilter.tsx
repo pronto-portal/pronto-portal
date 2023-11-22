@@ -1,20 +1,18 @@
-import React from "react";
-import { Claimant } from "../../types/ObjectTypes";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import React, { useEffect } from "react";
+import { Claimant, Person } from "../../types/ObjectTypes";
+import { useForm, Controller } from "react-hook-form";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import {
-  useGetAddressesQuery,
-  useGetAssignmentsQuery,
-} from "../../redux/reducers";
+import { useGetAssignmentsQuery } from "../../redux/reducers";
 import Autocomplete from "@mui/material/Autocomplete";
-import { AddressOption } from "../AddressOption";
 import LinearProgress from "@mui/material/LinearProgress";
 import { UserInfoAutocompleteOption } from "../UserInfoAutocompleteOption";
+import { ResponsiveForm } from "../ResponsiveForm";
 
 interface ClaimantFilterProps {
-  onChange(data: Claimant): void;
+  onChange(data: Partial<Claimant>): void;
   defaultValue?: Partial<Claimant>;
+  value?: Partial<Claimant>;
 }
 
 export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
@@ -26,12 +24,14 @@ export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
     phone: "",
     id: "",
   },
+  value,
 }) => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm<{ data: Claimant }>({
+  } = useForm<{ data: Partial<Claimant> }>({
     defaultValues: {
       data: {
         firstName,
@@ -39,9 +39,23 @@ export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
         email,
         phone,
         id,
-      } as Claimant,
+      } as Partial<Claimant>,
     },
   });
+
+  useEffect(() => {
+    setValue(
+      "data",
+      value ||
+        ({
+          firstName,
+          lastName,
+          email,
+          phone,
+          id,
+        } as Partial<Claimant>)
+    );
+  }, [firstName, lastName, email, phone, id, setValue, value]);
 
   const { data, isLoading } = useGetAssignmentsQuery({});
   const assignments = data?.getAssignments.assignments || [];
@@ -56,7 +70,13 @@ export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
   return isLoading ? (
     <LinearProgress sx={{ width: "100%" }} />
   ) : (
-    <form onSubmit={onFormSubmit}>
+    <ResponsiveForm
+      onSubmit={onFormSubmit}
+      sx={{
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Controller
         name="data"
         control={control}
@@ -64,7 +84,8 @@ export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
           <Autocomplete
             ref={ref}
             value={value}
-            onChange={(e, data) => {
+            fullWidth
+            onChange={(_, data) => {
               onChange(data);
               if (data) onClaimantChange(data);
             }}
@@ -72,14 +93,17 @@ export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
             getOptionLabel={(option) =>
               `${option.firstName} ${option.lastName}`
             }
-            renderOption={(props, option) => (
-              <li {...props}>
-                <UserInfoAutocompleteOption option={option} />
-              </li>
-            )}
+            renderOption={(props, option) =>
+              option ? (
+                <li {...props}>
+                  <UserInfoAutocompleteOption option={option as Person} />
+                </li>
+              ) : null
+            }
             renderInput={(params) => (
               <TextField
                 {...params}
+                fullWidth
                 label="Claimant"
                 variant="outlined"
                 error={!!errors.data}
@@ -89,6 +113,6 @@ export const ClaimantFilter: React.FC<ClaimantFilterProps> = ({
           />
         )}
       />
-    </form>
+    </ResponsiveForm>
   );
 };

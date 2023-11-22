@@ -21,7 +21,9 @@ type SearchableTranslatorKey = keyof Pick<
   "phone" | "email" | "id" | "firstName" | "lastName"
 >;
 
-const searchableFields: SearchableTranslatorKey[] = ["phone", "email", "id"];
+type SelectableFields = SearchableTranslatorKey | "name";
+
+const searchableFields: SelectableFields[] = ["phone", "email", "id", "name"];
 
 export const TranslatorDirectorySearch: React.FC = () => {
   const {
@@ -30,7 +32,7 @@ export const TranslatorDirectorySearch: React.FC = () => {
     setFilters: ctxSetFilter,
   } = useFilteredTranslators();
 
-  const [searchBy, setSearchBy] = useState<SearchableTranslatorKey>("id");
+  const [searchBy, setSearchBy] = useState<SelectableFields>("id");
   const [searchByValue, setSearchByValue] = useState<string>(
     ctxFilter.id || ""
   );
@@ -50,9 +52,18 @@ export const TranslatorDirectorySearch: React.FC = () => {
 
     if (ctxFilter.state) setState(ctxFilter.state);
 
-    if (ctxFilter.city) setCity(ctxFilter.city);
+    if (ctxFilter.state && ctxFilter.city) setCity(ctxFilter.city);
 
-    if (ctxFilter[searchBy]) setSearchByValue(ctxFilter[searchBy] as string);
+    if (ctxFilter.firstName && ctxFilter.lastName) {
+      setSearchBy("name");
+      setSearchByValue(ctxFilter.firstName + " " + ctxFilter.lastName);
+    }
+
+    if (searchBy !== "name" && ctxFilter[searchBy])
+      setSearchByValue(ctxFilter[searchBy] as string);
+    else if (searchBy === "name" && ctxFilter.firstName && ctxFilter.lastName) {
+      setSearchByValue(ctxFilter.firstName + " " + ctxFilter.lastName);
+    }
 
     console.log("ctxFilter", ctxFilter);
     Object.keys(ctxFilter).forEach((key) => {
@@ -92,21 +103,32 @@ export const TranslatorDirectorySearch: React.FC = () => {
     if (state) newFilters.state = state;
 
     if (searchBy && searchByValue) {
-      newFilters[searchBy] = searchByValue as string & string[];
+      if (searchBy === "name") {
+        const [firstName, lastName] = searchByValue.split(" ");
+        newFilters.firstName = firstName;
+        newFilters.lastName = lastName;
+      } else {
+        newFilters[searchBy] = searchByValue as string & string[];
+      }
     } else {
-      delete newFilters[searchBy];
+      if (searchBy === "name") {
+        delete newFilters.firstName;
+        delete newFilters.lastName;
+      } else {
+        delete newFilters[searchBy];
+      }
     }
 
     console.log("Setting new filters", newFilters);
     ctxSetFilter(newFilters);
   };
 
-  const searchableTranslators: SearchableTranslator[] = translators.map(
-    (translator) => ({
-      label: `${translator.id} - ${translator.lastName}, ${translator.firstName} - ${translator.phone} - ${translator.email}`,
-      ...translator,
-    })
-  );
+  // const searchableTranslators: SearchableTranslator[] = translators.map(
+  //   (translator) => ({
+  //     label: `${translator.id} - ${translator.lastName}, ${translator.firstName} - ${translator.phone} - ${translator.email}`,
+  //     ...translator,
+  //   })
+  // );
 
   return (
     <Stack
@@ -131,17 +153,34 @@ export const TranslatorDirectorySearch: React.FC = () => {
           <Autocomplete
             sx={{ flex: 1 }}
             onChange={(_e, newValue) => {
-              setSearchByValue(newValue ? newValue[searchBy].toString() : "");
+              setSearchByValue(
+                newValue
+                  ? searchBy === "name"
+                    ? newValue.firstName + " " + newValue.lastName
+                    : newValue[searchBy].toString()
+                  : ""
+              );
             }}
             value={
-              searchableTranslators.find(
-                (translator) => translator[searchBy] === searchByValue
-              ) || null
+              translators.find((translator) => {
+                const searchBySplit = searchByValue.split(" ");
+                const firstName = searchBySplit[0];
+                const lastName = searchBySplit[1];
+                return searchBy === "name"
+                  ? translator.firstName.toLowerCase() ===
+                      firstName.toLowerCase() &&
+                      translator.lastName.toLowerCase() ===
+                        lastName.toLowerCase()
+                  : translator[searchBy] === searchByValue;
+              }) || null
             }
-            options={searchableTranslators}
-            getOptionLabel={(option) =>
-              option[searchBy] ? option[searchBy].toString() : ""
-            }
+            options={translators}
+            getOptionLabel={(option) => {
+              if (searchBy === "name")
+                return `${option.firstName} ${option.lastName}`;
+
+              return option[searchBy] ? option[searchBy].toString() : "";
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -227,6 +266,15 @@ export const TranslatorDirectorySearch: React.FC = () => {
       <Stack direction="column" justifyContent="space-around" spacing={1}>
         <Button variant="contained" onClick={handleApplyFilters} fullWidth>
           Apply Filters
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            ctxSetFilter({});
+          }}
+          fullWidth
+        >
+          Clear Filters
         </Button>
       </Stack>
     </Stack>

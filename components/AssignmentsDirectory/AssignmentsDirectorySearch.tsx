@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import MenuItem from "@mui/material/MenuItem";
@@ -34,6 +35,8 @@ export const AssignmentsDirectorySearch: React.FC = () => {
   const [filterValue, setFilterValue] = useState<any>();
 
   useEffect(() => {
+    console.log("ctxFilter", ctxFilter);
+    console.log("filterValue", filterValue);
     const searchByKey = Object.keys(
       ctxFilter || {}
     )[0] as SearchableAssignmentsKey;
@@ -80,24 +83,35 @@ export const AssignmentsDirectorySearch: React.FC = () => {
     );
   } else if (searchBy === "id") {
     RenderFilter = (
-      <Autocomplete
-        options={assignments.map((assignment) => ({
-          ...assignment,
-          label: assignment.id,
-        }))}
-        defaultValue={
-          ctxFilter && ctxFilter.id
-            ? assignments.find((assignment) => assignment.id === ctxFilter.id)
-            : undefined
-        }
-        getOptionLabel={(option) => option.id}
-        renderInput={(params) => <TextField {...params} label="ID" />}
-        onChange={(e, value) => {
-          if (value) {
-            setFilterValue({ id: value.id });
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
+        height="100%"
+      >
+        <Autocomplete
+          options={assignments.map((assignment) => ({
+            ...assignment,
+            label: assignment.id,
+          }))}
+          defaultValue={
+            ctxFilter && ctxFilter.id
+              ? assignments.find((assignment) => assignment.id === ctxFilter.id)
+              : undefined
           }
-        }}
-      />
+          getOptionLabel={(option) => option.id}
+          fullWidth
+          renderInput={(params) => (
+            <TextField {...params} fullWidth label="ID" />
+          )}
+          onChange={(e, value) => {
+            if (value) {
+              setFilterValue({ id: value.id });
+            }
+          }}
+        />{" "}
+      </Stack>
     );
   } else if (searchBy === "address") {
     RenderFilter = (
@@ -183,14 +197,23 @@ export const AssignmentsDirectorySearch: React.FC = () => {
       <Box flex={1}>{RenderFilter}</Box>
 
       <Stack
-        direction="row"
-        justifyContent="flex-end"
+        direction="column"
+        justifyContent="center"
         alignItems="center"
-        spacing={1}
+        spacing={2}
         flex={0.5}
       >
         <Button variant="contained" onClick={handleApplyFilters}>
           Apply Filters
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFilterValue({});
+            ctxSetFilter({});
+          }}
+        >
+          Clear Filters
         </Button>
       </Stack>
     </Stack>

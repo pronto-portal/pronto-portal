@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Wrapper } from "../../types/PropTypes/Wrapper";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -15,6 +15,8 @@ interface CollapsableProps extends Wrapper {
   sxDetails?: SxProps<Theme>;
   title: React.ReactNode | string;
   actions?: React.ReactNode;
+  open?: boolean; // New prop for initial state
+  onToggle?: () => void; // New prop for callback when open
 }
 
 export const Collapsable: React.FC<CollapsableProps> = ({
@@ -24,9 +26,17 @@ export const Collapsable: React.FC<CollapsableProps> = ({
   sxDetails,
   title,
   actions,
+  open = false,
+  onToggle = () => {},
 }) => {
   return (
-    <Accordion sx={sx}>
+    <Accordion
+      expanded={open}
+      onChange={() => {
+        onToggle();
+      }}
+      sx={sx}
+    >
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={sxSummary}>
         {typeof title === "string" ? <Typography>{title}</Typography> : title}
       </AccordionSummary>

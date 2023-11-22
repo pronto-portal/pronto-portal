@@ -31,6 +31,8 @@ export const AssignmentDirectory: React.FC = () => {
     totalRowCount,
     countPerPage,
     setCountPerPage,
+    filtersOpen,
+    setFiltersOpen,
   } = useFilteredAssignments();
 
   const {
@@ -97,6 +99,8 @@ export const AssignmentDirectory: React.FC = () => {
       />
       <ModelDirectoryLayout<Assignment>
         titleText="Assignments"
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
         tableProps={{
           data: assignments,
           omitFields: ["id", "createdBy", "assignedTo"],

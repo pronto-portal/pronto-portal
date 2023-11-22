@@ -16,6 +16,8 @@ export const TranslatorDirectory: React.FC = () => {
     totalRowCount,
     countPerPage,
     setCountPerPage,
+    filtersOpen,
+    setFiltersOpen,
   } = useFilteredTranslators();
 
   const [openAddTranslatorForm, setOpenAddTranslatorForm] =
@@ -47,6 +49,9 @@ export const TranslatorDirectory: React.FC = () => {
         countPerPage={countPerPage}
         setCountPerPage={setCountPerPage}
         renderFilters={<TranslatorDirectorySearch />}
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
+        key="translator-directory-layout"
       />
       <AddTranslatorForm
         open={openAddTranslatorForm}

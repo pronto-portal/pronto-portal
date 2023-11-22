@@ -1,12 +1,11 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import LocationOn from "@mui/icons-material/LocationOn";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Address } from "../../types/ObjectTypes";
 
 interface AddressOptionProps {
-  address: Address;
+  address: Partial<Address>;
 }
 
 export const AddressOption: React.FC<AddressOptionProps> = ({ address }) => {

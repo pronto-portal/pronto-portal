@@ -66,7 +66,7 @@ export const EditAssignmentForm: React.FC<EditAssignmentFormProps> = ({
       <DialogTitle>Edit Assignment</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmitHandler)}>
-          <Grid spacing={2}>
+          <Grid spacing={2} container>
             <FlexGridItem item>
               <Typography>Translator No Show</Typography>
               <Controller

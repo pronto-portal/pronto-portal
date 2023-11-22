@@ -14,7 +14,10 @@ import { useGetNonUserTranslatorsQuery } from "../../redux/reducers/nonUserTrans
 type FilteredTranslatorsContextProps = FilteredObjects<
   GetTranslatorsFilters,
   GetNonUserTranslators
->;
+> & {
+  filtersOpen: boolean;
+  setFiltersOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const FilteredTranslatorsContext = createContext(
   {} as FilteredTranslatorsContextProps
@@ -24,6 +27,7 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
   children,
 }) => {
   const [filters, setFilters] = useState<GetTranslatorsFilters>({});
+  const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
   const { page, setPage, countPerPage, setCountPerPage } =
     usePaginationState(20);
 
@@ -49,6 +53,8 @@ export const FilteredTranslatorsProvider: React.FC<Wrapper> = ({
       value={{
         filters,
         setFilters,
+        filtersOpen,
+        setFiltersOpen,
         page,
         setPage,
         countPerPage,

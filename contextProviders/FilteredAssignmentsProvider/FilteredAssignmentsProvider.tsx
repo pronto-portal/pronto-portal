@@ -9,7 +9,10 @@ import { FilteredObjects } from "../../types/FilteredObjectsType";
 type FilteredAssignmentsContextProps = FilteredObjects<
   GetAssignmentsFilter,
   GetAssignments
->;
+> & {
+  filtersOpen: boolean;
+  setFiltersOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const FilteredAssignmentsContext = createContext(
   {} as FilteredAssignmentsContextProps
@@ -19,6 +22,7 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
   children,
 }) => {
   const [filters, setFilters] = useState<GetAssignmentsFilter>({});
+  const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
   const { page, setPage, countPerPage, setCountPerPage } =
     usePaginationState(20);
 
@@ -45,6 +49,8 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({
       value={{
         filters,
         setFilters,
+        filtersOpen,
+        setFiltersOpen,
         page,
         setPage,
         countPerPage,
