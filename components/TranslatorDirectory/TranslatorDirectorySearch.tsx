@@ -6,7 +6,6 @@ import { useFilteredTranslators } from "../../contextProviders/FilteredTranslato
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useLanguages } from "../../contextProviders/LanguagesProvider";
 import { useSelectCityState } from "../../hooks/useSelectCityState";
 import { GetTranslatorsFilters } from "../../types/InputTypes";
 import { Box } from "@mui/material";
@@ -32,7 +31,9 @@ export const TranslatorDirectorySearch: React.FC = () => {
   } = useFilteredTranslators();
 
   const [searchBy, setSearchBy] = useState<SearchableTranslatorKey>("id");
-  const [searchByValue, setSearchByValue] = useState<string>("");
+  const [searchByValue, setSearchByValue] = useState<string>(
+    ctxFilter.id || ""
+  );
 
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
     ctxFilter.languages || []
@@ -51,12 +52,23 @@ export const TranslatorDirectorySearch: React.FC = () => {
 
     if (ctxFilter.city) setCity(ctxFilter.city);
 
-    searchableFields.forEach((field) => {
-      if (ctxFilter[field]) {
-        setSearchBy(field);
-        setSearchByValue(ctxFilter[field] as string);
+    if (ctxFilter[searchBy]) setSearchByValue(ctxFilter[searchBy] as string);
+
+    console.log("ctxFilter", ctxFilter);
+    Object.keys(ctxFilter).forEach((key) => {
+      if (searchableFields.includes(key as SearchableTranslatorKey)) {
+        console.log(key);
+        setSearchBy(key as SearchableTranslatorKey);
+        setSearchByValue(ctxFilter[key as SearchableTranslatorKey] as string);
       }
     });
+    // searchableFields.forEach((field) => {
+    //   if (ctxFilter[field]) {
+    //     setSearchBy(field);
+    //     setSearchByValue(ctxFilter[field] as string);
+    //   }
+    // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ctxFilter.languages,
     ctxFilter.city,
@@ -121,9 +133,11 @@ export const TranslatorDirectorySearch: React.FC = () => {
             onChange={(_e, newValue) => {
               setSearchByValue(newValue ? newValue[searchBy].toString() : "");
             }}
-            value={searchableTranslators.find(
-              (translator) => translator[searchBy] === searchByValue
-            )}
+            value={
+              searchableTranslators.find(
+                (translator) => translator[searchBy] === searchByValue
+              ) || null
+            }
             options={searchableTranslators}
             getOptionLabel={(option) =>
               option[searchBy] ? option[searchBy].toString() : ""
@@ -145,6 +159,7 @@ export const TranslatorDirectorySearch: React.FC = () => {
             sx={{ flex: 0.25 }}
             select
             defaultValue={searchBy}
+            value={searchBy}
             onChange={(e) =>
               setSearchBy(e.target.value as SearchableTranslatorKey)
             }
