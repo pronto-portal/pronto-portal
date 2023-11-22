@@ -1,6 +1,5 @@
 import React from "react";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
-import { Language } from "../../types/ObjectTypes";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField, { TextFieldVariants } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -29,6 +28,7 @@ export const LanguagesAutocomplete = React.forwardRef(
     ref: React.ForwardedRef<HTMLInputElement>
   ) => {
     const { languageCodes, getLanguageFromCode } = useLanguages();
+    console.log("lang", value);
 
     return (
       <Autocomplete
@@ -43,6 +43,7 @@ export const LanguagesAutocomplete = React.forwardRef(
         sx={sx}
         onChange={(_, value) => {
           if (value) {
+            console.log("new Value", value);
             onChange(multiple ? (value as string[]) : (value as string));
           }
         }}

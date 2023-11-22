@@ -27,10 +27,10 @@ export default function Profile() {
     <Stack
       width="100%"
       height="100%"
-      justifyContent="center"
+      justifyContent="flex-start"
       direction="column"
       alignItems="center"
-      padding={4}
+      padding={2}
     >
       {user && !isLoading ? (
         <Grid

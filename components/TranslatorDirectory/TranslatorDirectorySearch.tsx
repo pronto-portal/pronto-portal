@@ -34,9 +34,15 @@ export const TranslatorDirectorySearch: React.FC = () => {
   const [searchBy, setSearchBy] = useState<SearchableTranslatorKey>("id");
   const [searchByValue, setSearchByValue] = useState<string>("");
 
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>();
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
+    ctxFilter.languages || []
+  );
   const { city, setCity, state, setState, stateISOCodes, cities } =
     useSelectCityState();
+
+  console.log("ctxFilter langs", ctxFilter.languages);
+  console.log("selectedLanguages", selectedLanguages);
+  console.log("------------------");
 
   useEffect(() => {
     if (ctxFilter.languages) setSelectedLanguages(ctxFilter.languages);
@@ -51,15 +57,23 @@ export const TranslatorDirectorySearch: React.FC = () => {
         setSearchByValue(ctxFilter[field] as string);
       }
     });
-  }, [ctxFilter, setCity, setState]);
-
-  const { languages } = useLanguages();
+  }, [
+    ctxFilter.languages,
+    ctxFilter.city,
+    ctxFilter.state,
+    ctxFilter,
+    setCity,
+    setState,
+  ]);
 
   const handleApplyFilters = () => {
     let newFilters: GetTranslatorsFilters = {};
 
     if (selectedLanguages && selectedLanguages.length)
-      newFilters.languages = selectedLanguages;
+      newFilters.languages = [
+        ...(newFilters.languages || []),
+        ...selectedLanguages,
+      ];
 
     if (city) newFilters.city = city;
 
@@ -71,6 +85,7 @@ export const TranslatorDirectorySearch: React.FC = () => {
       delete newFilters[searchBy];
     }
 
+    console.log("Setting new filters", newFilters);
     ctxSetFilter(newFilters);
   };
 
@@ -106,6 +121,9 @@ export const TranslatorDirectorySearch: React.FC = () => {
             onChange={(_e, newValue) => {
               setSearchByValue(newValue ? newValue[searchBy].toString() : "");
             }}
+            value={searchableTranslators.find(
+              (translator) => translator[searchBy] === searchByValue
+            )}
             options={searchableTranslators}
             getOptionLabel={(option) =>
               option[searchBy] ? option[searchBy].toString() : ""
@@ -148,9 +166,10 @@ export const TranslatorDirectorySearch: React.FC = () => {
         >
           <LanguagesAutocomplete
             sx={{ flex: 1 }}
-            value={selectedLanguages}
+            value={selectedLanguages || []}
             onChange={(val) => {
-              setSelectedLanguages(val as string[]);
+              console.log("val", val);
+              if (val) setSelectedLanguages(val as string[]);
             }}
             multiple
             label="Languages"
