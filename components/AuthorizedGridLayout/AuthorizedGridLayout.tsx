@@ -13,12 +13,15 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
   const { data, error } = useGetUserQuery({});
   const router = useRouter();
 
+  const isOnLoginPage = router.pathname === "/login";
+
   useEffect(() => {
-    if (error && "status" in error && error.status === 401) {
+    if (!isOnLoginPage && error && "status" in error && error.status === 401) {
       signOut();
-      Router.push("/login");
+      //Router.push("/login");
+      console.log("Signing out");
     }
-  }, [error]);
+  }, [error, isOnLoginPage]);
 
   useEffect(() => {
     if (!error && data && data.getUser) {

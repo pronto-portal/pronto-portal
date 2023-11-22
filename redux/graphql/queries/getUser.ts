@@ -21,6 +21,7 @@ export const getUser = gql`
       subscriptionEndDate
       translatorsCount
       remindersCount
+      remindersCreatedThisMonth
       role {
         name
         description

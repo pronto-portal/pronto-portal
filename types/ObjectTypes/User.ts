@@ -16,4 +16,5 @@ export interface User extends Person {
   role: Role;
   translatorsCount: number;
   remindersCount: number;
+  remindersCreatedThisMonth: number;
 }

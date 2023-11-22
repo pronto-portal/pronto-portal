@@ -10,7 +10,10 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    if (session) router.push("/");
+    if (session) {
+      console.log("session", session);
+      router.push("/");
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
