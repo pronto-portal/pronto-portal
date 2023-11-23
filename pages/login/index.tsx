@@ -1,23 +1,9 @@
 import { Stack, Typography, Divider } from "@mui/material";
 import { GoogleLoginButton } from "../../components/GoogleLoginButton";
-import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import Box from "@mui/material/Box";
 
 export default function Login() {
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      console.log("session", session);
-      router.push("/");
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
-
   return (
     <Stack
       direction="row"
@@ -53,7 +39,7 @@ export default function Login() {
           <Divider sx={{ width: "75%" }} />
           <Box paddingTop={2}>
             <GoogleLoginButton
-              onClick={() => signIn("google")}
+              onClick={() => signIn("google", { callbackUrl: "/" })}
               variant="contained"
             />
           </Box>

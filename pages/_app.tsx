@@ -17,9 +17,11 @@ import React from "react";
 import { AnimatedLayout } from "../components/Animated/AnimatedLayout";
 import { AnimatedPage } from "../components/Animated/AnimatedPage";
 import { useRouter } from "next/router";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
+
   const {
     pageProps: { session, ...pageProps },
   } = props;
@@ -39,17 +41,19 @@ function App({ Component, ...rest }: AppProps) {
           <SessionProvider session={session}>
             <ThemeProvider theme={theme}>
               <PageWrapper>
-                <AuthorizedGridLayout>
-                  <LanguagesProvider>
-                    <StripeProvider>
-                      <AnimatedLayout>
-                        <AnimatedPage key={router.route}>
-                          <Component {...pageProps} />
-                        </AnimatedPage>
-                      </AnimatedLayout>
-                    </StripeProvider>
-                  </LanguagesProvider>
-                </AuthorizedGridLayout>
+                <ErrorBoundary>
+                  <AuthorizedGridLayout>
+                    <LanguagesProvider>
+                      <StripeProvider>
+                        <AnimatedLayout>
+                          <AnimatedPage key={router.route}>
+                            <Component {...pageProps} />
+                          </AnimatedPage>
+                        </AnimatedLayout>
+                      </StripeProvider>
+                    </LanguagesProvider>
+                  </AuthorizedGridLayout>
+                </ErrorBoundary>
               </PageWrapper>
             </ThemeProvider>
           </SessionProvider>

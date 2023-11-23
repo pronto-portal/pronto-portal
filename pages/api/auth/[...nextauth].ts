@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { setCookie } from "cookies-next";
+import { setCookie, deleteCookie } from "cookies-next";
 import { login } from "../../../redux/graphql/mutations/login";
 import { print } from "graphql/language/printer";
 import axios from "axios";
 import { parseSetCookie } from "../../../utils/parseSetCookie";
+import { access } from "fs";
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   return await NextAuth(req, res, {
@@ -30,6 +31,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     },
     pages: {
       signIn: "/login",
+      signOut: "/login",
     },
     callbacks: {
       async redirect({ baseUrl, url }) {
@@ -68,7 +70,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                 if (resCookies) {
                   tokens = parseSetCookie(resCookies);
                   console.log("SETTING COOKIES");
-                  console.log("TOKENS", tokens);
 
                   setCookie("x-access-token", tokens["x-access-token"], {
                     req,
@@ -89,12 +90,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                   // );
                 }
 
-                console.log("dataRes", dataRes.data);
-                console.log(dataRes.data.errors);
                 return dataRes.data;
               })
               .catch((err) => {
-                console.log("Error", err);
+                console.log("Error", err.message);
                 return err;
               });
 
@@ -122,6 +121,49 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       },
       async jwt({ token, user, account, profile, isNewUser }) {
         return token;
+      },
+    },
+    events: {
+      signOut: async ({ token }) => {
+        console.log("SIGN OUT EVENT", token);
+
+        if (token) {
+          const base64EncodedToken = Buffer.from(
+            JSON.stringify(token)
+          ).toString("base64");
+          console.log(base64EncodedToken);
+          await axios
+            .post(
+              process.env.NEXT_PUBLIC_API_URL! + "/signout",
+              {},
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  authorization: base64EncodedToken,
+                },
+              }
+            )
+            .then((dataRes) => {
+              console.log("SIGN OUT RESPONSE", dataRes.data);
+              const resCookies = dataRes.headers["set-cookie"];
+
+              if (resCookies) {
+                const tokens = parseSetCookie(resCookies);
+                setCookie("x-access-token", tokens["x-access-token"], {
+                  req,
+                  res,
+                  sameSite: false,
+                  secure: true,
+                });
+                deleteCookie("x-refresh-token", { req, res });
+              }
+            })
+            .catch((err) => {
+              console.log("SIGN OUT ERROR", err.message);
+            });
+        }
+
+        return Promise.resolve();
       },
     },
   });

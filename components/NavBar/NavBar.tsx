@@ -12,8 +12,7 @@ import {
   Theme,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { IconLabel } from "../IconLabel/IconLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShopIcon from "@mui/icons-material/Shop";
@@ -195,8 +194,7 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                   <IconLabel
                     text="Sign Out"
                     onClick={() => {
-                      signOut();
-                      router.push("/login");
+                      signOut({ callbackUrl: "/login" });
                     }}
                     icon={<LogoutIcon />}
                   />

@@ -50,7 +50,9 @@ export default function CompleteProfile() {
     if (data && data.getUser) {
       const user: User = data.getUser;
 
-      if (user.isProfileComplete) router.push("/");
+      if (user.isProfileComplete) {
+        router.push("/");
+      }
 
       setPhoneNumber(phone(user.phone || ""));
       setFirstName(user.firstName);
