@@ -1,7 +1,8 @@
 FROM node:18-alpine AS base
 WORKDIR /app
 COPY . .
-RUN npm ci && \
+RUN apk --no-cache add curl && \ 
+    npm ci && \
     npm run build && \
     npm prune --production
 
