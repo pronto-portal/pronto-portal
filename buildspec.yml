@@ -10,7 +10,11 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
+      - docker build -t $REPOSITORY_URI:latest \
+        --build-arg NEXT_PUBLIC_GOOGLE_PLACES_API_KEY=$NEXT_PUBLIC_GOOGLE_PLACES_API_KEY \
+        --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY \
+        --build-arg NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY=$NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY \
+        --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
   post_build:
     commands:
