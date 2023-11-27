@@ -12,6 +12,12 @@ phases:
       - set -e
       - echo Build started on `date`
       - echo Building the Docker image...
+      - echo "Env vars:"
+      - echo "NEXT_PUBLIC_GOOGLE_PLACES_API_KEY:$NEXT_PUBLIC_GOOGLE_PLACES_API_KEY"
+      - echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
+      - echo "NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY:$NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY"
+      - echo "NEXT_PUBLIC_API_URL:$NEXT_PUBLIC_API_URL"
+      - echo "REPOSITORY_URI:$REPOSITORY_URI"
       - docker build -t "$REPOSITORY_URI:latest" \
         --build-arg NEXT_PUBLIC_GOOGLE_PLACES_API_KEY="$NEXT_PUBLIC_GOOGLE_PLACES_API_KEY" \
         --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY" \
