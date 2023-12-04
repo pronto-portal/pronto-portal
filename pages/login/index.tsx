@@ -44,22 +44,20 @@ export default function Login() {
           <Box paddingTop={2}>
             <GoogleLoginButton
               onClick={() =>
-                signIn("google", { callbackUrl: "/", redirect: false }).then(
-                  (res) => {
-                    if (res)
-                      if (res.ok) {
-                        router.push("/");
-                      } else {
-                        console.log(res.error);
-                        enqueueSnackbar("Credentials do not match!", {
-                          variant: "error",
-                        });
-                      }
-                    else {
-                      console.log("Failed to receive signin response");
+                signIn("google", { redirect: false }).then((res) => {
+                  if (res)
+                    if (res.ok) {
+                      router.push("/");
+                    } else {
+                      console.log(res.error);
+                      enqueueSnackbar("Credentials do not match!", {
+                        variant: "error",
+                      });
                     }
+                  else {
+                    console.log("Failed to receive signin response");
                   }
-                )
+                })
               }
               variant="contained"
             />
