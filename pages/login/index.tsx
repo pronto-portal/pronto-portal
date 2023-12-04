@@ -47,6 +47,7 @@ export default function Login() {
                 signIn("google", { redirect: false }).then((res) => {
                   if (res)
                     if (res.ok) {
+                      console.log("Signin successful");
                       router.push("/");
                     } else {
                       console.log(res.error);

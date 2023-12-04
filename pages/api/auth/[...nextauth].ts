@@ -41,16 +41,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         // From here I can send an api call to my api's login endpoint where I would check if the user exists in the system
         // On the api I can either create a user then generate a token there or generate a token if a user already exists.
         // In the response of my api I would return a cookie with the token stored in it that would persist on the frontend.
-
-        console.log(
-          "SIGN IN CALLBACK",
-          user,
-          account,
-          profile,
-          email,
-          credentials
-        );
-
         if (account) {
           if (user && profile) {
             const name = user.name!.split(" ");
