@@ -14,7 +14,8 @@ echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" >> .env.local
 
 RUN apk --no-cache add curl && \ 
     npm ci && \
-    npm run build 
+    npm run build && \
+    chmod 755 /app/healthcheck.sh
 
 EXPOSE 3000
 
