@@ -2,8 +2,12 @@ import { Stack, Typography, Divider } from "@mui/material";
 import { GoogleLoginButton } from "../../components/GoogleLoginButton";
 import { signIn } from "next-auth/react";
 import Box from "@mui/material/Box";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
   return (
     <Stack
       direction="row"
@@ -39,7 +43,24 @@ export default function Login() {
           <Divider sx={{ width: "75%" }} />
           <Box paddingTop={2}>
             <GoogleLoginButton
-              onClick={() => signIn("google", { callbackUrl: "/" })}
+              onClick={() =>
+                signIn("google", { callbackUrl: "/", redirect: false }).then(
+                  (res) => {
+                    if (res)
+                      if (res.ok) {
+                        router.push("/");
+                      } else {
+                        console.log(res.error);
+                        enqueueSnackbar("Credentials do not match!", {
+                          variant: "error",
+                        });
+                      }
+                    else {
+                      console.log("Failed to receive signin response");
+                    }
+                  }
+                )
+              }
               variant="contained"
             />
           </Box>
