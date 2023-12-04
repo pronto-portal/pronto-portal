@@ -1,10 +1,8 @@
 import React from "react";
-import { useSession } from "next-auth/react";
 import { useGetUserQuery } from "../../redux/reducers";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FlexRowGridItem } from "../../components/FlexRowGridItem";
 import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";

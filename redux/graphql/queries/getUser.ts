@@ -10,6 +10,7 @@ export const getUser = gql`
       phone
       firstName
       lastName
+      profilePic
       isManager
       isTranslator
       isBanned

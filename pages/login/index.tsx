@@ -1,9 +1,9 @@
 import { Stack, Typography, Divider } from "@mui/material";
 import { GoogleLoginButton } from "../../components/GoogleLoginButton";
-import { signIn } from "next-auth/react";
 import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
+import { axiosInstance } from "../../utils/axiosInstances";
 
 export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
@@ -44,21 +44,30 @@ export default function Login() {
           <Box paddingTop={2}>
             <GoogleLoginButton
               onClick={() =>
-                signIn("google", { redirect: false }).then((res) => {
-                  if (res)
-                    if (res.ok) {
-                      console.log("Signin successful");
-                      router.push("/");
-                    } else {
-                      console.log(res.error);
-                      enqueueSnackbar("Credentials do not match!", {
-                        variant: "error",
-                      });
+                // signIn("google", { redirect: false }).then((res) => {
+                //   if (res)
+                //     if (res.ok) {
+                //       console.log("Signin successful");
+                //       router.push("/");
+                //     } else {
+                //       console.log(res.error);
+                //       enqueueSnackbar("Credentials do not match!", {
+                //         variant: "error",
+                //       });
+                //     }
+                //   else {
+                //     console.log("Failed to receive signin response");
+                //   }
+                // })
+                {
+                  axiosInstance.get("/auth/google").then((res) => {
+                    console.log(res.data);
+                    if (res && res.data && res.data.url) {
+                      const url = res.data.url;
+                      window.location.href = url;
                     }
-                  else {
-                    console.log("Failed to receive signin response");
-                  }
-                })
+                  });
+                }
               }
               variant="contained"
             />

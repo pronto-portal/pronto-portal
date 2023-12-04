@@ -7,7 +7,7 @@ import Router, { useRouter } from "next/router";
 import { User } from "../../types/ObjectTypes";
 import { useGetUserQuery } from "../../redux/reducers";
 import LinearProgress from "@mui/material/LinearProgress";
-import { signOut } from "next-auth/react";
+import signOut from "../../utils/signOut";
 export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
   const { data, error } = useGetUserQuery({});
   const router = useRouter();
@@ -16,7 +16,8 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
 
   useEffect(() => {
     if (!isOnLoginPage && error && "status" in error && error.status === 401) {
-      signOut({ callbackUrl: "/login" });
+      console.log("Signing out");
+      signOut();
     }
   }, [error, isOnLoginPage]);
 

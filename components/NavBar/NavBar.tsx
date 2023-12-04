@@ -12,7 +12,6 @@ import {
   Theme,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { signOut, useSession } from "next-auth/react";
 import { IconLabel } from "../IconLabel/IconLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShopIcon from "@mui/icons-material/Shop";
@@ -22,6 +21,7 @@ import BarChart from "@mui/icons-material/BarChart";
 import Link from "next/link";
 import { useGetUserQuery } from "../../redux/reducers";
 import { useRouter } from "next/router";
+import signOut from "../../utils/signOut";
 
 interface NavBarProps {
   sx?: SxProps<Theme>;
@@ -42,7 +42,6 @@ const sxTabStyling = {
 };
 
 export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
-  const { data: session } = useSession();
   const { data, isError } = useGetUserQuery({});
   const user = data?.getUser;
   const router = useRouter();
@@ -61,7 +60,8 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  if (!session || !user || isError) return null;
+  if (!user || isError) return null;
+  console.log(user);
 
   return (
     <Box
@@ -147,8 +147,8 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
             <Tooltip title="Open settings">
               <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  alt={session?.user?.name || ""}
-                  src={session?.user?.image || ""}
+                  alt={user.firstName || "User"}
+                  src={user.profilePic || ""}
                 />
               </Button>
             </Tooltip>
@@ -194,7 +194,7 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                   <IconLabel
                     text="Sign Out"
                     onClick={() => {
-                      signOut({ callbackUrl: "/login" });
+                      signOut();
                     }}
                     icon={<LogoutIcon />}
                   />

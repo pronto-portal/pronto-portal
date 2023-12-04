@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
 import { PageWrapper } from "../components/PageWrapper";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme/theme";
@@ -38,25 +37,23 @@ function App({ Component, ...rest }: AppProps) {
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={locale}>
       <Provider store={store}>
         <SnackbarProvider>
-          <SessionProvider session={session}>
-            <ThemeProvider theme={theme}>
-              <PageWrapper>
-                <ErrorBoundary>
-                  <AuthorizedGridLayout>
-                    <LanguagesProvider>
-                      <StripeProvider>
-                        <AnimatedLayout>
-                          <AnimatedPage key={router.route}>
-                            <Component {...pageProps} />
-                          </AnimatedPage>
-                        </AnimatedLayout>
-                      </StripeProvider>
-                    </LanguagesProvider>
-                  </AuthorizedGridLayout>
-                </ErrorBoundary>
-              </PageWrapper>
-            </ThemeProvider>
-          </SessionProvider>
+          <ThemeProvider theme={theme}>
+            <PageWrapper>
+              <ErrorBoundary>
+                <AuthorizedGridLayout>
+                  <LanguagesProvider>
+                    <StripeProvider>
+                      <AnimatedLayout>
+                        <AnimatedPage key={router.route}>
+                          <Component {...pageProps} />
+                        </AnimatedPage>
+                      </AnimatedLayout>
+                    </StripeProvider>
+                  </LanguagesProvider>
+                </AuthorizedGridLayout>
+              </ErrorBoundary>
+            </PageWrapper>
+          </ThemeProvider>
         </SnackbarProvider>
       </Provider>
     </LocalizationProvider>
