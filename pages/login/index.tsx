@@ -64,6 +64,7 @@ export default function Login() {
                     console.log(res.data);
                     if (res && res.data && res.data.url) {
                       const url = res.data.url;
+                      console.log("url: ", url);
                       window.location.href = url;
                     }
                   });
