@@ -8,6 +8,8 @@ const redirectUri =
     ? `https://prontotranslationservices.com/api/auth/google/callback`
     : "http://localhost:3000/api/auth/google/callback";
 
+console.log("redirectUri", redirectUri);
+
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET_ID,
@@ -32,69 +34,85 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     console.log("token exists");
+    console.log("redirectUri", redirectUri);
     // Exchange the authorization code for an access token
-    oauth2Client.getToken(code as string).then(({ tokens }) => {
-      console.log("token exists");
+    oauth2Client
+      .getToken(code as string)
+      .then(({ tokens }) => {
+        console.log("token exists");
+        console.log("tokens", tokens);
 
-      oauth2Client.setCredentials(tokens);
-      const oauth2 = google.oauth2({
-        auth: oauth2Client,
-        version: "v2",
-      });
+        oauth2Client.setCredentials(tokens);
 
-      console.log("credentials set");
+        console.log("set credentials");
 
-      const idToken = tokens.id_token;
+        const oauth2 = google.oauth2({
+          auth: oauth2Client,
+          version: "v2",
+        });
 
-      if (!idToken) {
-        return res.status(400).send("Invalid request: No idToken provided");
-      }
+        console.log("established oauth2 client");
 
-      // Retrieve user information
-      console.log("getting user data");
-      const userInfo = oauth2.userinfo.get().then((userInfo) => {
-        console.log("got user data");
-        const expiresIn = tokens.expiry_date;
-        const userData = userInfo.data;
-        if (userData) {
-          console.log("userData: ", userData);
-          console.log("attempting to authenticate");
+        const idToken = tokens.id_token;
+
+        if (!idToken) {
+          return res.status(400).send("Invalid request: No idToken provided");
         }
 
-        axios
-          .post(`${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/login`, userData, {
-            headers: {
-              authorization: idToken,
-            },
-          })
-          .then((dataRes) => {
-            const resCookies = dataRes.headers["set-cookie"];
-            if (resCookies) {
-              const tokens = parseSetCookie(resCookies);
-              console.log("SETTING COOKIES");
+        // Retrieve user information
+        console.log("getting user data");
+        const userInfo = oauth2.userinfo.get().then((userInfo) => {
+          console.log("got user data");
+          const expiresIn = tokens.expiry_date;
+          const userData = userInfo.data;
+          if (userData) {
+            console.log("userData: ", userData);
+            console.log("attempting to authenticate");
+          }
 
-              console.log("cookie", dataRes.headers["set-cookie"]);
+          axios
+            .post(
+              `${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/login`,
+              userData,
+              {
+                headers: {
+                  authorization: idToken,
+                },
+              }
+            )
+            .then((dataRes) => {
+              const resCookies = dataRes.headers["set-cookie"];
+              if (resCookies) {
+                const tokens = parseSetCookie(resCookies);
+                console.log("SETTING COOKIES");
 
-              res.setHeader(
-                "set-cookie",
-                `x-access-token=${
-                  tokens["x-access-token"]
-                }; path=/; secure; httponly; samesite=none; expires=${expiresIn}; domain=${
+                console.log("cookie", dataRes.headers["set-cookie"]);
+
+                res.setHeader(
+                  "set-cookie",
+                  `x-access-token=${
+                    tokens["x-access-token"]
+                  }; path=/; secure; httponly; samesite=none; expires=${expiresIn}; domain=${
+                    process.env.NODE_ENV === "production"
+                      ? "localhost"
+                      : ".prontotranslationservices.com"
+                  };`
+                );
+                res.redirect(
+                  302,
                   process.env.NODE_ENV === "production"
-                    ? "localhost"
-                    : ".prontotranslationservices.com"
-                };`
-              );
-              res.redirect(
-                302,
-                process.env.NODE_ENV === "production"
-                  ? "https://prontotranslationservices.com/"
-                  : "http://localhost:3000/"
-              );
-            }
-          });
+                    ? "https://prontotranslationservices.com/"
+                    : "http://localhost:3000/"
+                );
+              }
+            });
+        });
+      })
+      .catch((err) => {
+        console.log("oauth2Client.getToken error", err);
+        res.status(500).send("Error retrieving access token");
+        reject(err);
       });
-    });
   });
 };
 
