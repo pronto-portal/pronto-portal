@@ -11,7 +11,7 @@ const prepareHeaders = (headers: Headers) => {
 };
 
 export const baseQuery = graphqlRequestBaseQuery({
-  url: process.env.NEXT_PUBLIC_API_URL! + "/graphql",
+  url: process.env.NEXT_PUBLIC_API_URL! + "/data/graphql",
   prepareHeaders,
   customErrors: (error) => {
     return {
