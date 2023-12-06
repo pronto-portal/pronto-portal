@@ -5,11 +5,11 @@ const nextConfig = {
     return [
       {
         source: "/api",
-        destination: `${process.env.NEXT_PRIVATE_API_URL}`, // Proxy to Backend
+        destination: `${process.env.NEXT_PUBLIC_PRIVATE_API_URL}`, // Proxy to Backend
       },
       {
         source: "/api/data/:path*",
-        destination: `${process.env.NEXT_PRIVATE_API_URL}/:path*`, // Proxy to Backend
+        destination: `${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/:path*`, // Proxy to Backend
       },
     ];
   },

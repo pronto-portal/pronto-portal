@@ -62,7 +62,7 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         axios
-          .post(`${process.env.NEXT_PRIVATE_API_URL}/login`, userData, {
+          .post(`${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/login`, userData, {
             headers: {
               authorization: idToken,
             },
