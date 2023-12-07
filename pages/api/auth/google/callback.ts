@@ -71,15 +71,11 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
           }
 
           axios
-            .post(
-              `${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/login`,
-              userData,
-              {
-                headers: {
-                  authorization: idToken,
-                },
-              }
-            )
+            .post(`http://localhost:3000/api/login`, userData, {
+              headers: {
+                authorization: idToken,
+              },
+            })
             .then((dataRes) => {
               const resCookies = dataRes.headers["set-cookie"];
               if (resCookies) {
@@ -109,7 +105,7 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
         });
       })
       .catch((err) => {
-        console.log("oauth2Client.getToken error", err);
+        console.log("oauth2Client.getToken error", err.message);
         res.status(500).send("Error retrieving access token");
         reject(err);
       });
