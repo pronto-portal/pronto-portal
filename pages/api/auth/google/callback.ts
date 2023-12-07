@@ -68,46 +68,50 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
           if (userData) {
             console.log("userData: ", userData);
             console.log("attempting to authenticate");
-          }
 
-          axios
-            .post(`http://localhost:3000/api/login`, userData, {
-              headers: {
-                authorization: idToken,
-              },
-            })
-            .then((dataRes) => {
-              const resCookies = dataRes.headers["set-cookie"];
-              if (resCookies) {
-                const tokens = parseSetCookie(resCookies);
-                console.log("SETTING COOKIES");
+            axios
+              .post(
+                `${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/login`,
+                userData,
+                {
+                  headers: {
+                    authorization: idToken,
+                  },
+                }
+              )
+              .then((dataRes) => {
+                const resCookies = dataRes.headers["set-cookie"];
+                if (resCookies) {
+                  const tokens = parseSetCookie(resCookies);
+                  console.log("SETTING COOKIES");
 
-                console.log("cookie", dataRes.headers["set-cookie"]);
+                  console.log("cookie", dataRes.headers["set-cookie"]);
 
-                res.setHeader(
-                  "set-cookie",
-                  `x-access-token=${
-                    tokens["x-access-token"]
-                  }; path=/; secure; httponly; samesite=none; expires=${expiresIn}; domain=${
+                  res.setHeader(
+                    "set-cookie",
+                    `x-access-token=${
+                      tokens["x-access-token"]
+                    }; path=/; secure; httponly; samesite=none; expires=${expiresIn}; domain=${
+                      process.env.NODE_ENV === "production"
+                        ? "localhost"
+                        : ".prontotranslationservices.com"
+                    };`
+                  );
+                  res.redirect(
+                    302,
                     process.env.NODE_ENV === "production"
-                      ? "localhost"
-                      : ".prontotranslationservices.com"
-                  };`
-                );
-                res.redirect(
-                  302,
-                  process.env.NODE_ENV === "production"
-                    ? "https://prontotranslationservices.com/"
-                    : "http://localhost:3000/"
-                );
-              }
-            });
+                      ? "https://prontotranslationservices.com/"
+                      : "http://localhost:3000/"
+                  );
+                }
+              });
+          }
         });
       })
       .catch((err) => {
         console.log("oauth2Client.getToken error", err.message);
         res.status(500).send("Error retrieving access token");
-        reject(err);
+        reject(err.message);
       });
   });
 };
