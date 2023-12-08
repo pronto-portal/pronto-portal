@@ -4,7 +4,7 @@ import { getLanguages } from "../graphql/queries/getLanguages";
 import { GetLanguagesResponse } from "../../types/ResponseTypes/Language";
 
 export const api = createApi({
-  baseQuery,
+  baseQuery: baseQuery(),
   tagTypes: [
     "User",
     "NonUserTranslator",
