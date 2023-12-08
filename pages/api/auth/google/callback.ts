@@ -70,15 +70,11 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
             console.log("attempting to authenticate");
 
             axios
-              .post(
-                `${process.env.NEXT_PUBLIC_PRIVATE_API_URL}/login`,
-                userData,
-                {
-                  headers: {
-                    authorization: idToken,
-                  },
-                }
-              )
+              .post(`${process.env.NEXT_PUBLIC_API_URL}/login`, userData, {
+                headers: {
+                  authorization: idToken,
+                },
+              })
               .then((dataRes) => {
                 const resCookies = dataRes.headers["set-cookie"];
                 if (resCookies) {
