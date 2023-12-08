@@ -3,7 +3,10 @@ import { GoogleLoginButton } from "../../components/GoogleLoginButton";
 import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
-import { axiosInstance } from "../../utils/axiosInstances";
+import {
+  axiosInstance,
+  axiosInstanceCustomUrl,
+} from "../../utils/axiosInstances";
 
 export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
@@ -60,14 +63,22 @@ export default function Login() {
                 //   }
                 // })
                 {
-                  axiosInstance.get("/auth/google").then((res) => {
-                    console.log(res.data);
-                    if (res && res.data && res.data.url) {
-                      const url = res.data.url;
-                      console.log("url: ", url);
-                      window.location.href = url;
-                    }
-                  });
+                  axiosInstanceCustomUrl
+                    .get(
+                      `${
+                        process.env.NODE_ENV === "production"
+                          ? "https://prontotranslationservices.com"
+                          : "http://localhost:3000"
+                      }/api/auth/google`
+                    )
+                    .then((res) => {
+                      console.log(res.data);
+                      if (res && res.data && res.data.url) {
+                        const url = res.data.url;
+                        console.log("url: ", url);
+                        window.location.href = url;
+                      }
+                    });
                 }
               }
               variant="contained"
