@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { google } from "googleapis";
 import axios from "axios";
 import { parseSetCookie } from "../../../../utils/parseSetCookie";
+import { setCookie } from "cookies-next";
 
 const redirectUri =
   process.env.NODE_ENV === "production"
@@ -89,10 +90,11 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
                       tokens["x-access-token"]
                     }; path=/; secure; httponly; samesite=none; expires=${expiresIn}; domain=${
                       process.env.NODE_ENV === "production"
-                        ? "localhost"
-                        : ".prontotranslationservices.com"
+                        ? ".prontotranslationservices.com"
+                        : "localhost"
                     };`
                   );
+
                   res.redirect(
                     302,
                     process.env.NODE_ENV === "production"
