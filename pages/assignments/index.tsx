@@ -8,25 +8,16 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TableRowsIcon from "@mui/icons-material/TableRows";
+import { AssignmentsCalendarView } from "../../components/AssignmentsCalendarView";
 
 export default function Assignments() {
   const [tab, setTab] = useState<string>("calendar");
+  console.log("new tab", tab);
 
   return (
     <FilteredAssignmentsProvider>
       <AssignmentWriteProvider>
-        <Tabs
-          sx={{ height: "100%", padding: 0 }}
-          value={tab}
-          onChange={(e, newTab) => setTab(newTab)}
-        >
-          <Tab label={<CalendarMonthIcon />} value="calendar" />
-          <Tab label={<TableRowsIcon />} value="table" />
-        </Tabs>
-
-        {tab === "calendar" ? (
-          "test"
-        ) : (
+        <ClaimantWriteProvider>
           <Stack
             direction="column"
             width="100%"
@@ -36,9 +27,22 @@ export default function Assignments() {
             spacing={2}
             p={2}
           >
-            <AssignmentDirectory />
+            <Tabs
+              sx={{ padding: 0 }}
+              value={tab}
+              onChange={(e, newTab) => setTab(newTab)}
+            >
+              <Tab label={<CalendarMonthIcon />} value="calendar" />
+              <Tab label={<TableRowsIcon />} value="table" />
+            </Tabs>
+
+            {tab === "calendar" ? (
+              <AssignmentsCalendarView />
+            ) : (
+              <AssignmentDirectory />
+            )}
           </Stack>
-        )}
+        </ClaimantWriteProvider>
       </AssignmentWriteProvider>
     </FilteredAssignmentsProvider>
   );
