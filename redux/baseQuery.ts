@@ -40,11 +40,8 @@ export const baseQuery =
       return { data: result };
     } catch (error) {
       const errorStr = String(error);
-      const errorObj = extractJsonObjectFromString(errorStr);
+      const errorObj = extractJsonObjectFromString(errorStr) as ClientError;
 
-      if (errorObj instanceof ClientError) {
-        return { error: { status: errorObj.response.status, data: errorObj } };
-      }
-      return { error: { status: 500, data: errorObj } };
+      return { error: { status: errorObj.response.status, data: errorObj } };
     }
   };
