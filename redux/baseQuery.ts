@@ -1,3 +1,4 @@
+import extractJsonObjectFromString from "../utils/extractJsonObjectFromString";
 import setAuthHeaders from "../utils/setAuthHeaders";
 import { GraphQLClient, ClientError } from "graphql-request";
 
@@ -30,9 +31,6 @@ export const baseQuery =
     document: string;
     variables?: Record<string, any>;
   }) => {
-    console.log("DOCUMENT", document);
-    console.log("VARIABLES", variables);
-
     try {
       const result = await client.request(
         document,
@@ -41,9 +39,12 @@ export const baseQuery =
       );
       return { data: result };
     } catch (error) {
-      if (error instanceof ClientError) {
-        return { error: { status: error.response.status, data: error } };
+      const errorStr = String(error);
+      const errorObj = extractJsonObjectFromString(errorStr);
+
+      if (errorObj instanceof ClientError) {
+        return { error: { status: errorObj.response.status, data: errorObj } };
       }
-      return { error: { status: 500, data: error } };
+      return { error: { status: 500, data: errorObj } };
     }
   };
