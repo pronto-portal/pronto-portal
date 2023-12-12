@@ -25,7 +25,6 @@ export const ObjectGridSpread = <T extends {}>({
       container
       direction={"column"}
       spacing={2}
-      padding={2}
       alignItems="start"
       alignContent="space-between"
       width={1}
