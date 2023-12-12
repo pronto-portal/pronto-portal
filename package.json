@@ -7,7 +7,8 @@
         "build": "next build",
         "start": "next start --keepAliveTimeout 65000",
         "lint": "next lint --fix",
-        "format": "prettier --write '*/**/*.{js,jsx,ts,tsx,css,md}'"
+        "format": "prettier --write '*/**/*.{js,jsx,ts,tsx,css,md}'",
+        "codegen": "graphql-codegen --config src/redux/graphql/codegen/codegen.ts"
     },
     "dependencies": {
         "@emotion/react": "^11.10.5",
@@ -39,7 +40,7 @@
         "eslint-config-next": "13.1.1",
         "framer-motion": "^10.16.5",
         "googleapis": "^129.0.0",
-        "graphql": "^16.6.0",
+        "graphql": "^16.8.1",
         "graphql-request": "^6.1.0",
         "http-proxy": "^1.18.1",
         "jsonwebtoken": "^9.0.0",
@@ -52,10 +53,11 @@
         "react-dom": "18.2.0",
         "react-hook-form": "^7.45.4",
         "react-redux": "^8.1.2",
-        "redux-persist": "^6.0.0",
-        "typescript": "4.9.4"
+        "redux-persist": "^6.0.0"
     },
     "devDependencies": {
+        "@graphql-codegen/cli": "5.0.0",
+        "@graphql-codegen/client-preset": "^4.1.0",
         "@rtk-query/graphql-request-base-query": "^2.2.0",
         "@types/autosuggest-highlight": "^3.2.3",
         "@types/d3-array": "^3.2.1",
@@ -68,6 +70,7 @@
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-import": "^2.29.0",
         "eslint-plugin-prettier": "^5.0.1",
-        "prettier": "^3.1.1"
+        "prettier": "^3.1.1",
+        "typescript": "^5.3.3"
     }
 }

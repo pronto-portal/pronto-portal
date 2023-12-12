@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request';
 
 export const updateUser = gql`
-    mutation UpdateUser($input: UpdateUserInput!) {
+    mutation UpdateUserInfo($input: UpdateUserInput!) {
         updateUser(input: $input) {
             id
             email

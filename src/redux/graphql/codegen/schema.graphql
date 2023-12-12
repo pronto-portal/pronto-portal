@@ -1,0 +1,396 @@
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type User {
+    id: String!
+    createdAt: DateTime
+    updatedAt: DateTime
+    email: String!
+    phone: String
+    firstName: String
+    lastName: String
+    profilePic: String
+    isManager: Boolean
+    isTranslator: Boolean
+    isBanned: Boolean
+    isProfileComplete: Boolean
+    city: String
+    state: String
+    languages: [String]
+    assignments: [Assignment]
+    assignedTo: [Assignment]
+    translators: [Translator]
+    translatingFor: [User]
+    nonUserTranslators: [Translator]
+    role: Role
+    autoRenewSubscription: Boolean
+    subscriptionEndDate: DateTime
+    translatorsCount: Int
+    remindersCount: Int
+    remindersCreatedThisMonth: Int
+}
+
+type Address {
+    id: String
+    address1: String
+    address2: String
+    city: String
+    state: String
+    zipCode: String
+    userId: String
+    user: User
+    assignment: [Assignment]
+}
+
+type Claimant {
+    id: String
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    userId: String
+    user: User
+    assignment: [Assignment]
+    languages: [String]
+    primaryLanguage: String
+}
+
+type Assignment {
+    id: String
+    createdAt: DateTime
+    dateTime: DateTime
+    assignedToUser: Translator
+    createdBy: User
+    claimant: Claimant
+    address: Address
+    assignedTo: Translator
+    isComplete: Boolean
+    claimantNoShow: Boolean
+    translatorNoShow: Boolean
+}
+
+type Translator {
+    id: String
+    createdAt: DateTime
+    updatedAt: DateTime
+    firstName: String
+    lastName: String
+    assignedTo: [Assignment]
+    email: String
+    phone: String
+    city: String
+    state: String
+    languages: [String!]
+}
+
+type Reminder {
+    id: String
+    claimantMessage: String
+    translatorMessage: String
+    assignment: Assignment
+    assignmentId: String
+    createdBy: User
+    createdById: String
+}
+
+type GetAddressesResponse {
+    totalRowCount: Int!
+    addresses: [Address!]!
+}
+
+type GetAssignmentsResponse {
+    totalRowCount: Int!
+    assignments: [Assignment!]!
+}
+
+type GetTranslatorsResponse {
+    totalRowCount: Int!
+    translators: [User!]!
+}
+
+type GetClaimantsResponse {
+    totalRowCount: Int!
+    claimants: [Claimant!]!
+}
+
+type GetRemindersResponse {
+    totalRowCount: Int!
+    reminders: [Reminder!]!
+}
+
+type GetNonUserTranslatorsResponse {
+    totalRowCount: Int!
+    translators: [Translator!]!
+}
+
+type Role {
+    name: String
+    description: String
+    priceCents: Int
+    users: [User]
+    features: [String!]
+    stripePriceId: String
+    translatorsLimit: Int
+    remindersLimit: Int
+}
+
+type Language {
+    name: String
+    code: String
+}
+
+input CreateUserInput {
+    email: String!
+    profilePic: String
+    phone: String
+    firstName: String
+    lastName: String
+}
+
+input UpdateUserInput {
+    id: String!
+    email: String
+    phone: String
+    firstName: String
+    lastName: String
+    profilePic: String = ""
+    isManager: Boolean
+    isTranslator: Boolean
+    isProfileComplete: Boolean
+    city: String
+    state: String
+    languages: [String!]
+}
+
+input CompleteProfileInput {
+    phone: String!
+    firstName: String!
+    lastName: String!
+    city: String!
+    state: String!
+    isManager: Boolean!
+    isTranslator: Boolean!
+    languages: [String!]
+}
+
+input AddAndCreateTranslatorInput {
+    email: String!
+    phone: String!
+    firstName: String!
+    lastName: String
+    city: String
+    state: String
+    languages: [String!]
+}
+
+input AddTranslatorInput {
+    email: String!
+}
+
+input DisconnectTranslatorInput {
+    email: String!
+}
+
+input TranslatorsFilter {
+    id: String
+    email: String
+    phone: String
+    languages: [String!]
+    city: String
+    state: String
+    firstName: String
+    lastName: String
+}
+
+input AddNonUserTranslatorInput {
+    email: String!
+    firstName: String!
+    lastName: String!
+    phone: String
+    city: String
+    state: String
+    languages: [String!]
+}
+
+input UpdateNonUserTranslatorInput {
+    id: String!
+    email: String
+    firstName: String
+    lastName: String
+    phone: String
+    city: String
+    state: String
+    languages: [String!]
+}
+
+input PaginatedInput {
+    page: Int!
+    countPerPage: Int!
+}
+
+input ByEmailInput {
+    email: String!
+}
+
+input ByIdInput {
+    id: String!
+}
+
+input DateRange {
+    date1: DateTime!
+    date2: DateTime!
+}
+
+input CreateAssignmentInput {
+    translatorId: String!
+    claimantId: String!
+    addressId: String!
+    dateTime: DateTime!
+}
+
+input UpdateAssignmentInput {
+    id: String!
+    translatorId: String
+    claimantId: String
+    address: UpdateAddressInput
+    addressId: String
+    dateTime: DateTime
+    isComplete: Boolean
+    claimantNoShow: Boolean
+    translatorNoShow: Boolean
+}
+
+input AssignmentsFilter {
+    address: AddressesFilter
+    assignedTo: TranslatorsFilter
+    claimant: ClaimantsFilter
+    dateRange: DateRange
+    date: DateTime
+}
+
+input CreateClaimantInput {
+    firstName: String!
+    lastName: String!
+    email: String
+    phone: String!
+    languages: [String!]
+    primaryLanguage: String!
+}
+
+input UpdateClaimantInput {
+    id: String!
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    languages: [String!]
+    primaryLanguage: String
+}
+
+input ClaimantsFilter {
+    primaryLanguage: String
+    language: String
+    firstName: String
+    lastName: String
+}
+
+input CreateAddressInput {
+    address1: String!
+    address2: String
+    city: String!
+    state: String!
+    zipCode: String!
+}
+
+input UpdateAddressInput {
+    id: String!
+    address1: String
+    address2: String
+    city: String
+    state: String
+    zipCode: String
+}
+
+input AddressesFilter {
+    address1: String
+    address2: String
+    city: String
+    state: String
+    zipCode: String
+}
+
+input CreateReminderInput {
+    assignmentId: String!
+    translatorMessage: String
+    claimantMessage: String
+}
+
+input UpdateReminderInput {
+    id: String!
+    translatorMessage: String
+    claimantMessage: String
+}
+
+input RemindersFilter {
+    range: DateRange
+    date: String
+}
+
+input CreateRoleInput {
+    name: String!
+    priceCents: Int!
+}
+
+input UpdateRoleInput {
+    name: String
+    description: String
+    priceCents: Int
+}
+
+input DeleteRoleInput {
+    name: String!
+}
+
+type Mutation {
+    updateUser(input: UpdateUserInput!): User
+    completeProfile(input: CompleteProfileInput!): User
+    addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
+    addTranslator(input: AddTranslatorInput!): User
+    disconnectTranslator(input: DisconnectTranslatorInput!): User
+    addNonUserTranslator(input: AddNonUserTranslatorInput!): Translator
+    updateNonUserTranslator(input: UpdateNonUserTranslatorInput!): Translator
+    deleteNonUserTranslator(input: ByIdInput!): Translator
+    createClaimant(input: CreateClaimantInput!): Claimant!
+    updateClaimant(input: UpdateClaimantInput!): Claimant!
+    deleteClaimant(input: ByIdInput!): Claimant!
+    createAddress(input: CreateAddressInput!): Address!
+    updateAddress(input: UpdateAddressInput!): Address!
+    deleteAddress(input: ByIdInput!): Address!
+    createAssignment(input: CreateAssignmentInput!): Assignment!
+    updateAssignment(input: UpdateAssignmentInput!): Assignment!
+    deleteAssignment(input: ByIdInput!): Assignment!
+    createReminder(input: CreateReminderInput!): Reminder!
+    updateReminder(input: UpdateReminderInput!): Reminder!
+    deleteReminder(input: ByIdInput!): Reminder!
+}
+
+type Query {
+    getUser: User!
+    getTranslators(input: PaginatedInput, where: TranslatorsFilter): GetTranslatorsResponse!
+    getTranslator(input: ByIdInput!): User!
+    getNonUserTranslator(input: ByIdInput!): Translator!
+    getNonUserTranslators(input: PaginatedInput, where: TranslatorsFilter): GetNonUserTranslatorsResponse!
+    getAddresses(input: PaginatedInput, where: AddressesFilter): GetAddressesResponse!
+    getAddress(input: ByIdInput!): Address!
+    getAssignments(input: PaginatedInput, where: AssignmentsFilter): GetAssignmentsResponse!
+    getAssignment(input: ByIdInput!): Assignment!
+    getClaimants(input: PaginatedInput, where: ClaimantsFilter): GetClaimantsResponse!
+    getClaimant(input: ByIdInput!): Claimant!
+    getReminder(input: ByIdInput!): Reminder!
+    getReminders(input: PaginatedInput!, where: RemindersFilter): GetRemindersResponse!
+    getRole(input: ByIdInput!): Role
+    getRoles: [Role]
+    getLanguages: [Language]
+}
