@@ -6,14 +6,14 @@ import {
     GetTranslatorsInput,
     GetNonUserTranslatorInput,
     GetById,
-} from '../../../types/InputTypes';
+} from '../../types/InputTypes';
 import {
     AddNonUserTranslatorResponse,
     DeleteNonUserTranslatorResponse,
     GetNonUserTranslatorResponse,
     GetNonUserTranslatorsResponse,
     UpdateNonUserTranslatorResponse,
-} from '../../../types/ResponseTypes';
+} from '../../types/ResponseTypes';
 import { addNonUserTranslator } from '../graphql/mutations/addNonUserTranslator';
 import { deleteNonUserTranslator } from '../graphql/mutations/deleteNonUserTranslator';
 import { updateNonUserTranslator } from '../graphql/mutations/updateNonUserTranslator';

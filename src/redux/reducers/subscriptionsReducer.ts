@@ -1,5 +1,5 @@
 import { api } from './apiReducer';
-import { GetRoles } from '../../../types/ResponseTypes';
+import { GetRoles } from '../../types/ResponseTypes';
 import { getRoles } from '../graphql/queries/getRoles';
 
 export const subscriptions = api.injectEndpoints({

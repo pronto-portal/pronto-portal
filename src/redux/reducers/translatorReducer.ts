@@ -1,8 +1,8 @@
 import { api } from './apiReducer';
-import { GetTranslatorsInput, AddAndCreateTranslatorInput } from '../../../types/InputTypes';
-import { GetById } from '../../../types/InputTypes';
-import { GetTranslatorResponse } from '../../../types/ResponseTypes';
-import { AddAndCreateTranslatorResponse, GetTranslatorsResponse } from '../../../types/ResponseTypes/Translator';
+import { GetTranslatorsInput, AddAndCreateTranslatorInput } from '../../types/InputTypes';
+import { GetById } from '../../types/InputTypes';
+import { GetTranslatorResponse } from '../../types/ResponseTypes';
+import { AddAndCreateTranslatorResponse, GetTranslatorsResponse } from '../../types/ResponseTypes/Translator';
 import { addAndCreateTranslator } from '../graphql/mutations/addAndCreateTranslator';
 import { getTranslator } from '../graphql/queries/getTranslator';
 import { getTranslators } from '../graphql/queries/getTranslators';

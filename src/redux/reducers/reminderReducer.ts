@@ -1,10 +1,10 @@
 import { api } from './apiReducer';
-import { CreateReminderInput, GetRemindersInput, UpdateReminderInput, GetReminderInput } from '../../../types/InputTypes';
-import { CreateReminderResponse, GetRemindersResponse, UpdateReminderResponse, GetReminderResponse } from '../../../types/ResponseTypes/Reminder';
+import { CreateReminderInput, GetRemindersInput, UpdateReminderInput, GetReminderInput } from '../../types/InputTypes';
+import { CreateReminderResponse, GetRemindersResponse, UpdateReminderResponse, GetReminderResponse } from '../../types/ResponseTypes/Reminder';
 import { createReminder } from '../graphql/mutations/createReminder';
-import { getReminder } from '../graphql/mutations/getReminder';
-import { getReminders } from '../graphql/mutations/getReminders';
 import { updateReminder } from '../graphql/mutations/updateReminder';
+import { getReminder } from '../graphql/queries/getReminder';
+import { getReminders } from '../graphql/queries/getReminders';
 
 export const reminderReducer = api.injectEndpoints({
     endpoints: (builder) => ({

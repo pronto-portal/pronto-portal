@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { GetLanguagesResponse } from '../../../types/ResponseTypes/Language';
+import { GetLanguagesResponse } from '../../types/ResponseTypes/Language';
 import { baseQuery } from '../baseQuery';
 import { getLanguages } from '../graphql/queries/getLanguages';
 

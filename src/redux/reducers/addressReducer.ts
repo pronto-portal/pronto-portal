@@ -1,6 +1,6 @@
 import { api } from './apiReducer';
-import { CreateAddressInput, GetAddressesInput, GetById, UpdateAddressInput } from '../../../types/InputTypes';
-import { GetAddressResponse, GetAddressesResponse, CreateAddressResponse, UpdateAddressResponse } from '../../../types/ResponseTypes';
+import { CreateAddressInput, GetAddressesInput, GetById, UpdateAddressInput } from '../../types/InputTypes';
+import { GetAddressResponse, GetAddressesResponse, CreateAddressResponse, UpdateAddressResponse } from '../../types/ResponseTypes';
 import { createAddress } from '../graphql/mutations/createAddress';
 import { updateAddress } from '../graphql/mutations/updateAddress';
 import { getAddresses } from '../graphql/queries/getAddresses';

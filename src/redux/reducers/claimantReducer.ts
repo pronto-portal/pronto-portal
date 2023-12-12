@@ -1,6 +1,6 @@
 import { api } from './apiReducer';
-import { CreateClaimantsInput, GetClaimantInput, GetClaimantsInput, UpdateClaimantsInput } from '../../../types/InputTypes';
-import { CreateClaimantResponse, GetClaimantResponse, GetClaimantsResponse, UpdateClaimantResponse } from '../../../types/ResponseTypes';
+import { CreateClaimantsInput, GetClaimantInput, GetClaimantsInput, UpdateClaimantsInput } from '../../types/InputTypes';
+import { CreateClaimantResponse, GetClaimantResponse, GetClaimantsResponse, UpdateClaimantResponse } from '../../types/ResponseTypes';
 import { createClaimant } from '../graphql/mutations/createClaimant';
 import { updateClaimant } from '../graphql/mutations/updateClaimant';
 import { getClaimant } from '../graphql/queries/getClaimant';

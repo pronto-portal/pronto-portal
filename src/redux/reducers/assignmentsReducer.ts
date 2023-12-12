@@ -1,10 +1,10 @@
 import { api } from './apiReducer';
-import { GetAssignmentsInput } from '../../../types/InputTypes';
-import { CreateAssignmentInput } from '../../../types/InputTypes';
-import { UpdateAssignmentInput } from '../../../types/InputTypes';
-import { GetAssignmentsResponse } from '../../../types/ResponseTypes';
-import { CreateAssignmentResponse } from '../../../types/ResponseTypes';
-import { UpdateAssignmentResponse } from '../../../types/ResponseTypes';
+import { GetAssignmentsInput } from '../../types/InputTypes';
+import { CreateAssignmentInput } from '../../types/InputTypes';
+import { UpdateAssignmentInput } from '../../types/InputTypes';
+import { GetAssignmentsResponse } from '../../types/ResponseTypes';
+import { CreateAssignmentResponse } from '../../types/ResponseTypes';
+import { UpdateAssignmentResponse } from '../../types/ResponseTypes';
 import { createAssignment } from '../graphql/mutations/createAssignment';
 import { updateAssignment } from '../graphql/mutations/updateAssignment';
 import { getAssignments } from '../graphql/queries/getAssignments';

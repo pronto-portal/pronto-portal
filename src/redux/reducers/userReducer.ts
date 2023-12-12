@@ -1,6 +1,6 @@
 import { api } from './apiReducer';
-import { UpdateUserInput } from '../../../types/InputTypes';
-import { GetUserResponse, UpdateUserResponse } from '../../../types/ResponseTypes';
+import { UpdateUserInput } from '../../types/InputTypes';
+import { GetUserResponse, UpdateUserResponse } from '../../types/ResponseTypes';
 import { completeProfile } from '../graphql/mutations/completeProfile';
 import { updateUser } from '../graphql/mutations/updateUser';
 import { getUser } from '../graphql/queries';
