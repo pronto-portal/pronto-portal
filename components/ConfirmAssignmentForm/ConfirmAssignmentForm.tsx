@@ -2,14 +2,12 @@ import React from "react";
 import { useAddAssignmentFlow } from "../../contextProviders/AddAssignmentFlowProvider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import { AssignmentFlowForm } from "../../types/PropTypes/AssignmentFlowForm";
 import { FlexRowGridItem } from "../FlexRowGridItem/FlexRowGridItem";
-import { styled } from "@mui/system";
 import { ObjectGridSpread } from "../ObjectGridSpread/ObjectGridSpread";
 import { Address, Claimant, Translator, User } from "../../types/ObjectTypes";
 import IconButton from "@mui/material/IconButton";
@@ -21,18 +19,7 @@ import {
 import { useSnackbar } from "notistack";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useLanguages } from "../../contextProviders/LanguagesProvider";
-
-const FlexCard = styled(Card)({
-  flex: 1,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  alignItems: "start",
-});
-
-const FlexCardContent = styled(CardContent)({
-  height: "100%",
-});
+import { FlexCard, FlexCardContent } from "../FlexCard";
 
 export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({
   onSuccess,
