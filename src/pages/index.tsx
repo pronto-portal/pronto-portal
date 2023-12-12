@@ -3,7 +3,7 @@ import { Stack } from '@mui/material';
 import { TranslatorDirectory } from '../components/TranslatorDirectory/TranslatorDirectory';
 import { FilteredTranslatorsProvider } from '../contextProviders/FilteredTranslatorsProvider';
 import { TranslatorWriteProvider } from '../contextProviders/TranslatorWriteProvider';
-import useDetectRouteChange from '../src/hooks/useDetectRouteChange';
+import useDetectRouteChange from '../hooks/useDetectRouteChange';
 
 export default function Translators() {
     return (

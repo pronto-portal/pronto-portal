@@ -1,4 +1,4 @@
-import { PaginationState } from '../src/hooks/usePaginationState';
+import { PaginationState } from '../hooks/usePaginationState';
 
 type BaseFilteredObjects<FiltersType> = {
     filters: FiltersType;
