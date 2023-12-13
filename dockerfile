@@ -1,19 +1,28 @@
 FROM node:18-alpine AS base
 WORKDIR /app
 COPY . .
-RUN npm ci && \
-    npm run build && \
-    npm prune --production
 
-RUN addgroup -S appgroup && \
-adduser -S nextjs -G appgroup && \
-chown -R nextjs:appgroup /app && \
-chmod -R 755 /app
+ARG NEXT_PUBLIC_GOOGLE_PLACES_API_KEY
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY
+ARG NEXT_PUBLIC_API_URL
+ARG NEXTAUTH_URL_INTERNAL
 
-USER nextjs
+RUN echo "NEXT_PUBLIC_GOOGLE_PLACES_API_KEY=${NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}" >> .env.local && \
+echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}" >> .env.local && \
+echo "NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY=${NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}" >> .env.local && \
+echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" >> .env.local && \
+echo "NEXTAUTH_URL_INTERNAL=${NEXTAUTH_URL_INTERNAL}">> .env.local
+
+
+RUN apk --no-cache add curl && \ 
+    npm ci
+
+ENV NODE_ENV=production
+
+RUN npm run build && \
+    chmod 755 /app/healthcheck.sh
 
 EXPOSE 3000
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
 
 CMD ["npm", "start"]
