@@ -1,5 +1,5 @@
 import { GraphQLClient, ClientError } from 'graphql-request';
-import extractJsonObjectFromString from '../../utils/extractJsonObjectFromString';
+import extractJsonObjectFromString from '../utils/extractJsonObjectFromString';
 import setAuthHeaders from '../utils/setAuthHeaders';
 
 const prepareHeaders = () => {
