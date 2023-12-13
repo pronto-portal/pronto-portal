@@ -16,12 +16,12 @@ import { useUpdateAssignmentMutation } from '../../redux/reducers';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { Assignment } from '../../types/ObjectTypes';
 import { AddEditAddressForm } from '../AddEditAddressForm';
+import { DateTimeForm } from '../DateTimeForm';
+import { EditAssignmentForm } from '../EditAssignmentForm';
 import { FlexCard, FlexCardContent } from '../FlexCard';
 import { FlexRowGridItem } from '../FlexRowGridItem/FlexRowGridItem';
 import { ObjectGridSpread } from '../ObjectGridSpread/ObjectGridSpread';
 import { TranslatorSelect } from '../TranslatorSelect';
-import { DateTimeForm } from '../DateTimeForm';
-import { EditAssignmentForm } from '../EditAssignmentForm';
 
 interface EditCalendarAssignmentProps {
     assignment: Pick<Assignment, 'id' | 'assignedTo' | 'claimant' | 'address' | 'dateTime' | 'isComplete' | 'translatorNoShow' | 'claimantNoShow'>;
@@ -58,7 +58,6 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         if (assignmentCompletion.translatorNoShow !== undefined) updateAssignmentVariables.translatorNoShow = assignmentCompletion.translatorNoShow;
         if (assignmentCompletion.claimantNoShow !== undefined) updateAssignmentVariables.claimantNoShow = assignmentCompletion.claimantNoShow;
 
-        console.log('assignmentCompletion', assignmentCompletion);
         updateAssignment({
             input: {
                 id,
@@ -97,8 +96,6 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
             });
         }
     }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow]);
-
-    console.log('updating assignment completion', assignmentCompletion);
 
     return (
         <>
