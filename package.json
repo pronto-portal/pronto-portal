@@ -64,6 +64,7 @@
         "@types/http-proxy": "^1.17.14",
         "@types/jsonwebtoken": "^9.0.1",
         "@types/moment": "^2.13.0",
+        "@types/react-big-calendar": "^1.8.7",
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.13.2",
         "eslint": "^8.55.0",

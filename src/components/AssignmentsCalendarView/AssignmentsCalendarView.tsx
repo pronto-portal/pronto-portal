@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -13,9 +14,7 @@ import { useGetAssignmentsQuery } from '../../redux/reducers';
 import { Assignment } from '../../types/ObjectTypes';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AddAssignmentsForm } from '../AssignmentsDirectory/AddAssignmentForm';
-import { EditAssignmentForm } from '../EditAssignmentForm';
 import { EditCalendarAssignment } from '../EditCalendarAssignment';
-import Button from '@mui/material/Button';
 
 const localizer = momentLocalizer(moment);
 
