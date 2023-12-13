@@ -1,4 +1,5 @@
 import { GraphQLClient, ClientError } from 'graphql-request';
+import extractJsonObjectFromString from '../utils/extractJsonObjectFromString';
 import setAuthHeaders from '../utils/setAuthHeaders';
 
 const prepareHeaders = () => {
@@ -21,16 +22,13 @@ const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL! + '/graphql', 
 export const baseQuery =
     () =>
     async ({ document, variables = {} }: { document: string; variables?: Record<string, any> }) => {
-        console.log('DOCUMENT', document);
-        console.log('VARIABLES', variables);
-
         try {
             const result = await client.request(document, variables, prepareHeaders());
             return { data: result };
         } catch (error) {
-            if (error instanceof ClientError) {
-                return { error: { status: error.response.status, data: error } };
-            }
-            return { error: { status: 500, data: error } };
+            const errorStr = String(error);
+            const errorObj = extractJsonObjectFromString(errorStr) as ClientError;
+
+            return { error: { status: errorObj.response.status, data: errorObj } };
         }
     };

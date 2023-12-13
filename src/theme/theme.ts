@@ -60,6 +60,9 @@ export const theme = createTheme({
                 root: {
                     padding: 0,
                     margin: 0,
+                    '.MuiGrid-item': {
+                        padding: '10px',
+                    },
                 },
             },
         },

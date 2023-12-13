@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import { AddAssignmentsForm } from './AddAssignmentForm';
@@ -58,21 +61,26 @@ export const AssignmentDirectory: React.FC = () => {
 
     return (
         <>
-            <EditAssignmentForm
+            <Dialog
                 open={isEditAssignmentOpen}
-                handleClose={() => {
+                onClose={() => {
                     setIsEditAssignmentOpen(false);
                 }}
-                id={editingAssignment.id}
-                defaultValues={{
-                    isComplete: editingAssignment.isComplete,
-                    translatorNoShow: editingAssignment.translatorNoShow,
-                    claimantNoShow: editingAssignment.claimantNoShow,
-                }}
-                onSubmit={() => {
-                    setIsEditAssignmentOpen(false);
-                }}
-            />
+            >
+                <DialogContent>
+                    <EditAssignmentForm
+                        id={editingAssignment.id}
+                        defaultValues={{
+                            isComplete: editingAssignment.isComplete,
+                            translatorNoShow: editingAssignment.translatorNoShow,
+                            claimantNoShow: editingAssignment.claimantNoShow,
+                        }}
+                        onSubmit={() => {
+                            setIsEditAssignmentOpen(false);
+                        }}
+                    />
+                </DialogContent>
+            </Dialog>
             <ModelDirectoryLayout<Assignment>
                 titleText='Assignments'
                 filtersOpen={filtersOpen}

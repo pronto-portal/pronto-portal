@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Phone from 'phone';
+import { useLanguages } from '../../contextProviders/LanguagesProvider';
 import { Person } from '../../types/ObjectTypes';
 
 interface UserInfoAutocompleteOptionProps {
@@ -12,6 +13,7 @@ interface UserInfoAutocompleteOptionProps {
 }
 
 export const UserInfoAutocompleteOption: React.FC<UserInfoAutocompleteOptionProps> = ({ option: { id, firstName, lastName, email, phone, languages } }) => {
+    const { getLanguageFromCode } = useLanguages();
     return (
         <Grid container direction='column' spacing={1}>
             <Grid item container xs={4} sx={{ width: '100%' }}>
@@ -71,7 +73,7 @@ export const UserInfoAutocompleteOption: React.FC<UserInfoAutocompleteOptionProp
                 }}
             >
                 {languages.map((language) => (
-                    <Chip label={language} key={`UserInfoAutocompleteOption-${id}-${language}`} />
+                    <Chip label={getLanguageFromCode(language)} key={`UserInfoAutocompleteOption-${id}-${language}`} />
                 ))}
             </Grid>
         </Grid>

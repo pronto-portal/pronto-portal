@@ -1,7 +1,6 @@
 import React from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
@@ -9,27 +8,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/system';
 import { useSnackbar } from 'notistack';
 import { useAddAssignmentFlow } from '../../contextProviders/AddAssignmentFlowProvider';
 import { useLanguages } from '../../contextProviders/LanguagesProvider';
 import { useCreateAssignmentMutation, useCreateReminderMutation } from '../../redux/reducers';
-import { Address, Claimant, Translator, User } from '../../types/ObjectTypes';
+import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { AssignmentFlowForm } from '../../types/PropTypes/AssignmentFlowForm';
+import { FlexCard, FlexCardContent } from '../FlexCard';
 import { FlexRowGridItem } from '../FlexRowGridItem/FlexRowGridItem';
 import { ObjectGridSpread } from '../ObjectGridSpread/ObjectGridSpread';
-
-const FlexCard = styled(Card)({
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'start',
-});
-
-const FlexCardContent = styled(CardContent)({
-    height: '100%',
-});
 
 export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
     const { claimant, translator, date, createReminder, address, handleOpenEditing } = useAddAssignmentFlow();
