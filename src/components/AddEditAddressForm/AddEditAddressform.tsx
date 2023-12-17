@@ -7,14 +7,13 @@ import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { useCreateAddressMutation, useGetAddressQuery, useUpdateAddressMutation } from '../../redux/reducers';
-import { Address } from '../../types/ObjectTypes';
+import { Address, BaseAddress } from '../../types/ObjectTypes';
 import { ModelForm } from '../../types/PropTypes/AssignmentFlowForm';
 import { CreateAddressResponse, UpdateAddressResponse } from '../../types/ResponseTypes';
 import { ResponseData, ResponseError } from '../../types/ResponseTypes/base';
 import { firstCharToUpper } from '../../utils/firstCharToUpper';
-import geocodeByAddress from '../../utils/geocodeByAddress';
 import { AddressSelect } from '../AddressSelect';
-import GoogleMaps from '../GoogleMapsAutoComplete/GoogleMapsAutoComplete';
+import GoogleMapsAutoComplete from '../GoogleMapsAutoComplete/GoogleMapsAutoComplete';
 import { ResponsiveForm } from '../ResponsiveForm/ResponsiveForm';
 
 interface AddressFormState {
@@ -33,7 +32,7 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({ onSucces
     });
 
     const [address, setAddress] = useState<Address>({} as Address);
-    const [googleAddress, setGoogleAddress] = useState<string>('');
+    const [googleAddress, setGoogleAddress] = useState<BaseAddress>();
     const { data, isLoading: isGetAddressLoading } = useGetAddressQuery(
         {
             input: {
@@ -52,22 +51,15 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({ onSucces
 
     const onSubmit: SubmitHandler<AddressFormState> = async (submitData) => {
         if (googleAddress) {
-            const results = await geocodeByAddress(googleAddress);
-            const address = results[0].address_components;
-            const streetNumber = address.find((item) => item.types.includes('street_number'));
-            const streetName = address.find((item) => item.types.includes('route'));
-            const city = address.find((item) => item.types.includes('locality'));
-            const state = address.find((item) => item.types.includes('administrative_area_level_1'));
-            const zipCode = address.find((item) => item.types.includes('postal_code'));
-            const address1 = `${streetNumber?.long_name} ${streetName?.long_name}`;
+            const { address1, city, state, zipCode } = googleAddress;
 
             if (address1 && city && state && zipCode) {
                 const addressData = {
                     address1: address1,
                     address2: submitData.apt,
-                    city: city.long_name,
-                    state: state.short_name,
-                    zipCode: zipCode.long_name,
+                    city: city,
+                    state: state,
+                    zipCode: zipCode,
                 };
 
                 if (mode === 'create') {
@@ -108,10 +100,8 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({ onSucces
             const existingAddress: Address | undefined = data ? data.getAddress : defaultValue;
 
             if (existingAddress) {
-                const googleAddress = `${existingAddress.address1} ${existingAddress.city} ${existingAddress.state} ${existingAddress.zipCode}`;
-
                 setAddress(existingAddress);
-                setGoogleAddress(googleAddress);
+                setGoogleAddress(existingAddress);
                 setValue('apt', existingAddress.address2 || '');
             }
         }
@@ -126,9 +116,9 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({ onSucces
                     </Typography>
                 </Grid>
                 <Grid item xs={2} width={0.75}>
-                    <GoogleMaps
+                    <GoogleMapsAutoComplete
                         value={googleAddress}
-                        onChange={(newVal: string) => {
+                        onChange={(newVal: BaseAddress) => {
                             setGoogleAddress(newVal);
                         }}
                     />
@@ -154,7 +144,7 @@ export const AddEditAddressForm: React.FC<AddEditAddressFormProps> = ({ onSucces
                             <AddressSelect
                                 defaultValue={defaultValue}
                                 onChange={(data: Address) => {
-                                    setGoogleAddress(`${data.address1} ${data.city} ${data.state} ${data.zipCode}`);
+                                    setGoogleAddress(data);
                                     setAddress(data);
                                 }}
                             />
