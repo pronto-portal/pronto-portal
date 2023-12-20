@@ -22,4 +22,5 @@ export interface Assignment {
     reminder: Reminder;
     assignedTo?: Translator;
     assignedToId?: string;
+    isCancelled: boolean;
 }

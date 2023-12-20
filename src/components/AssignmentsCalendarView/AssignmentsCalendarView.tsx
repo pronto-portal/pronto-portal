@@ -20,7 +20,11 @@ const localizer = momentLocalizer(moment);
 
 export const AssignmentsCalendarView: React.FC = () => {
     const [openAddAssignmentsForm, setOpenAddAssignmentsForm] = useState<boolean>(false);
-    const { data, isLoading } = useGetAssignmentsQuery({});
+    const { data, isLoading } = useGetAssignmentsQuery({
+        where: {
+            isCancelled: false,
+        },
+    });
     const { getLanguageFromCode } = useLanguages();
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
     const [openEditAssignmentForm, setOpenEditAssignmentForm] = useState<boolean>(false);

@@ -127,6 +127,8 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                                                 translatorNoShow: data.translatorNoShow || assignmentCompletion.translatorNoShow,
                                                 claimantNoShow: data.claimantNoShow || assignmentCompletion.claimantNoShow,
                                             });
+
+                                            onSuccess();
                                         }
                                     }}
                                     handleUpdate={false}

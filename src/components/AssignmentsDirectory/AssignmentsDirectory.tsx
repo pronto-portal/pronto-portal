@@ -70,6 +70,7 @@ export const AssignmentDirectory: React.FC = () => {
                 <DialogContent>
                     <EditAssignmentForm
                         id={editingAssignment.id}
+                        isCancelled={editingAssignment.isCancelled}
                         defaultValues={{
                             isComplete: editingAssignment.isComplete,
                             translatorNoShow: editingAssignment.translatorNoShow,

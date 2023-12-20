@@ -57,6 +57,7 @@ export const getAssignments = gql`
                 createdAt
                 claimantNoShow
                 translatorNoShow
+                isCancelled
             }
             totalRowCount
         }
