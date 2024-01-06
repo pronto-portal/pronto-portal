@@ -10,13 +10,10 @@ export const config = {
 const Signout = (req: NextApiRequest, res: NextApiResponse) => {
     return new Promise<void>((resolve, reject) => {
         return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signout`).then((response) => {
-            console.log('response', response);
             const { data } = response;
             const expiresInDateUnixTime = new Date('1970-01-01').toUTCString();
-            console.log('expiresInDateUnixTime', expiresInDateUnixTime);
 
             if (data) {
-                console.log('data', data);
                 res.setHeader(
                     'set-cookie',
                     `x-access-token=; path=/; secure; httponly; samesite=none; expires=${expiresInDateUnixTime}; domain=${
