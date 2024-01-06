@@ -1,16 +1,8 @@
 import axios from 'axios';
-import { setCookie } from 'cookies-next';
 import { google } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import oauth2Client, { redirectUri } from '../../../../utils/googleAuthClient';
 import { parseSetCookie } from '../../../../utils/parseSetCookie';
-
-const redirectUri =
-    process.env.NODE_ENV === 'production' ? `https://prontotranslationservices.com/api/auth/google/callback` : 'http://localhost:3000/api/auth/google/callback';
-
-console.log('redirectUri', redirectUri);
-
-const oauth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET_ID, redirectUri);
-
 // Make sure that we don't parse JSON bodies on this route:
 export const config = {
     api: {
