@@ -1,10 +1,11 @@
 import Router from 'next/router';
-import { axiosInstance } from './axiosInstances';
+import { axiosInstanceCustomUrl } from './axiosInstances';
 const signOut = async () => {
-    const res = await axiosInstance.post('/signout').then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
-        Router.push('/login');
-    });
+    const res = await axiosInstanceCustomUrl
+        .get(`${process.env.NODE_ENV === 'production' ? 'https://prontotranslationservices.com' : 'http://localhost:3000'}/api/auth/signOut`)
+        .then(() => {
+            Router.push('/login');
+        });
 
     return res;
 };
