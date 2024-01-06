@@ -19,11 +19,7 @@ const GoogleOAuth = (req: NextApiRequest, res: NextApiResponse) => {
         prompt: 'consent',
         response_type: 'code',
         include_granted_scopes: true,
-        scope: [
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/user.phonenumbers.read',
-        ],
+        scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
     });
 
     console.log('REDIRECTING TO URL: ', url);

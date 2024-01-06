@@ -41,6 +41,25 @@ export const Analytics: React.FC = () => {
 
     const MotionGrid = motion(Grid);
 
+    const Metrics = [
+        {
+            Name: 'This Month Vs Last Month Assignments',
+            Component: ThisMonthVsLastMonthAssignments,
+        },
+        {
+            Name: 'Assignments Status Comparison',
+            Component: AssignmentsStatusComparison,
+        },
+        {
+            Name: 'Languages Per Assignment Location',
+            Component: LanguagesPerAssignmentLocation,
+        },
+        {
+            Name: 'Translator No Show To Completion Ratio',
+            Component: TranslatorNoShowToCompletionRatio,
+        },
+    ];
+
     return (
         <MotionGrid
             container
@@ -53,15 +72,13 @@ export const Analytics: React.FC = () => {
             initial='hidden'
             animate='show'
         >
-            {[ThisMonthVsLastMonthAssignments, AssignmentsStatusComparison, LanguagesPerAssignmentLocation, TranslatorNoShowToCompletionRatio].map(
-                (Component, index) => (
-                    <MotionGrid item height='50%' {...gridBreakPoints} key={`${Component.name}-${index}}`} variants={itemVariants}>
-                        <Metric titleText={`Metric ${index + 1}`}>
-                            <Component />
-                        </Metric>
-                    </MotionGrid>
-                )
-            )}
+            {Metrics.map(({ Name, Component }, index) => (
+                <MotionGrid item height='50%' {...gridBreakPoints} key={`${Component.name}-${index}}`} variants={itemVariants}>
+                    <Metric titleText={Name}>
+                        <Component />
+                    </Metric>
+                </MotionGrid>
+            ))}
         </MotionGrid>
     );
 };
