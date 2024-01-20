@@ -114,6 +114,10 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                                 onSuccess={() => {
                                     setOpenEditing(false);
                                 }}
+                                claimant={claimant}
+                                translator={translator}
+                                assignmentAddress={address}
+                                assignmentDate={date}
                             />
                         )}
                         {editing === 'translator' && (
