@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import { grey } from '@mui/material/colors';
@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -30,17 +29,22 @@ const Legend = styled(Box)(({ theme }) => ({
 interface LegendReplaceInputProps {
     words: Word[];
     enablePreview?: boolean;
+    defaultValue?: string;
+    onChange: (value: string) => void;
 }
 
-export const LegendReplaceInput: React.FC<LegendReplaceInputProps> = ({ words, enablePreview = false }) => {
-    const [value, setValue] = React.useState<string>('');
+export const LegendReplaceInput: React.FC<LegendReplaceInputProps> = ({ words, enablePreview = false, defaultValue = '', onChange }) => {
+    const [value, setValue] = React.useState<string>(defaultValue);
+    const previewText = enablePreview ? words.reduce((acc, { label, word }) => acc.replaceAll(`{{${label}}}`, word), value) : '';
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log('On change');
         setValue(event.target.value);
     };
 
-    const previewText = enablePreview ? words.reduce((acc, { label, word }) => acc.replaceAll(`{{${label}}}`, word), value) : '';
+    useEffect(() => {
+        onChange(previewText);
+    }, [previewText, onChange]);
 
     return (
         <Stack direction='column' spacing={1} alignItems='center' width={1} justifyContent='center'>

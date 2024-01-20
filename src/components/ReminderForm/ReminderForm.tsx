@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -9,27 +13,23 @@ import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import { Words, TextArea } from './styles';
 import { Reminder } from '../../redux/graphql/codegen/types/graphql';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import Word from '../../types/word';
+import { addressToString } from '../../utils/addressTostring';
 import formatAMPM from '../../utils/formatAMPM';
 import CronJobBuilder from '../CronBuilder/CronBuilder';
 import { LegendReplaceInput } from '../LegendReplaceInput';
 import { ResponsiveForm } from '../ResponsiveForm/ResponsiveForm';
-
 interface ReminderFormProps {
     onSuccess: (data?: Reminder) => void;
     claimant?: Claimant;
     translator?: Translator;
     assignmentDate?: Date;
-    assignmentAddress?: Address;
-}
-
-interface DraggableItem {
-    type: string;
-    word: string;
+    assignmentAddress: Address;
 }
 
 export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant, translator, assignmentDate, assignmentAddress }) => {
@@ -76,6 +76,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
     const [claimantPreview, setClaimantPreview] = useState<string>('');
     const [translatorPreview, setTranslatorPreview] = useState<string>('');
     const [cron, setCron] = useState<string>('');
+    const [configureReminderSchedule, setConfigureReminderSchedule] = useState<boolean>(false);
 
     const handleOnSubmit = () => {
         onSuccess();
@@ -88,6 +89,10 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
         no: false,
     };
 
+    const defaultReminderMessage = `You are scheduled for {{Date}} {{Time}} at {{Address}}`;
+
+    console.log('claimant message', claimantMessage);
+    console.log('translator message', translatorMessage);
     return (
         <ResponsiveForm>
             <Grid container spacing={2} alignItems='center' alignContent='center' direction='column' width='100%' height='100%'>
@@ -105,17 +110,6 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                 </Grid>
                 {createReminder && (
                     <Grid item container direction='column'>
-                        <Grid item>
-                            <Typography>Configure the intervals to which this reminder will be sent</Typography>
-                            <Box>
-                                <CronJobBuilder
-                                    defaultValue={cron}
-                                    onChange={(cron) => {
-                                        setCronString(cron);
-                                    }}
-                                />
-                            </Box>
-                        </Grid>
                         <Grid
                             item
                             sx={{
@@ -126,7 +120,14 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                             }}
                         >
                             <Typography>Translator Message</Typography>
-                            <LegendReplaceInput words={translatorWords} enablePreview={true} />
+                            <LegendReplaceInput
+                                words={translatorWords}
+                                enablePreview={true}
+                                defaultValue={defaultReminderMessage}
+                                onChange={(msg) => {
+                                    setTranslatorMessage(msg);
+                                }}
+                            />
                         </Grid>
 
                         <Grid
@@ -139,7 +140,39 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                             }}
                         >
                             <Typography>Claimant Message</Typography>
-                            <LegendReplaceInput words={claimantWords} enablePreview={true} />
+                            <LegendReplaceInput
+                                words={claimantWords}
+                                enablePreview={true}
+                                defaultValue={defaultReminderMessage}
+                                onChange={(msg) => {
+                                    setClaimantMessage(msg);
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid container direction='column' spacing={2}>
+                            <Grid item>
+                                <Typography>Configure Reminder Schedule</Typography>
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Switch checked={configureReminderSchedule} onChange={(e) => setConfigureReminderSchedule(e.target.checked)} />}
+                                    label={
+                                        configureReminderSchedule
+                                            ? 'Reminder will be sent based on the following config'
+                                            : 'Reminder will be sent the day before the assignment'
+                                    }
+                                    sx={{ flex: 0.75 }}
+                                />
+                                <Box sx={{ display: configureReminderSchedule ? 'block' : 'none' }}>
+                                    <CronJobBuilder
+                                        defaultValue={cron}
+                                        onChange={(cron) => {
+                                            setCronString(cron);
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
                         </Grid>
                     </Grid>
                 )}
