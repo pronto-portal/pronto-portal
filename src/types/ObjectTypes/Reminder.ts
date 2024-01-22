@@ -9,4 +9,5 @@ export interface Reminder {
     translatorMessage: string;
     createdBy: User;
     createdById: string;
+    cronSchedule?: string;
 }

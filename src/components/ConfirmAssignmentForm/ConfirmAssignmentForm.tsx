@@ -14,12 +14,13 @@ import { useLanguages } from '../../contextProviders/LanguagesProvider';
 import { useCreateAssignmentMutation, useCreateReminderMutation } from '../../redux/reducers';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { AssignmentFlowForm } from '../../types/PropTypes/AssignmentFlowForm';
+import describeReminderCronExpression from '../../utils/describeReminderCronExpression';
 import { FlexCard, FlexCardContent } from '../FlexCard';
 import { FlexRowGridItem } from '../FlexRowGridItem/FlexRowGridItem';
 import { ObjectGridSpread } from '../ObjectGridSpread/ObjectGridSpread';
 
 export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
-    const { claimant, translator, date, createReminder, address, handleOpenEditing } = useAddAssignmentFlow();
+    const { claimant, translator, date, createReminder, address, handleOpenEditing, reminder } = useAddAssignmentFlow();
 
     const [createAssignment, { data, isLoading: assignmentIsLoading }] = useCreateAssignmentMutation();
     const [createReminderMutation, { data: reminderData, isLoading: reminderIsLoading }] = useCreateReminderMutation();
@@ -47,6 +48,9 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
                         createReminderMutation({
                             input: {
                                 assignmentId: assignment.id,
+                                cronSchedule: reminder.cronSchedule,
+                                translatorMessage: reminder.translatorMessage,
+                                claimantMessage: reminder.claimantMessage,
                             },
                         }).then((reminderRes) => {
                             if ('data' in reminderRes && reminderRes.data.createReminder) {
@@ -71,6 +75,8 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
                 }
             });
     };
+
+    console.log('reminder', reminder);
 
     return (
         <Grid container spacing={2} direction='column' alignItems='center' alignContent='start'>
@@ -141,6 +147,11 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
                     <CardHeader title='Reminders' />
                     <FlexCardContent>
                         <Typography>Create Reminder: {createReminder ? 'Yes' : 'No'}</Typography>
+                        <Typography>
+                            {reminder.cronSchedule
+                                ? describeReminderCronExpression(reminder.cronSchedule)
+                                : 'Reminder will be sent the day before the assignment'}
+                        </Typography>
                     </FlexCardContent>
                     <CardActions>
                         <IconButton onClick={() => handleOpenEditing('reminder')} disabled={isLoading}>

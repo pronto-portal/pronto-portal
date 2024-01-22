@@ -33,7 +33,7 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({ open, ha
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const { reset, date, setDate, claimant, translator, address } = useAddAssignmentFlow();
+    const { reset, date, setDate, claimant, translator, address, setReminder } = useAddAssignmentFlow();
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='md'>
@@ -82,7 +82,10 @@ export const AddAssignmentsForm: React.FC<AddAssignmentsFormProps> = ({ open, ha
                     )}
                     {activeStep === 4 && (
                         <ReminderForm
-                            onSuccess={() => setActiveStep(5)}
+                            onSuccess={(data) => {
+                                if (data) setReminder(data);
+                                setActiveStep(5);
+                            }}
                             claimant={claimant}
                             translator={translator}
                             assignmentAddress={address}

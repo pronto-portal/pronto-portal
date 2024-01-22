@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
-import { Words, TextArea } from './styles';
-import { Reminder } from '../../redux/graphql/codegen/types/graphql';
+import { ReminderInputsType } from '../../types/InputTypes';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import Word from '../../types/word';
-import { addressToString } from '../../utils/addressTostring';
 import formatAMPM from '../../utils/formatAMPM';
 import CronJobBuilder from '../CronBuilder/CronBuilder';
 import { LegendReplaceInput } from '../LegendReplaceInput';
 import { ResponsiveForm } from '../ResponsiveForm/ResponsiveForm';
+
 interface ReminderFormProps {
-    onSuccess: (data?: Reminder) => void;
+    onSuccess: (data?: ReminderInputsType) => void;
     claimant?: Claimant;
     translator?: Translator;
     assignmentDate?: Date;
@@ -73,13 +66,17 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
 
     const [translatorMessage, setTranslatorMessage] = useState<string>('');
     const [claimantMessage, setClaimantMessage] = useState<string>('');
-    const [claimantPreview, setClaimantPreview] = useState<string>('');
-    const [translatorPreview, setTranslatorPreview] = useState<string>('');
-    const [cron, setCron] = useState<string>('');
     const [configureReminderSchedule, setConfigureReminderSchedule] = useState<boolean>(false);
 
     const handleOnSubmit = () => {
-        onSuccess();
+        const reminder: ReminderInputsType = {
+            claimantMessage,
+            translatorMessage,
+            cronSchedule: configureReminderSchedule ? cronString : '',
+        };
+
+        console.log('Reminder form reminder', reminder);
+        onSuccess(reminder);
     };
 
     const [createReminder, setCreateReminder] = useState<boolean>(false);
@@ -91,8 +88,6 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
 
     const defaultReminderMessage = `You are scheduled for {{Date}} {{Time}} at {{Address}}`;
 
-    console.log('claimant message', claimantMessage);
-    console.log('translator message', translatorMessage);
     return (
         <ResponsiveForm>
             <Grid container spacing={2} alignItems='center' alignContent='center' direction='column' width='100%' height='100%'>
@@ -166,7 +161,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                                 />
                                 <Box sx={{ display: configureReminderSchedule ? 'block' : 'none' }}>
                                     <CronJobBuilder
-                                        defaultValue={cron}
+                                        defaultValue={''}
                                         onChange={(cron) => {
                                             setCronString(cron);
                                         }}

@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import { daysOfWeek, months } from '../../utils/constants';
+import describeReminderCronExpression, { parseDayOfWeekStringCronPart } from '../../utils/describeReminderCronExpression';
 import { FlexRowGridItem } from '../FlexRowGridItem';
 
 const StyledFormControl = styled(FormControl)`
@@ -50,8 +51,6 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
     const [selectWeekday, setSelectWeekday] = useState(false);
 
     useEffect(() => {
-        // onChange(cronString);
-
         // set defaults
         const { minute, hour, isPM, dayOfMonth, month, dayOfWeek } = parseDefaultValue();
         setMinute(minute);
@@ -63,7 +62,11 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
     }, [defaultValue, parseDefaultValue]);
 
     const hourInCron = selectedIsPM ? (selectedHour % 12) + 12 : selectedHour % 12;
-    const cronString = `${selectedMinute} ${hourInCron} ${selectedDayOfMonth} ${selectedMonth} ${selectedDayOfWeek}`;
+
+    const parsedSelectedDayOfWeek = parseDayOfWeekStringCronPart(selectedDayOfWeek); // selectedDayOfWeek.length === 0  ? ['*'] : selectedDayOfWeek.filter((day) => day !== '*').map((day) => +day);
+    const cronString = `${selectedMinute} ${hourInCron} ${selectedDayOfMonth} ${selectedMonth} ${parsedSelectedDayOfWeek.join(',')}`;
+
+    useEffect(() => onChange(cronString), [cronString, onChange]);
 
     // Helper function to generate menu items
     const generateMenuItems = (start: number, end: number, key: string) => {
@@ -94,21 +97,7 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
         ));
     };
 
-    const timeFromSelectedHourAndDay: string = `${selectedHour}:${selectedMinute < 10 ? `0${selectedMinute}` : selectedMinute} ${selectedIsPM ? 'PM' : 'AM'}`;
-
-    const formattedMonth = selectedMonth === '*' ? 'every month' : months[+selectedMonth - 1];
-    const formattedDayOfMonth =
-        selectedDayOfMonth === '*'
-            ? selectWeekday
-                ? selectedDayOfWeek.length === 0 || selectedDayOfWeek[0] === '*'
-                    ? 'every day'
-                    : 'every week'
-                : 'every day'
-            : selectedDayOfMonth;
-    const formattedDayOfWeek = selectedDayOfWeek
-        .map((day) => (day === '*' ? daysOfWeek.join(', ') : daysOfWeek[+day]))
-        .join(', ')
-        .trim();
+    const CronToReminderText = describeReminderCronExpression(cronString, selectWeekday, selectedIsPM);
 
     useEffect(() => {
         if (selectWeekday) {
@@ -144,7 +133,6 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
                     <StyledFormControl fullWidth>
                         <TextField select value={selectedDayOfMonth} onChange={(e) => setDayOfMonth(e.target.value)} label={'Day of month'} sx={{ flex: 1 }}>
                             <MenuItem value={''}></MenuItem>
-
                             <MenuItem value={'*'}>Every Day</MenuItem>
                             {generateMenuItems(1, 31, 'dayOfMonth')}
                         </TextField>
@@ -188,17 +176,7 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
                     sx={{ flex: 0.25 }}
                 />
             </StyledFormControl>
-            <Typography sx={{ width: '100%' }}>
-                Your reminder(s) will be sent <b>{formattedMonth}</b>, <b>{formattedDayOfMonth}</b> at <b>{timeFromSelectedHourAndDay}</b>
-                {formattedDayOfWeek ? (
-                    <>
-                        {' on '} <b> {formattedDayOfWeek} </b>
-                    </>
-                ) : (
-                    ''
-                )}
-            </Typography>
-            {/* <Typography>{cronString}</Typography> */}
+            <Typography sx={{ width: '100%' }}>{CronToReminderText}</Typography>
         </Stack>
     );
 };

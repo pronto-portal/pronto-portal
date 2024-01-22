@@ -6,6 +6,7 @@ export const createReminder = gql`
             id
             translatorMessage
             claimantMessage
+            cronSchedule
             assignment {
                 id
                 dateTime
