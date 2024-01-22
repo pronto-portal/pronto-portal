@@ -90,8 +90,8 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
     };
 
     const generateMonthItems = () => {
-        return months.map((month, index) => (
-            <MenuItem key={`CronBuilder${month}`} value={index}>
+        return Object.entries(months).map(([num, month]) => (
+            <MenuItem key={`CronBuilder${month}`} value={num}>
                 {month}
             </MenuItem>
         ));
