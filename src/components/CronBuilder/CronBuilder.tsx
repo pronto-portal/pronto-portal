@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import { daysOfWeek, months } from '../../utils/constants';
 import describeReminderCronExpression, { parseDayOfWeekStringCronPart } from '../../utils/describeReminderCronExpression';
-import { FlexRowGridItem } from '../FlexRowGridItem';
+import getDateTimeDetailsFromCronExpression from '../../utils/getDateTimeDetailsFromCronExpression';
 
 const StyledFormControl = styled(FormControl)`
     flex: 1;
@@ -22,44 +19,16 @@ interface CronJobBuilderProps {
     defaultValue?: string;
 }
 const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue }) => {
-    const parseDefaultValue = useCallback(() => {
-        if (!defaultValue) return { minute: 0, hour: 12, isPM: false, dayOfMonth: '*', month: '*', dayOfWeek: ['*'] };
+    const { minute, hour, dayOfMonth, month, dayOfWeek, isPM } = getDateTimeDetailsFromCronExpression(defaultValue || '0 12 1 1 *');
+    const defaultSelectWeekday = dayOfWeek.length > 1 || (dayOfWeek.length === 1 && dayOfWeek[0] !== '*');
 
-        const parts = defaultValue.split(' ');
-        if (parts.length !== 5) return { minute: 0, hour: 12, isPM: false, dayOfMonth: '*', month: '*', dayOfWeek: ['*'] };
-
-        const [minute, hour, dayOfMonth, month, dayOfWeek] = parts;
-
-        const dayOfWeekString = dayOfWeek.split(',');
-        const hourNumber = parseInt(hour, 10);
-        return {
-            minute: +minute,
-            hour: hourNumber > 12 ? hourNumber - 12 : hourNumber,
-            isPM: hourNumber >= 12,
-            dayOfMonth: +dayOfMonth,
-            month: +month,
-            dayOfWeek: dayOfWeekString,
-        };
-    }, [defaultValue]);
-
-    const [selectedMinute, setMinute] = useState(0);
-    const [selectedHour, setHour] = useState(0);
-    const [selectedIsPM, setIsPM] = useState(true);
-    const [selectedDayOfMonth, setDayOfMonth] = useState<string | number>(1);
-    const [selectedMonth, setMonth] = useState<string | number>(1);
-    const [selectedDayOfWeek, setDayOfWeek] = useState<string[]>([]);
-    const [selectWeekday, setSelectWeekday] = useState(false);
-
-    useEffect(() => {
-        // set defaults
-        const { minute, hour, isPM, dayOfMonth, month, dayOfWeek } = parseDefaultValue();
-        setMinute(minute);
-        setHour(hour);
-        setIsPM(isPM);
-        setDayOfMonth(dayOfMonth);
-        setMonth(month);
-        setDayOfWeek(dayOfWeek);
-    }, [defaultValue, parseDefaultValue]);
+    const [selectedMinute, setMinute] = useState(minute);
+    const [selectedHour, setHour] = useState(hour);
+    const [selectedIsPM, setIsPM] = useState(isPM);
+    const [selectedDayOfMonth, setDayOfMonth] = useState<string | number>(dayOfMonth);
+    const [selectedMonth, setMonth] = useState<string | number>(month);
+    const [selectedDayOfWeek, setDayOfWeek] = useState<string[]>(dayOfWeek);
+    const [selectWeekday, setSelectWeekday] = useState(defaultSelectWeekday);
 
     const hourInCron = selectedIsPM ? (selectedHour % 12) + 12 : selectedHour % 12;
 

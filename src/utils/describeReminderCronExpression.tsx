@@ -1,7 +1,7 @@
 import { daysOfWeek, months } from './constants';
 
 export const parseDayOfWeekStringCronPart = (dayOfWeek: string[]) => {
-    return dayOfWeek.length === 0 || (dayOfWeek.length === 1 && dayOfWeek[0] === '*') ? ['*'] : dayOfWeek.filter((day) => day !== '*').map((day) => +day);
+    return dayOfWeek.length === 0 || (dayOfWeek.length === 1 && dayOfWeek[0] === '*') ? ['*'] : dayOfWeek.filter((day) => day !== '*').map((day) => day);
 };
 
 const describeReminderCronExpression = (cronExpression: string, selectWeekday?: boolean, selectedIsPM?: boolean) => {
@@ -13,9 +13,9 @@ const describeReminderCronExpression = (cronExpression: string, selectWeekday?: 
     const dayOfWeek = parseDayOfWeekStringCronPart(preformattedDayOfWeek); //preformattedDayOfWeek.length === 0 ? ['*'] : preformattedDayOfWeek.filter((day) => day !== '*').map((day) => +day);
     const month = cronExpressionParts[3];
 
-    console.log('Cron expression', cronExpression);
-    console.log('day of month', dayOfMonth);
-    console.log('day of week', dayOfWeek);
+    // console.log('Cron expression', cronExpression);
+    // console.log('day of month', dayOfMonth);
+    // console.log('day of week', dayOfWeek);
 
     const formattedMonth = month === '*' ? 'every month' : months[+month];
     const formattedDayOfMonth =

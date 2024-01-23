@@ -25,6 +25,8 @@ interface AddAssignmentFlowContextProps {
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
     createReminder: boolean;
     setCreateReminder: React.Dispatch<React.SetStateAction<boolean>>;
+    configureReminderSchedule: boolean;
+    setConfigureReminderSchedule: React.Dispatch<React.SetStateAction<boolean>>;
     handleOpenEditing: (type: AssignmentFlowEditingType) => void;
     reset: () => void;
 }
@@ -35,6 +37,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
     const [address, setAddress] = useState<Address>({} as Address);
     const [claimant, setClaimant] = useState<Claimant>({} as Claimant);
     const [reminder, setReminder] = useState<ReminderInputsType>({} as ReminderInputsType);
+    const [configureReminderSchedule, setConfigureReminderSchedule] = useState<boolean>(false);
     const [translator, setTranslator] = useState<Translator>({} as Translator);
     const [date, setDate] = useState<Date>();
     const [createReminder, setCreateReminder] = useState<boolean>(true);
@@ -55,6 +58,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
         setCreateReminder(true);
     };
 
+    console.log('Reminder cron string', reminder.cronSchedule);
+
     return (
         <>
             <AddAssignmentFlowContext.Provider
@@ -73,6 +78,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                     setDate,
                     handleOpenEditing,
                     reset,
+                    configureReminderSchedule,
+                    setConfigureReminderSchedule,
                 }}
             >
                 {children}
@@ -112,6 +119,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                                     if (data) {
                                         console.log('Flow reminder data', data);
                                         setReminder(data);
+                                        setCreateReminder(data.createReminder);
                                     }
 
                                     setOpenEditing(false);
@@ -120,6 +128,7 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                                 translator={translator}
                                 assignmentAddress={address}
                                 assignmentDate={date}
+                                defaultValue={{ ...reminder, createReminder, configureReminderSchedule }}
                             />
                         )}
                         {editing === 'translator' && (

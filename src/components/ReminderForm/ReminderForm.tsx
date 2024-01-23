@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -9,23 +9,25 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
-import { ReminderInputsType } from '../../types/InputTypes';
+import { ReminderFlowInput } from '../../types/InputTypes';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import Word from '../../types/word';
 import formatAMPM from '../../utils/formatAMPM';
+import getDateTimeDetailsFromCronExpression from '../../utils/getDateTimeDetailsFromCronExpression';
 import CronJobBuilder from '../CronBuilder/CronBuilder';
 import { LegendReplaceInput } from '../LegendReplaceInput';
 import { ResponsiveForm } from '../ResponsiveForm/ResponsiveForm';
 
 interface ReminderFormProps {
-    onSuccess: (data?: ReminderInputsType) => void;
+    onSuccess: (data?: ReminderFlowInput) => void;
     claimant?: Claimant;
     translator?: Translator;
     assignmentDate?: Date;
     assignmentAddress: Address;
+    defaultValue?: ReminderFlowInput;
 }
 
-export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant, translator, assignmentDate, assignmentAddress }) => {
+export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant, translator, assignmentDate, assignmentAddress, defaultValue }) => {
     const formattedAddressText: string = assignmentAddress
         ? `${assignmentAddress.address1}${assignmentAddress.address2 ? `, ${assignmentAddress.address2}` : ''} ${assignmentAddress.city}, ${
               assignmentAddress.state
@@ -67,19 +69,19 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
     const [translatorMessage, setTranslatorMessage] = useState<string>('');
     const [claimantMessage, setClaimantMessage] = useState<string>('');
     const [configureReminderSchedule, setConfigureReminderSchedule] = useState<boolean>(false);
+    const [createReminder, setCreateReminder] = useState<boolean>(false);
 
     const handleOnSubmit = () => {
-        const reminder: ReminderInputsType = {
+        const reminder: ReminderFlowInput = {
             claimantMessage,
             translatorMessage,
             cronSchedule: configureReminderSchedule ? cronString : '',
+            createReminder,
+            configureReminderSchedule,
         };
 
-        console.log('Reminder form reminder', reminder);
         onSuccess(reminder);
     };
-
-    const [createReminder, setCreateReminder] = useState<boolean>(false);
 
     const yesNoOptions: Record<string, boolean> = {
         yes: true,
@@ -87,6 +89,19 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
     };
 
     const defaultReminderMessage = `You are scheduled for {{Date}} {{Time}} at {{Address}}`;
+
+    // Set defaults
+    useEffect(() => {
+        if (defaultValue) {
+            if (defaultValue.cronSchedule) setCronString(defaultValue.cronSchedule);
+
+            setCreateReminder(defaultValue.createReminder);
+            setTranslatorMessage(defaultValue.translatorMessage);
+            setClaimantMessage(defaultValue.claimantMessage);
+            setConfigureReminderSchedule(defaultValue.configureReminderSchedule);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <ResponsiveForm>
@@ -118,7 +133,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                             <LegendReplaceInput
                                 words={translatorWords}
                                 enablePreview={true}
-                                defaultValue={defaultReminderMessage}
+                                defaultValue={translatorMessage || defaultReminderMessage}
                                 onChange={(msg) => {
                                     setTranslatorMessage(msg);
                                 }}
@@ -138,7 +153,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                             <LegendReplaceInput
                                 words={claimantWords}
                                 enablePreview={true}
-                                defaultValue={defaultReminderMessage}
+                                defaultValue={claimantMessage || defaultReminderMessage}
                                 onChange={(msg) => {
                                     setClaimantMessage(msg);
                                 }}
@@ -161,7 +176,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                                 />
                                 <Box sx={{ display: configureReminderSchedule ? 'block' : 'none' }}>
                                     <CronJobBuilder
-                                        defaultValue={''}
+                                        defaultValue={cronString}
                                         onChange={(cron) => {
                                             setCronString(cron);
                                         }}
@@ -173,7 +188,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                 )}
                 <Grid item>
                     <Button onClick={handleOnSubmit} variant='contained'>
-                        Next
+                        Confirm
                     </Button>
                 </Grid>
             </Grid>

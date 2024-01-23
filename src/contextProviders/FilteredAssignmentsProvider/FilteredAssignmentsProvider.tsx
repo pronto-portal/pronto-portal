@@ -18,7 +18,6 @@ export const FilteredAssignmentsProvider: React.FC<Wrapper> = ({ children }) => 
     const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
     const { page, setPage, countPerPage, setCountPerPage } = usePaginationState(20);
 
-    console.log(filters);
     const { data, isLoading, error } = useGetAssignmentsQuery(
         {
             input: {
