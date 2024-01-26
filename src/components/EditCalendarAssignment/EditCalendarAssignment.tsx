@@ -37,12 +37,10 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
 }) => {
     const defaultReminderObj = {
         createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
-        configureReminderSchedule: isReminderCronConfigured(reminder.cronSchedule || '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
+        configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
         translatorMessage: reminder.translatorMessage,
         claimantMessage: reminder.claimantMessage,
     };
-
-    console.log('defaultReminderObj', defaultReminderObj);
 
     const { enqueueSnackbar } = useSnackbar();
     const [updateAssignment, { isLoading }] = useUpdateAssignmentMutation({});
@@ -91,7 +89,6 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         });
     };
 
-    console.log('reminder', reminder);
     useEffect(() => {
         if (assignedTo) {
             setTranslatorObj(assignedTo);
@@ -106,16 +103,9 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         }
 
         if (reminder) {
-            console.log('setting reminder obj to ', {
-                createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
-                configureReminderSchedule: isReminderCronConfigured(reminder.cronSchedule || '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
-                translatorMessage: reminder.translatorMessage,
-                claimantMessage: reminder.claimantMessage,
-            });
-
             setReminderObj({
                 createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
-                configureReminderSchedule: isReminderCronConfigured(reminder.cronSchedule || '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
+                configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
                 translatorMessage: reminder.translatorMessage,
                 claimantMessage: reminder.claimantMessage,
             });
@@ -130,7 +120,6 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         }
     }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder]);
 
-    console.log('reminderObj', reminderObj);
     return (
         <>
             <Grid container spacing={2} direction='column' alignItems='center' alignContent='start' width='100%' height='100%'>
