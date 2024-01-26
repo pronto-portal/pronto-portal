@@ -1,7 +1,13 @@
 import { DateRange, GetById, PaginatedInput } from './base';
 import { Reminder } from '../ObjectTypes';
 
-interface CreateReminder extends Omit<Partial<Reminder>, 'id'> {
+export type ReminderInputsType = Pick<Reminder, 'claimantMessage' | 'translatorMessage' | 'cronSchedule'>;
+
+export interface ReminderFlowInput extends ReminderInputsType {
+    createReminder: boolean;
+    configureReminderSchedule: boolean;
+}
+interface CreateReminder extends ReminderInputsType {
     assignmentId: string;
 }
 

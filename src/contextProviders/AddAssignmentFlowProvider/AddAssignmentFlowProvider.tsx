@@ -1,16 +1,13 @@
 import React, { useState, useContext, createContext } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { AddEditAddressForm } from '../../components/AddEditAddressForm';
 import { AddEditClaimantForm } from '../../components/AddEditClaimantForm';
-import { AddEditTranslatorForm } from '../../components/AddEditTranslatorForm';
 import { DateTimeForm } from '../../components/DateTimeForm';
 import { ReminderForm } from '../../components/ReminderForm';
 import { TranslatorSelect } from '../../components/TranslatorSelect';
-import { Reminder } from '../../types/ObjectTypes';
-import { Address, Claimant, Translator, User } from '../../types/ObjectTypes';
+import { ReminderInputsType } from '../../types/InputTypes';
+import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { Wrapper } from '../../types/PropTypes/Wrapper';
 
 type AssignmentFlowEditingType = 'address' | 'claimant' | 'reminder' | 'translator' | 'date';
@@ -20,14 +17,16 @@ interface AddAssignmentFlowContextProps {
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
     claimant: Claimant;
     setClaimant: React.Dispatch<React.SetStateAction<Claimant>>;
-    reminder: Reminder;
-    setReminder: React.Dispatch<React.SetStateAction<Reminder>>;
+    reminder: ReminderInputsType;
+    setReminder: React.Dispatch<React.SetStateAction<ReminderInputsType>>;
     translator: Translator;
     setTranslator: React.Dispatch<React.SetStateAction<Translator>>;
     date?: Date;
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
     createReminder: boolean;
     setCreateReminder: React.Dispatch<React.SetStateAction<boolean>>;
+    configureReminderSchedule: boolean;
+    setConfigureReminderSchedule: React.Dispatch<React.SetStateAction<boolean>>;
     handleOpenEditing: (type: AssignmentFlowEditingType) => void;
     reset: () => void;
 }
@@ -37,7 +36,8 @@ const AddAssignmentFlowContext = createContext<AddAssignmentFlowContextProps>({}
 export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
     const [address, setAddress] = useState<Address>({} as Address);
     const [claimant, setClaimant] = useState<Claimant>({} as Claimant);
-    const [reminder, setReminder] = useState<Reminder>({} as Reminder);
+    const [reminder, setReminder] = useState<ReminderInputsType>({} as ReminderInputsType);
+    const [configureReminderSchedule, setConfigureReminderSchedule] = useState<boolean>(false);
     const [translator, setTranslator] = useState<Translator>({} as Translator);
     const [date, setDate] = useState<Date>();
     const [createReminder, setCreateReminder] = useState<boolean>(true);
@@ -52,11 +52,13 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
     const reset = () => {
         setAddress({} as Address);
         setClaimant({} as Claimant);
-        setReminder({} as Reminder);
+        setReminder({} as ReminderInputsType);
         setTranslator({} as Translator);
         setDate(undefined);
         setCreateReminder(true);
     };
+
+    console.log('Reminder cron string', reminder.cronSchedule);
 
     return (
         <>
@@ -76,6 +78,8 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                     setDate,
                     handleOpenEditing,
                     reset,
+                    configureReminderSchedule,
+                    setConfigureReminderSchedule,
                 }}
             >
                 {children}
@@ -111,9 +115,20 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                         )}
                         {editing === 'reminder' && (
                             <ReminderForm
-                                onSuccess={() => {
+                                onSuccess={(data) => {
+                                    if (data) {
+                                        console.log('Flow reminder data', data);
+                                        setReminder(data);
+                                        setCreateReminder(data.createReminder);
+                                    }
+
                                     setOpenEditing(false);
                                 }}
+                                claimant={claimant}
+                                translator={translator}
+                                assignmentAddress={address}
+                                assignmentDate={date}
+                                defaultValue={{ ...reminder, createReminder, configureReminderSchedule }}
                             />
                         )}
                         {editing === 'translator' && (

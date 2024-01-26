@@ -18,7 +18,6 @@ interface LanguagesAutocompleteProps {
 export const LanguagesAutocomplete = React.forwardRef(
     ({ value, onChange, multiple = false, label, variant, sx }: LanguagesAutocompleteProps, ref: React.ForwardedRef<HTMLInputElement>) => {
         const { languageCodes, getLanguageFromCode } = useLanguages();
-        console.log('lang', value);
 
         return (
             <Autocomplete

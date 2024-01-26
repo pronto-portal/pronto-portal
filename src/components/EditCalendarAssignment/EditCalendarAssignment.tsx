@@ -13,25 +13,35 @@ import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
 import { useLanguages } from '../../contextProviders/LanguagesProvider';
 import { useUpdateAssignmentMutation } from '../../redux/reducers';
+import { ReminderFlowInput } from '../../types/InputTypes';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { Assignment } from '../../types/ObjectTypes';
+import isReminderCronConfigured from '../../utils/isReminderCronConfigured';
 import { AddEditAddressForm } from '../AddEditAddressForm';
 import { DateTimeForm } from '../DateTimeForm';
 import { EditAssignmentForm } from '../EditAssignmentForm';
 import { FlexCard, FlexCardContent } from '../FlexCard';
 import { FlexRowGridItem } from '../FlexRowGridItem/FlexRowGridItem';
 import { ObjectGridSpread } from '../ObjectGridSpread/ObjectGridSpread';
+import { ReminderForm } from '../ReminderForm';
+import { ReminderInfo } from '../ReminderInfo';
 import { TranslatorSelect } from '../TranslatorSelect';
-
 interface EditCalendarAssignmentProps {
-    assignment: Pick<Assignment, 'id' | 'assignedTo' | 'claimant' | 'address' | 'dateTime' | 'isComplete' | 'translatorNoShow' | 'claimantNoShow'>;
+    assignment: Pick<Assignment, 'id' | 'assignedTo' | 'claimant' | 'address' | 'dateTime' | 'isComplete' | 'translatorNoShow' | 'claimantNoShow' | 'reminder'>;
     onSuccess: (assignment?: Assignment) => void;
 }
 
 export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
-    assignment: { id, assignedTo, claimant, address, dateTime, isComplete, translatorNoShow, claimantNoShow },
+    assignment: { id, assignedTo, claimant, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder },
     onSuccess,
 }) => {
+    const defaultReminderObj = {
+        createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
+        configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
+        translatorMessage: reminder.translatorMessage,
+        claimantMessage: reminder.claimantMessage,
+    };
+
     const { enqueueSnackbar } = useSnackbar();
     const [updateAssignment, { isLoading }] = useUpdateAssignmentMutation({});
     const { getLanguageFromCode } = useLanguages();
@@ -45,9 +55,13 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         claimantNoShow,
     });
 
+    // todo: reminder message variables should be substitued on the api side
+    const [reminderObj, setReminderObj] = useState<ReminderFlowInput>(defaultReminderObj);
+
     const [editAddressOpen, setEditAddressOpen] = useState<boolean>(false);
     const [editTranslatorOpen, setEditTranslatorOpen] = useState<boolean>(false);
     const [editDateTimeOpen, setEditDateTimeOpen] = useState<boolean>(false);
+    const [editReminderOpen, setEditReminderOpen] = useState<boolean>(false);
 
     const handleUpdateAssignment = () => {
         const updateAssignmentVariables: Record<string, string | boolean> = {};
@@ -88,6 +102,15 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
             setDateTimeObj(new Date(dateTime));
         }
 
+        if (reminder) {
+            setReminderObj({
+                createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
+                configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
+                translatorMessage: reminder.translatorMessage,
+                claimantMessage: reminder.claimantMessage,
+            });
+        }
+
         if (isComplete !== undefined || translatorNoShow !== undefined || claimantNoShow !== undefined) {
             setAssignmentCompletion({
                 isComplete,
@@ -95,7 +118,7 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                 claimantNoShow,
             });
         }
-    }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow]);
+    }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder]);
 
     return (
         <>
@@ -212,6 +235,21 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                         </FlexCard>
                     </FlexRowGridItem>
                 ) : null}
+
+                <FlexRowGridItem item xs={2}>
+                    <FlexCard>
+                        <CardHeader title='Reminders' />
+                        <FlexCardContent>
+                            <ReminderInfo reminderObj={reminderObj} />
+                        </FlexCardContent>
+                        <CardActions>
+                            <IconButton onClick={() => setEditReminderOpen(true)} disabled={isLoading}>
+                                <EditIcon />
+                            </IconButton>
+                        </CardActions>
+                    </FlexCard>
+                </FlexRowGridItem>
+
                 <Grid item xs={2}>
                     {isLoading ? (
                         <CircularProgress />
@@ -267,6 +305,23 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                                 if (data) {
                                     setDateTimeObj(data);
                                     setEditDateTimeOpen(false);
+                                }
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
+            ) : null}
+
+            {reminderObj ? (
+                <Dialog open={editReminderOpen} onClose={() => setEditReminderOpen(false)} maxWidth='md' fullWidth>
+                    <DialogContent>
+                        <ReminderForm
+                            defaultValue={reminderObj}
+                            assignmentAddress={addressObj || address}
+                            onSuccess={(data) => {
+                                if (data) {
+                                    setReminderObj(data);
+                                    setEditReminderOpen(false);
                                 }
                             }}
                         />

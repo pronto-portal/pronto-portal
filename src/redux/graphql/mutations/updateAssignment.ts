@@ -33,6 +33,12 @@ export const updateAssignment = gql`
                 firstName
                 lastName
             }
+            reminder {
+                id
+                claimantMessage
+                translatorMessage
+                cronSchedule
+            }
         }
     }
 `;

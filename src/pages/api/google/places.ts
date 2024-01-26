@@ -21,6 +21,7 @@ const GetPlacesPrediction = (req: NextApiRequest, res: NextApiResponse) => {
                 {
                     headers: {
                         'X-Goog-FieldMask': 'places.addressComponents', //'addressComponents,formattedAddress',
+                        Referer: process.env.NODE_ENV === 'production' ? 'https://prontotranslationservices.com' : 'http://localhost:3000',
                     },
                 }
             )

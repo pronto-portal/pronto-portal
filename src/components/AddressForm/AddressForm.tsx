@@ -16,7 +16,6 @@ export const AddressForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
     const [_, { isLoading }] = useCreateAddressMutation();
 
     const { address, setAddress } = useAddAssignmentFlow();
-    console.log(address);
 
     const addressExists = !!Object.keys(address).length;
 
