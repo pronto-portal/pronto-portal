@@ -38,13 +38,12 @@ export const LegendReplaceInput: React.FC<LegendReplaceInputProps> = ({ words, e
     const previewText = enablePreview ? words.reduce((acc, { label, word }) => acc.replaceAll(`{{${label}}}`, word), value) : '';
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('On change');
         setValue(event.target.value);
     };
 
     useEffect(() => {
-        onChange(previewText);
-    }, [previewText, onChange]);
+        onChange(value);
+    }, [value, onChange]);
 
     return (
         <Stack direction='column' spacing={1} alignItems='center' width={1} justifyContent='center'>
