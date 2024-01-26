@@ -14,10 +14,11 @@ import { useLanguages } from '../../contextProviders/LanguagesProvider';
 import { useCreateAssignmentMutation, useCreateReminderMutation } from '../../redux/reducers';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { AssignmentFlowForm } from '../../types/PropTypes/AssignmentFlowForm';
-import describeReminderCronExpression from '../../utils/describeReminderCronExpression';
+import isReminderCronConfigured from '../../utils/isReminderCronConfigured';
 import { FlexCard, FlexCardContent } from '../FlexCard';
 import { FlexRowGridItem } from '../FlexRowGridItem/FlexRowGridItem';
 import { ObjectGridSpread } from '../ObjectGridSpread/ObjectGridSpread';
+import { ReminderInfo } from '../ReminderInfo';
 
 export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess }) => {
     const { claimant, translator, date, createReminder, address, handleOpenEditing, reminder } = useAddAssignmentFlow();
@@ -146,12 +147,15 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
                 <FlexCard>
                     <CardHeader title='Reminders' />
                     <FlexCardContent>
-                        <Typography>Create Reminder: {createReminder ? 'Yes' : 'No'}</Typography>
-                        <Typography>
-                            {reminder.cronSchedule
-                                ? describeReminderCronExpression(reminder.cronSchedule)
-                                : 'Reminder will be sent the day before the assignment'}
-                        </Typography>
+                        <ReminderInfo
+                            reminderObj={{
+                                configureReminderSchedule: isReminderCronConfigured(reminder.cronSchedule, date),
+                                createReminder: createReminder,
+                                cronSchedule: reminder?.cronSchedule,
+                                translatorMessage: reminder?.translatorMessage,
+                                claimantMessage: reminder?.claimantMessage,
+                            }}
+                        />
                     </FlexCardContent>
                     <CardActions>
                         <IconButton onClick={() => handleOpenEditing('reminder')} disabled={isLoading}>

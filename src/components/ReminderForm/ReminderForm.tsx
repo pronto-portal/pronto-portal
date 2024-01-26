@@ -100,8 +100,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
             setClaimantMessage(defaultValue.claimantMessage);
             setConfigureReminderSchedule(defaultValue.configureReminderSchedule);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [defaultValue]);
 
     return (
         <ResponsiveForm>
@@ -112,7 +111,11 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                 <Grid item>
                     <FormControl>
                         <FormLabel>Would you like us to remind the translator and the claimant?</FormLabel>
-                        <RadioGroup defaultValue={createReminder ? 'yes' : 'no'} onChange={(e) => setCreateReminder(yesNoOptions[e.target.value])}>
+                        <RadioGroup
+                            defaultValue={defaultValue?.createReminder ? 'yes' : 'no'}
+                            value={createReminder ? 'yes' : 'no'}
+                            onChange={(e) => setCreateReminder(yesNoOptions[e.target.value])}
+                        >
                             <FormControlLabel value='yes' control={<Radio />} label='Yes' />
                             <FormControlLabel value='no' control={<Radio />} label='No' />
                         </RadioGroup>
@@ -178,7 +181,9 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                                     <CronJobBuilder
                                         defaultValue={cronString}
                                         onChange={(cron) => {
-                                            setCronString(cron);
+                                            // cron string must be '' if the backend is to use the default schedule
+                                            if (configureReminderSchedule) setCronString(cron);
+                                            else setCronString('');
                                         }}
                                     />
                                 </Box>

@@ -53,6 +53,12 @@ export const getAssignments = gql`
                     state
                     languages
                 }
+                reminder {
+                    id
+                    claimantMessage
+                    translatorMessage
+                    cronSchedule
+                }
                 isComplete
                 createdAt
                 claimantNoShow
