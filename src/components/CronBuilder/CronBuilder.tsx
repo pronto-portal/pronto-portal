@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import { daysOfWeek, months } from '../../utils/constants';
 import describeReminderCronExpression, { parseDayOfWeekStringCronPart } from '../../utils/describeReminderCronExpression';
 import getDateTimeDetailsFromCronExpression from '../../utils/getDateTimeDetailsFromCronExpression';
+import { getDefaultReminderCronString } from '../../utils/getDefaultReminderCronString';
 
 const StyledFormControl = styled(FormControl)`
     flex: 1;
@@ -21,7 +22,9 @@ interface CronJobBuilderProps {
 }
 const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, defaultDate }) => {
     const defaultYear = defaultDate ? defaultDate.getFullYear() : new Date().getFullYear();
-    const { minute, hour, dayOfMonth, month, dayOfWeek, isPM, year } = getDateTimeDetailsFromCronExpression(defaultValue || `0 12 1 1 * ${defaultYear}`);
+    const defaultCronString = defaultDate ? getDefaultReminderCronString(defaultDate.toISOString()) : `0 12 1 1 * ${defaultYear}`;
+
+    const { minute, hour, dayOfMonth, month, dayOfWeek, isPM, year } = getDateTimeDetailsFromCronExpression(defaultValue || defaultCronString);
     const defaultSelectWeekday = dayOfWeek.length > 1 || (dayOfWeek.length === 1 && dayOfWeek[0] !== '*');
 
     const [selectedMinute, setMinute] = useState(minute);
@@ -53,8 +56,8 @@ const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, de
     };
 
     const generateDayOfWeekItems = () => {
-        return daysOfWeek.map((day, index) => (
-            <MenuItem key={`CronBuilder${day}`} value={index}>
+        return Object.entries(daysOfWeek).map(([num, day]) => (
+            <MenuItem key={`CronBuilder${day}`} value={num}>
                 {day}
             </MenuItem>
         ));
