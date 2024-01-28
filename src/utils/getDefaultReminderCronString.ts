@@ -14,6 +14,6 @@ export const getDefaultReminderCronString = (dateString: string) => {
     const minute = dateTime.minute();
 
     // min hr day_of_month month day_of_week year
-    const cron = `${minute} ${hour} ${day} ${month} ? ${year}`;
+    const cron = `${minute} ${hour} ${day} ${month} * ${year}`;
     return cron;
 };

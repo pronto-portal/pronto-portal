@@ -3,6 +3,7 @@ const getDateTimeDetailsFromCronExpression = (cronExpression: string) => {
     const [minute, hour, dayOfMonth, month, dayOfWeek, year] = parts;
 
     const dayOfWeekString = dayOfWeek.split(',');
+
     const hourNumber = parseInt(hour, 10);
     return {
         minute: +minute,
