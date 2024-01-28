@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
@@ -35,12 +35,15 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
     assignment: { id, assignedTo, claimant, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder },
     onSuccess,
 }) => {
-    const defaultReminderObj = {
-        createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
-        configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
-        translatorMessage: reminder.translatorMessage,
-        claimantMessage: reminder.claimantMessage,
-    };
+    const defaultReminderObj = useMemo(
+        () => ({
+            createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
+            configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
+            translatorMessage: reminder && reminder.translatorMessage ? reminder.translatorMessage : '',
+            claimantMessage: reminder && reminder.claimantMessage ? reminder.claimantMessage : '',
+        }),
+        [reminder, dateTime]
+    );
 
     const { enqueueSnackbar } = useSnackbar();
     const [updateAssignment, { isLoading }] = useUpdateAssignmentMutation({});
@@ -103,12 +106,7 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         }
 
         if (reminder) {
-            setReminderObj({
-                createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
-                configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
-                translatorMessage: reminder.translatorMessage,
-                claimantMessage: reminder.claimantMessage,
-            });
+            setReminderObj(defaultReminderObj);
         }
 
         if (isComplete !== undefined || translatorNoShow !== undefined || claimantNoShow !== undefined) {
@@ -118,7 +116,7 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                 claimantNoShow,
             });
         }
-    }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder]);
+    }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder, defaultReminderObj]);
 
     return (
         <>
