@@ -25,3 +25,5 @@ export const daysOfWeek: {
     6: 'Friday',
     7: 'Saturday',
 };
+
+export const daysOfWeekArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

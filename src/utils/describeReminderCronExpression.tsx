@@ -1,4 +1,4 @@
-import { daysOfWeek, months } from './constants';
+import { daysOfWeek, daysOfWeekArray, months } from './constants';
 
 export const parseDayOfWeekStringCronPart = (dayOfWeek: string[]) => {
     return dayOfWeek.length === 0 || (dayOfWeek.length === 1 && dayOfWeek[0] === '*') ? ['*'] : dayOfWeek.filter((day) => day !== '*').map((day) => day);
@@ -31,7 +31,8 @@ const describeReminderCronExpression = (cronExpression: string, selectWeekday?: 
     const formattedDayOfWeek =
         dayOfMonth === '*'
             ? dayOfWeek
-                  .map((day) => (day === '*' ? daysOfWeek.join(', ') : daysOfWeek[+day]))
+                  .map((day) => (day === '*' ? daysOfWeekArray.join(', ') : daysOfWeek[+day]))
+                  .sort((a, b) => daysOfWeekArray.indexOf(a) - daysOfWeekArray.indexOf(b))
                   .join(', ')
                   .trim()
             : '';
