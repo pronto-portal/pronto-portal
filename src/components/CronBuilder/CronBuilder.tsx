@@ -17,9 +17,11 @@ const StyledFormControl = styled(FormControl)`
 interface CronJobBuilderProps {
     onChange: (cronString: string) => void;
     defaultValue?: string;
+    defaultDate?: Date;
 }
-const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue }) => {
-    const { minute, hour, dayOfMonth, month, dayOfWeek, isPM } = getDateTimeDetailsFromCronExpression(defaultValue || '0 12 1 1 *');
+const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, defaultDate }) => {
+    const defaultYear = defaultDate ? defaultDate.getFullYear() : new Date().getFullYear();
+    const { minute, hour, dayOfMonth, month, dayOfWeek, isPM, year } = getDateTimeDetailsFromCronExpression(defaultValue || `0 12 1 1 * ${defaultYear}`);
     const defaultSelectWeekday = dayOfWeek.length > 1 || (dayOfWeek.length === 1 && dayOfWeek[0] !== '*');
 
     const [selectedMinute, setMinute] = useState(minute);
@@ -33,7 +35,7 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
     const hourInCron = selectedIsPM ? (selectedHour % 12) + 12 : selectedHour % 12;
 
     const parsedSelectedDayOfWeek = parseDayOfWeekStringCronPart(selectedDayOfWeek); // selectedDayOfWeek.length === 0  ? ['*'] : selectedDayOfWeek.filter((day) => day !== '*').map((day) => +day);
-    const cronString = `${selectedMinute} ${hourInCron} ${selectedDayOfMonth} ${selectedMonth} ${parsedSelectedDayOfWeek.join(',')}`;
+    const cronString = `${selectedMinute} ${hourInCron} ${selectedDayOfMonth} ${selectedMonth} ${parsedSelectedDayOfWeek.join(',')} ${year}`;
 
     useEffect(() => onChange(cronString), [cronString, onChange]);
 
@@ -150,4 +152,4 @@ const CronJobBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue 
     );
 };
 
-export default CronJobBuilder;
+export default CronBuilder;

@@ -1,6 +1,6 @@
 const getDateTimeDetailsFromCronExpression = (cronExpression: string) => {
     const parts = cronExpression.split(' ');
-    const [minute, hour, dayOfMonth, month, dayOfWeek] = parts;
+    const [minute, hour, dayOfMonth, month, dayOfWeek, year] = parts;
 
     const dayOfWeekString = dayOfWeek.split(',');
     const hourNumber = parseInt(hour, 10);
@@ -11,6 +11,7 @@ const getDateTimeDetailsFromCronExpression = (cronExpression: string) => {
         dayOfMonth: +dayOfMonth,
         month: +month,
         dayOfWeek: dayOfWeekString,
+        year,
     };
 };
 

@@ -13,8 +13,7 @@ import { ReminderFlowInput } from '../../types/InputTypes';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import Word from '../../types/word';
 import formatAMPM from '../../utils/formatAMPM';
-import getDateTimeDetailsFromCronExpression from '../../utils/getDateTimeDetailsFromCronExpression';
-import CronJobBuilder from '../CronBuilder/CronBuilder';
+import CronBuilder from '../CronBuilder/CronBuilder';
 import { LegendReplaceInput } from '../LegendReplaceInput';
 import { ResponsiveForm } from '../ResponsiveForm/ResponsiveForm';
 
@@ -178,8 +177,9 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                                     sx={{ flex: 0.75 }}
                                 />
                                 <Box sx={{ display: configureReminderSchedule ? 'block' : 'none' }}>
-                                    <CronJobBuilder
+                                    <CronBuilder
                                         defaultValue={cronString}
+                                        defaultDate={assignmentDate}
                                         onChange={(cron) => {
                                             // cron string must be '' if the backend is to use the default schedule
                                             if (configureReminderSchedule) setCronString(cron);
