@@ -22,10 +22,10 @@ interface CronJobBuilderProps {
 }
 const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, defaultDate }) => {
     const defaultYear = defaultDate ? defaultDate.getFullYear() : new Date().getFullYear();
-    const defaultCronString = defaultDate ? getDefaultReminderCronString(defaultDate.toISOString()) : `0 12 1 1 * ${defaultYear}`;
+    const defaultCronString = defaultDate ? getDefaultReminderCronString(defaultDate.toISOString()) : `0 12 1 1 ? ${defaultYear}`;
 
     const { minute, hour, dayOfMonth, month, dayOfWeek, isPM, year } = getDateTimeDetailsFromCronExpression(defaultValue || defaultCronString);
-    const defaultSelectWeekday = dayOfWeek.length > 1 || (dayOfWeek.length === 1 && dayOfWeek[0] !== '*');
+    const defaultSelectWeekday = dayOfWeek.length > 1 || (dayOfWeek.length === 1 && dayOfWeek[0] !== '*' && dayOfWeek[0] !== '?');
 
     const [selectedMinute, setMinute] = useState(minute);
     const [selectedHour, setHour] = useState(hour);
@@ -37,7 +37,7 @@ const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, de
 
     const hourInCron = selectedIsPM ? (selectedHour % 12) + 12 : selectedHour % 12;
 
-    const parsedSelectedDayOfWeek = parseDayOfWeekStringCronPart(selectedDayOfWeek); // selectedDayOfWeek.length === 0  ? ['*'] : selectedDayOfWeek.filter((day) => day !== '*').map((day) => +day);
+    const parsedSelectedDayOfWeek = parseDayOfWeekStringCronPart(selectedDayOfWeek);
     const cronString = `${selectedMinute} ${hourInCron} ${selectedDayOfMonth} ${selectedMonth} ${parsedSelectedDayOfWeek.join(',')} ${year}`;
 
     useEffect(() => onChange(cronString), [cronString, onChange]);
@@ -75,7 +75,7 @@ const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, de
 
     useEffect(() => {
         if (selectWeekday) {
-            setDayOfMonth('*');
+            setDayOfMonth('?');
         } else {
             setDayOfWeek([]);
         }
@@ -89,7 +89,7 @@ const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, de
             <StyledFormControl fullWidth>
                 <TextField select value={selectedMonth} onChange={(e) => setMonth(e.target.value)} label={'Month'} sx={{ flex: 1 }}>
                     <MenuItem value={''}></MenuItem>
-                    <MenuItem value={'*'}>Every Month</MenuItem>
+                    <MenuItem value={'?'}>Every Month</MenuItem>
                     {generateMonthItems()}
                 </TextField>
             </StyledFormControl>
@@ -107,7 +107,7 @@ const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, de
                     <StyledFormControl fullWidth>
                         <TextField select value={selectedDayOfMonth} onChange={(e) => setDayOfMonth(e.target.value)} label={'Day of month'} sx={{ flex: 1 }}>
                             <MenuItem value={''}></MenuItem>
-                            <MenuItem value={'*'}>Every Day</MenuItem>
+                            <MenuItem value={'?'}>Every Day</MenuItem>
                             {generateMenuItems(1, 31, 'dayOfMonth')}
                         </TextField>
                     </StyledFormControl>
