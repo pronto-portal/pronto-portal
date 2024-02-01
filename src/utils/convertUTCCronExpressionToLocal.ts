@@ -10,8 +10,8 @@ const adjustDayOfWeekForLocal = (dayOfWeek: string, originalDate: Date, localDat
 
     const adjustedDays = days.map((day) => {
         let newDay = day - dayDifference;
-        if (newDay > 6) newDay -= 7;
-        if (newDay < 0) newDay += 7;
+        if (newDay > 7) newDay -= 7;
+        if (newDay < 1) newDay += 7;
         return newDay;
     });
 
