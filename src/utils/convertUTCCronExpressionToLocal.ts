@@ -1,5 +1,23 @@
 import moment from 'moment';
 
+const adjustDayOfWeekForLocal = (dayOfWeek: string, originalDate: Date, localDate: Date) => {
+    if (dayOfWeek === '*' || dayOfWeek === '?') {
+        return dayOfWeek;
+    }
+
+    const dayDifference = localDate.getDate() - originalDate.getDate();
+    const days = dayOfWeek.split(',').map(Number);
+
+    const adjustedDays = days.map((day) => {
+        let newDay = day - dayDifference;
+        if (newDay > 6) newDay -= 7;
+        if (newDay < 0) newDay += 7;
+        return newDay;
+    });
+
+    return adjustedDays.join(',');
+};
+
 const convertUTCCronExpressionToLocal = (cronExpression: string): string => {
     const cronArray = cronExpression.split(' ');
     const minute = cronArray[0];
@@ -19,11 +37,12 @@ const convertUTCCronExpressionToLocal = (cronExpression: string): string => {
     const utcDate = new Date(isoString);
 
     const localDate = moment(utcDate).local();
+    const finalDayOfWeek = adjustDayOfWeekForLocal(dayOfWeek, utcDate, localDate.toDate());
 
     const finalMonth = month === '?' || month === '*' ? month : localDate.month() + 1;
     const finalDate = day === '?' || day === '*' ? day : localDate.date();
 
-    const localDateCronExpression = `${localDate.minute()} ${localDate.hour()} ${finalDate} ${finalMonth} ${dayOfWeek} ${localDate.year()}`;
+    const localDateCronExpression = `${localDate.minute()} ${localDate.hour()} ${finalDate} ${finalMonth} ${finalDayOfWeek} ${localDate.year()}`;
 
     return localDateCronExpression;
 };

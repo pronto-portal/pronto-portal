@@ -1,5 +1,23 @@
 import moment from 'moment';
 
+const adjustDayOfWeekForUTC = (dayOfWeek: string, originalDate: Date, utcDate: Date) => {
+    if (dayOfWeek === '*' || dayOfWeek === '?') {
+        return dayOfWeek;
+    }
+
+    const dayDifference = utcDate.getDate() - originalDate.getDate();
+    const days = dayOfWeek.split(',').map(Number);
+
+    const adjustedDays = days.map((day) => {
+        let newDay = day + dayDifference;
+        if (newDay > 6) newDay -= 7;
+        if (newDay < 0) newDay += 7;
+        return newDay;
+    });
+
+    return adjustedDays.join(',');
+};
+
 const convertCronExpressionToUTC = (cronExpression: string): string => {
     const cronArray = cronExpression.split(' ');
     const minute = parseInt(cronArray[0]);
@@ -22,8 +40,9 @@ const convertCronExpressionToUTC = (cronExpression: string): string => {
 
     const finalMonth = month === '?' || month === '*' ? month : utcDate.month() + 1;
     const finalDate = day === '?' || day === '*' ? day : utcDate.date();
+    const finalDayOfWeek = adjustDayOfWeekForUTC(dayOfWeek, localDate, utcDate.toDate());
 
-    const utcCronExpression = `${utcDate.minute()} ${utcDate.hour()} ${finalDate} ${finalMonth} ${dayOfWeek} ${utcDate.year()}`;
+    const utcCronExpression = `${utcDate.minute()} ${utcDate.hour()} ${finalDate} ${finalMonth} ${finalDayOfWeek} ${utcDate.year()}`;
 
     return utcCronExpression;
 };
