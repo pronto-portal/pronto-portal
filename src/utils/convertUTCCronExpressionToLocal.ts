@@ -5,13 +5,13 @@ const adjustDayOfWeekForLocal = (dayOfWeek: string, originalDate: Date, localDat
         return dayOfWeek;
     }
 
-    const dayDifference = localDate.getDate() - originalDate.getDate();
+    const dayDifference = localDate.getDate() - originalDate.getUTCDate();
     const days = dayOfWeek.split(',').map(Number);
 
     const adjustedDays = days.map((day) => {
         let newDay = day - dayDifference;
-        if (newDay > 7) newDay -= 7;
-        if (newDay < 1) newDay += 7;
+
+        newDay = newDay > 7 ? newDay - 7 : newDay < 1 ? newDay + 7 : newDay;
         return newDay;
     });
 
