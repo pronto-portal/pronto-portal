@@ -27,8 +27,6 @@ export const AssignedToFilter: React.FC<AssignedToFilterProps> = ({
     },
     value,
 }) => {
-    console.log('default', { firstName, lastName, email, phone, id });
-
     const {
         control,
         handleSubmit,
@@ -90,7 +88,6 @@ export const AssignedToFilter: React.FC<AssignedToFilterProps> = ({
                             fullWidth
                             onChange={(e, data) => {
                                 onChange(data);
-                                console.log(data);
                                 if (data) onAssignedTohange(data);
                             }}
                             options={translators}

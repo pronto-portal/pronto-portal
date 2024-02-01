@@ -31,10 +31,6 @@ export const TranslatorDirectorySearch: React.FC = () => {
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>(ctxFilter.languages || []);
     const { city, setCity, state, setState, stateISOCodes, cities } = useSelectCityState();
 
-    console.log('ctxFilter langs', ctxFilter.languages);
-    console.log('selectedLanguages', selectedLanguages);
-    console.log('------------------');
-
     useEffect(() => {
         if (ctxFilter.languages) setSelectedLanguages(ctxFilter.languages);
 
@@ -52,10 +48,8 @@ export const TranslatorDirectorySearch: React.FC = () => {
             setSearchByValue(ctxFilter.firstName + ' ' + ctxFilter.lastName);
         }
 
-        console.log('ctxFilter', ctxFilter);
         Object.keys(ctxFilter).forEach((key) => {
             if (searchableFields.includes(key as SearchableTranslatorKey)) {
-                console.log(key);
                 setSearchBy(key as SearchableTranslatorKey);
                 setSearchByValue(ctxFilter[key as SearchableTranslatorKey] as string);
             }
@@ -95,7 +89,6 @@ export const TranslatorDirectorySearch: React.FC = () => {
             }
         }
 
-        console.log('Setting new filters', newFilters);
         ctxSetFilter(newFilters);
     };
 
@@ -162,7 +155,6 @@ export const TranslatorDirectorySearch: React.FC = () => {
                         sx={{ flex: 1 }}
                         value={selectedLanguages || []}
                         onChange={(val) => {
-                            console.log('val', val);
                             if (val) setSelectedLanguages(val as string[]);
                         }}
                         multiple

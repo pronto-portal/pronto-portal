@@ -12,33 +12,29 @@ export const config = {
 
 const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
     return new Promise<void>((resolve, reject) => {
-        console.log('attempting to authenticate');
         const { code } = req.query;
-        console.log('code', code);
         if (!code) {
             res.status(400).send('Invalid request: No code provided');
             return;
         }
 
-        console.log('token exists');
-        console.log('redirectUri', redirectUri);
         // Exchange the authorization code for an access token
         oauth2Client
             .getToken(code as string)
             .then(({ tokens }) => {
-                console.log('token exists');
-                console.log('tokens', tokens);
+                // console.log('token exists');
+                // console.log('tokens', tokens);
 
                 oauth2Client.setCredentials(tokens);
 
-                console.log('set credentials');
+                // console.log('set credentials');
 
                 const oauth2 = google.oauth2({
                     auth: oauth2Client,
                     version: 'v2',
                 });
 
-                console.log('established oauth2 client');
+                // console.log('established oauth2 client');
 
                 const idToken = tokens.id_token;
 
@@ -47,14 +43,14 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
                 }
 
                 // Retrieve user information
-                console.log('getting user data');
+                // console.log('getting user data');
                 const userInfo = oauth2.userinfo.get().then((userInfo) => {
-                    console.log('got user data');
+                    // console.log('got user data');
                     const expiresIn = tokens.expiry_date;
                     const userData = userInfo.data;
                     if (userData) {
-                        console.log('userData: ', userData);
-                        console.log('attempting to authenticate');
+                        // console.log('userData: ', userData);
+                        // console.log('attempting to authenticate');
 
                         axios
                             .post(`${process.env.NEXT_PUBLIC_API_URL}/login`, userData, {
@@ -66,9 +62,9 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
                                 const resCookies = dataRes.headers['set-cookie'];
                                 if (resCookies) {
                                     const tokens = parseSetCookie(resCookies);
-                                    console.log('SETTING COOKIES');
+                                    // console.log('SETTING COOKIES');
 
-                                    console.log('cookie', dataRes.headers['set-cookie']);
+                                    // console.log('cookie', dataRes.headers['set-cookie']);
 
                                     res.setHeader(
                                         'set-cookie',
@@ -87,7 +83,7 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
                 });
             })
             .catch((err) => {
-                console.log('oauth2Client.getToken error', err.message);
+                // console.log('oauth2Client.getToken error', err.message);
                 res.status(500).send('Error retrieving access token');
                 reject(err.message);
             });

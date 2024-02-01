@@ -24,19 +24,19 @@ export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
     const [isToggleAutoRenewalLoading, setIsToggleAutoRenewalLoading] = useState(false);
 
     const createCheckoutSession = async (priceId: string) => {
-        console.log('priceID', priceId);
         await stripeAxiosInstance
             .post('/create-checkout-session', {
                 priceId,
             })
             .then((res) => {
-                console.log('STRIPE RES', res.data);
                 if (res && res.data && res.data.checkoutUrl) {
                     window.location.href = res.data.checkoutUrl;
                 }
                 return res.data;
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                //console.log(err)
+            });
     };
 
     const toggleAutoRenewal = async (callback?: () => void) => {
@@ -45,13 +45,11 @@ export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
         await stripeAxiosInstance
             .post('/toggle-autorenewal')
             .then((res) => {
-                console.log('STRIPE RES', res.data);
                 enqueueSnackbar(res.data.message, { variant: 'success' });
                 return res.data;
             })
             .catch((err) => {
                 enqueueSnackbar('Error cancelling subscription', { variant: 'error' });
-                console.log(err);
             })
             .finally(() => {
                 setIsToggleAutoRenewalLoading(false);

@@ -30,7 +30,6 @@ export const LanguagesAutocomplete = React.forwardRef(
                 sx={sx}
                 onChange={(_, value) => {
                     if (value) {
-                        console.log('new Value', value);
                         onChange(multiple ? (value as string[]) : (value as string));
                     }
                 }}

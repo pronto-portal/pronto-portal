@@ -28,7 +28,6 @@ interface SubscriptionCardProps {
 export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ role }) => {
     const { name, description, priceCents, features, stripePriceId } = role;
     const { user } = useUser();
-    console.log(role);
 
     const { createCheckoutSession } = useStripeProvider();
     const theme = useTheme();

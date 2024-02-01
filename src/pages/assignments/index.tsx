@@ -12,7 +12,7 @@ import { FilteredAssignmentsProvider } from '../../contextProviders/FilteredAssi
 
 export default function Assignments() {
     const [tab, setTab] = useState<string>('calendar');
-    console.log('new tab', tab);
+    // console.log('new tab', tab);
 
     return (
         <FilteredAssignmentsProvider>

@@ -49,8 +49,8 @@ export default function CompleteProfile() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
-    console.log('city', city);
-    console.log('state', state);
+    // console.log('city', city);
+    // console.log('state', state);
 
     const isPhoneNumberValid = phone(phoneNumber.phoneNumber ?? '').isValid;
 

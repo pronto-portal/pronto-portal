@@ -49,7 +49,7 @@ const GetPlacesPrediction = (req: NextApiRequest, res: NextApiResponse) => {
                 resolve();
             })
             .catch((err) => {
-                console.log('placesData err', err);
+                // console.log('placesData err', err);
                 res.status(200).json([]);
                 resolve();
             });

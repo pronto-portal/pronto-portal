@@ -9,7 +9,6 @@ interface AddressOptionProps {
 }
 
 export const AddressOption: React.FC<AddressOptionProps> = ({ address }) => {
-    console.log(address);
     const addressObject = Object.fromEntries(
         Object.entries(address).filter(([key, value]) => typeof value === 'string' && value !== '' && value !== undefined && key !== 'id') as [string, string][]
     );

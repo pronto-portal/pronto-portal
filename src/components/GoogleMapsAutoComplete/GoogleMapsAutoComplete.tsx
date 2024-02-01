@@ -39,7 +39,6 @@ const GoogleMapsAutoComplete: React.FC<GoogleMapsAutoCompleteProps> = ({ value: 
     );
 
     const handleInputChange = (_: React.SyntheticEvent, newInputValue: string) => {
-        console.log(newInputValue);
         fetchPlaces(newInputValue);
     };
 

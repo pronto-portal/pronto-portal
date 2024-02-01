@@ -25,8 +25,6 @@ export const AssignmentsDirectorySearch: React.FC = () => {
     const [filterValue, setFilterValue] = useState<any>();
 
     useEffect(() => {
-        console.log('ctxFilter', ctxFilter);
-        console.log('filterValue', filterValue);
         const searchByKey = Object.keys(ctxFilter || {})[0] as SearchableAssignmentsKey;
         if (ctxFilter && searchByKey) {
             setFilterValue(ctxFilter);
@@ -39,11 +37,9 @@ export const AssignmentsDirectorySearch: React.FC = () => {
     }, [ctxFilter]);
 
     const handleApplyFilters = () => {
-        console.log('filterValue', filterValue);
         ctxSetFilter(filterValue);
     };
 
-    console.log('filterValue', filterValue);
     let RenderFilter = <></>;
 
     if (searchBy === 'date') {

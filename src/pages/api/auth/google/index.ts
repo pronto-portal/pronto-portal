@@ -22,7 +22,7 @@ const GoogleOAuth = (req: NextApiRequest, res: NextApiResponse) => {
         scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
     });
 
-    console.log('REDIRECTING TO URL: ', url);
+    // console.log('REDIRECTING TO URL: ', url);
 
     return res.status(200).json({ url });
 };

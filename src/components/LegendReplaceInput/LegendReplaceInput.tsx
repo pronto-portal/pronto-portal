@@ -93,7 +93,6 @@ export const LegendReplaceInput: React.FC<LegendReplaceInputProps> = ({ words, e
                                         primary={<Typography fontWeight={'bold'}> {`{{${label}}}`} </Typography>}
                                         onClick={() => {
                                             setValue((prev) => {
-                                                console.log('prev', value);
                                                 return prev + `{{${label}}}`;
                                             });
                                         }}
