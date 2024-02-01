@@ -4,7 +4,7 @@ export const getDefaultReminderCronString = (dateString: string) => {
     // todo: ensure all date string coming into the backend get converted into utc time
 
     const dateObj = new Date(dateString);
-    const dateTime = moment.utc(dateObj);
+    const dateTime = moment(dateObj);
 
     // day before the assignment
     const day = dateTime.date() - 1 <= 0 ? 1 : dateTime.date() - 1;

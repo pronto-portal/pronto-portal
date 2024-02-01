@@ -22,13 +22,19 @@ interface CronJobBuilderProps {
 }
 const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, defaultDate }) => {
     const defaultYear = defaultDate ? defaultDate.getFullYear() : new Date().getFullYear();
+
+    // console.log('defaultYear', defaultYear);
     const defaultCronString = defaultDate ? getDefaultReminderCronString(defaultDate.toISOString()) : `0 12 1 1 ? ${defaultYear}`;
+
+    // console.log('defaultDate', defaultDate);
+    // console.log('defaultCronString', defaultCronString);
 
     const { minute, hour, dayOfMonth, month, dayOfWeek, isPM, year } = getDateTimeDetailsFromCronExpression(defaultValue || defaultCronString);
     const defaultSelectWeekday = dayOfWeek.length > 1 || (dayOfWeek.length === 1 && dayOfWeek[0] !== '*' && dayOfWeek[0] !== '?');
 
     const [selectedMinute, setMinute] = useState(minute);
-    const [selectedHour, setHour] = useState(hour);
+    // the default hour needs to handle the possibility of being 12pm, which is 12 in 24 hour time, but 0 in 12 hour time
+    const [selectedHour, setHour] = useState(!isPM && hour === 0 ? 12 : hour);
     const [selectedIsPM, setIsPM] = useState(isPM);
     const [selectedDayOfMonth, setDayOfMonth] = useState<string | number>(dayOfMonth);
     const [selectedMonth, setMonth] = useState<string | number>(month);
@@ -36,6 +42,9 @@ const CronBuilder: React.FC<CronJobBuilderProps> = ({ onChange, defaultValue, de
     const [selectWeekday, setSelectWeekday] = useState(defaultSelectWeekday);
 
     const hourInCron = selectedIsPM ? (selectedHour % 12) + 12 : selectedHour % 12;
+    // console.log('defaultValue', defaultValue);
+    // console.log('hour', selectedHour);
+    // console.log('hourInCron', hourInCron);
 
     const parsedSelectedDayOfWeek = parseDayOfWeekStringCronPart(selectedDayOfWeek);
     const cronString = `${selectedMinute} ${hourInCron} ${selectedDayOfMonth} ${selectedMonth} ${parsedSelectedDayOfWeek.join(',')} ${year}`;

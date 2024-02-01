@@ -47,7 +47,6 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
     };
 
     if (!user || isError) return null;
-    console.log(user);
 
     return (
         <Box

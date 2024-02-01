@@ -58,8 +58,6 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
         setCreateReminder(true);
     };
 
-    console.log('Reminder cron string', reminder.cronSchedule);
-
     return (
         <>
             <AddAssignmentFlowContext.Provider
@@ -117,7 +115,6 @@ export const AddAssignmentFlowProvider: React.FC<Wrapper> = ({ children }) => {
                             <ReminderForm
                                 onSuccess={(data) => {
                                     if (data) {
-                                        console.log('Flow reminder data', data);
                                         setReminder(data);
                                         setCreateReminder(data.createReminder);
                                     }

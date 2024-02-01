@@ -6,7 +6,6 @@ const prepareHeaders = () => {
     const headers = new Headers();
     const preparedHeaders = setAuthHeaders();
 
-    console.log('PREPARED HEADERS', preparedHeaders);
     Object.entries(preparedHeaders).forEach(([key, value]) => {
         headers.set(key, value);
     });

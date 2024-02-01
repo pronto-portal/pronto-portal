@@ -14,6 +14,7 @@ import { useLanguages } from '../../contextProviders/LanguagesProvider';
 import { useCreateAssignmentMutation, useCreateReminderMutation } from '../../redux/reducers';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { AssignmentFlowForm } from '../../types/PropTypes/AssignmentFlowForm';
+import convertCronExpressionToUTC from '../../utils/convertCronExpressionToUTC';
 import isReminderCronConfigured from '../../utils/isReminderCronConfigured';
 import { FlexCard, FlexCardContent } from '../FlexCard';
 import { FlexRowGridItem } from '../FlexRowGridItem/FlexRowGridItem';
@@ -31,6 +32,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
     const { enqueueSnackbar } = useSnackbar();
 
     const { getLanguageFromCode } = useLanguages();
+    // console.log(reminder.cronSchedule && convertCronExpressionToUTC(reminder.cronSchedule));
 
     const handleCreateAssignment = () => {
         if (translator && claimant && date && address)
@@ -49,7 +51,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
                         createReminderMutation({
                             input: {
                                 assignmentId: assignment.id,
-                                cronSchedule: reminder.cronSchedule,
+                                cronSchedule: reminder.cronSchedule ? convertCronExpressionToUTC(reminder.cronSchedule) : '',
                                 translatorMessage: reminder.translatorMessage,
                                 claimantMessage: reminder.claimantMessage,
                             },
@@ -77,7 +79,7 @@ export const ConfirmAssignmentForm: React.FC<AssignmentFlowForm> = ({ onSuccess 
             });
     };
 
-    console.log('reminder', reminder);
+    // console.log('reminder', reminder);
 
     return (
         <Grid container spacing={2} direction='column' alignItems='center' alignContent='start'>

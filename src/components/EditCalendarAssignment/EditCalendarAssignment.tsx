@@ -12,10 +12,11 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
 import { useLanguages } from '../../contextProviders/LanguagesProvider';
-import { useUpdateAssignmentMutation } from '../../redux/reducers';
+import { useUpdateAssignmentMutation, useUpdateReminderMutation } from '../../redux/reducers';
 import { ReminderFlowInput } from '../../types/InputTypes';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import { Assignment } from '../../types/ObjectTypes';
+import convertCronExpressionToUTC from '../../utils/convertCronExpressionToUTC';
 import isReminderCronConfigured from '../../utils/isReminderCronConfigured';
 import { AddEditAddressForm } from '../AddEditAddressForm';
 import { DateTimeForm } from '../DateTimeForm';
@@ -46,7 +47,10 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
     );
 
     const { enqueueSnackbar } = useSnackbar();
-    const [updateAssignment, { isLoading }] = useUpdateAssignmentMutation({});
+    const [updateAssignment, { isLoading: assignmentIsLoading }] = useUpdateAssignmentMutation({});
+    const [updateReminder, { isLoading: reminderIsLoading }] = useUpdateReminderMutation({});
+    const isLoading = assignmentIsLoading || reminderIsLoading;
+
     const { getLanguageFromCode } = useLanguages();
 
     const [translator, setTranslatorObj] = useState<Translator | null>(null);
@@ -83,6 +87,36 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
         }).then((res) => {
             if ('data' in res && res.data.updateAssignment) {
                 enqueueSnackbar('Assignment updated', { variant: 'success' });
+
+                if (reminderObj.createReminder) {
+                    const updateReminderVariables: Record<string, string | boolean> = {};
+                    if (reminderObj.translatorMessage) updateReminderVariables.translatorMessage = reminderObj.translatorMessage;
+                    if (reminderObj.claimantMessage) updateReminderVariables.claimantMessage = reminderObj.claimantMessage;
+                    if (reminderObj.cronSchedule) updateReminderVariables.cronSchedule = convertCronExpressionToUTC(reminderObj.cronSchedule);
+
+                    // Check if the reminderObj differs from the assignment reminder. if it differs then update the reminder. By comparing translatorMessage, claimantMessage, and CronSchedule
+                    if (
+                        (reminder && reminder.translatorMessage !== reminderObj.translatorMessage) ||
+                        (reminder && reminder.claimantMessage !== reminderObj.claimantMessage) ||
+                        (reminder && reminder.cronSchedule !== reminderObj.cronSchedule)
+                    )
+                        updateReminder({
+                            input: {
+                                assignmentId: id,
+                                ...updateReminderVariables,
+                            },
+                        }).then((res) => {
+                            if ('data' in res && res.data.updateReminder) {
+                                enqueueSnackbar('Reminder updated', { variant: 'success' });
+                                onSuccess();
+                            } else if ('error' in res) {
+                                enqueueSnackbar('Failed to update reminder', {
+                                    variant: 'error',
+                                });
+                            }
+                        });
+                }
+
                 onSuccess(res.data.updateAssignment);
             } else if ('error' in res) {
                 enqueueSnackbar('Failed to update assignment', {

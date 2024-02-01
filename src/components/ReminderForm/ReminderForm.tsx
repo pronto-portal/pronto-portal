@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { ReminderFlowInput } from '../../types/InputTypes';
 import { Address, Claimant, Translator } from '../../types/ObjectTypes';
 import Word from '../../types/word';
+import convertUTCCronExpressionToLocal from '../../utils/convertUTCCronExpressionToLocal';
 import formatAMPM from '../../utils/formatAMPM';
 import CronBuilder from '../CronBuilder/CronBuilder';
 import { LegendReplaceInput } from '../LegendReplaceInput';
@@ -27,6 +28,7 @@ interface ReminderFormProps {
 }
 
 export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant, translator, assignmentDate, assignmentAddress, defaultValue }) => {
+    // console.log('assignmentDate', assignmentDate);
     const formattedAddressText: string = assignmentAddress
         ? `${assignmentAddress.address1}${assignmentAddress.address2 ? `, ${assignmentAddress.address2}` : ''} ${assignmentAddress.city}, ${
               assignmentAddress.state
@@ -178,7 +180,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ onSuccess, claimant,
                                 />
                                 <Box sx={{ display: configureReminderSchedule ? 'block' : 'none' }}>
                                     <CronBuilder
-                                        defaultValue={cronString}
+                                        defaultValue={cronString ? convertUTCCronExpressionToLocal(cronString) : ''}
                                         defaultDate={assignmentDate}
                                         onChange={(cron) => {
                                             // cron string must be '' if the backend is to use the default schedule
