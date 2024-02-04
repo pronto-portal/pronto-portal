@@ -24,7 +24,7 @@ export interface GetRemindersInput {
 }
 
 export interface UpdateReminderInput {
-    input: Omit<Partial<Reminder>, 'id'>;
+    input: Partial<Reminder>;
 }
 
 export interface CreateReminderInput {

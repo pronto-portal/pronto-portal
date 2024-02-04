@@ -2,7 +2,7 @@ import { GetAddressesFilter } from './Address';
 import { DateRange, PaginatedInput } from './base';
 import { GetClaimantsFilter } from './Claimant';
 import { GetTranslatorsFilters } from './Translator';
-import { Assignment } from '../ObjectTypes';
+import { Assignment, Reminder } from '../ObjectTypes';
 
 export interface GetAssignmentsFilter {
     id?: string;
@@ -39,7 +39,9 @@ export interface CreateAssignmentInput {
 // t.nullable.boolean("translatorNoShow");
 
 export type UpdateAssignment = Pick<Assignment, 'id'> &
-    Partial<Pick<Assignment, 'assignedToId' | 'claimantId' | 'address' | 'addressId' | 'dateTime' | 'claimantNoShow' | 'translatorNoShow' | 'isComplete'>>;
+    Partial<Pick<Assignment, 'assignedToId' | 'claimantId' | 'address' | 'addressId' | 'dateTime' | 'claimantNoShow' | 'translatorNoShow' | 'isComplete'>> & {
+        reminder?: Partial<Pick<Reminder, 'claimantMessage' | 'translatorMessage' | 'cronSchedule'>>;
+    };
 
 export interface UpdateAssignmentInput {
     input: UpdateAssignment;

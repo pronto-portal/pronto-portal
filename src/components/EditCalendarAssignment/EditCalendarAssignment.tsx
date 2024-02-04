@@ -12,11 +12,12 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
 import { useLanguages } from '../../contextProviders/LanguagesProvider';
-import { useUpdateAssignmentMutation, useUpdateReminderMutation } from '../../redux/reducers';
+import { useCreateReminderMutation, useDeleteReminderMutation, useUpdateAssignmentMutation, useUpdateReminderMutation } from '../../redux/reducers';
 import { ReminderFlowInput } from '../../types/InputTypes';
-import { Address, Claimant, Translator } from '../../types/ObjectTypes';
+import { Address, Claimant, Reminder, Translator } from '../../types/ObjectTypes';
 import { Assignment } from '../../types/ObjectTypes';
 import convertCronExpressionToUTC from '../../utils/convertCronExpressionToUTC';
+import convertUTCCronExpressionToLocal from '../../utils/convertUTCCronExpressionToLocal';
 import isReminderCronConfigured from '../../utils/isReminderCronConfigured';
 import { AddEditAddressForm } from '../AddEditAddressForm';
 import { DateTimeForm } from '../DateTimeForm';
@@ -36,30 +37,33 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
     assignment: { id, assignedTo, claimant, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder },
     onSuccess,
 }) => {
-    const defaultReminderObj = useMemo(
-        () => ({
+    const defaultReminderObj = useMemo(() => {
+        return {
             createReminder: reminder ? true : false, // a reminder is created if cronSchedule is not falsy
             configureReminderSchedule: isReminderCronConfigured(reminder && reminder.cronSchedule ? reminder.cronSchedule : '', new Date(dateTime)), // true if reminder cron is exactly 1 day before assignment date
             translatorMessage: reminder && reminder.translatorMessage ? reminder.translatorMessage : '',
             claimantMessage: reminder && reminder.claimantMessage ? reminder.claimantMessage : '',
-        }),
-        [reminder, dateTime]
-    );
+            cronSchedule: reminder && reminder.cronSchedule ? reminder.cronSchedule : '',
+        };
+    }, [reminder, dateTime]);
 
     const { enqueueSnackbar } = useSnackbar();
     const [updateAssignment, { isLoading: assignmentIsLoading }] = useUpdateAssignmentMutation({});
     const [updateReminder, { isLoading: reminderIsLoading }] = useUpdateReminderMutation({});
-    const isLoading = assignmentIsLoading || reminderIsLoading;
+    const [createReminder, { isLoading: createReminderIsLoading }] = useCreateReminderMutation({});
+    const [deleteReminder, { isLoading: deleteReminderIsLoading }] = useDeleteReminderMutation({});
+
+    const isLoading = assignmentIsLoading || reminderIsLoading || createReminderIsLoading || deleteReminderIsLoading;
 
     const { getLanguageFromCode } = useLanguages();
 
-    const [translator, setTranslatorObj] = useState<Translator | null>(null);
-    const [addressObj, setAddressObj] = useState<Address | null>(null);
-    const [dateTimeObj, setDateTimeObj] = useState<Date | null>(null);
+    const [translator, setTranslatorObj] = useState<Translator | null>(assignedTo ? assignedTo : null);
+    const [addressObj, setAddressObj] = useState<Address | null>(address);
+    const [dateTimeObj, setDateTimeObj] = useState<Date | null>(new Date(dateTime));
     const [assignmentCompletion, setAssignmentCompletion] = useState({
-        isComplete,
-        translatorNoShow,
-        claimantNoShow,
+        isComplete: isComplete !== undefined ? isComplete : false,
+        translatorNoShow: translatorNoShow !== undefined ? translatorNoShow : false,
+        claimantNoShow: claimantNoShow !== undefined ? claimantNoShow : false,
     });
 
     // todo: reminder message variables should be substitued on the api side
@@ -90,30 +94,72 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
 
                 if (reminderObj.createReminder) {
                     const updateReminderVariables: Record<string, string | boolean> = {};
+                    const originalCronSchedule = reminderObj && reminderObj.cronSchedule ? reminderObj.cronSchedule : '';
+
                     if (reminderObj.translatorMessage) updateReminderVariables.translatorMessage = reminderObj.translatorMessage;
                     if (reminderObj.claimantMessage) updateReminderVariables.claimantMessage = reminderObj.claimantMessage;
-                    if (reminderObj.cronSchedule) updateReminderVariables.cronSchedule = convertCronExpressionToUTC(reminderObj.cronSchedule);
+                    if (reminderObj.cronSchedule) updateReminderVariables.cronSchedule = reminderObj.cronSchedule;
 
                     // Check if the reminderObj differs from the assignment reminder. if it differs then update the reminder. By comparing translatorMessage, claimantMessage, and CronSchedule
-                    if (
-                        (reminder && reminder.translatorMessage !== reminderObj.translatorMessage) ||
-                        (reminder && reminder.claimantMessage !== reminderObj.claimantMessage) ||
-                        (reminder && reminder.cronSchedule !== reminderObj.cronSchedule)
-                    )
-                        updateReminder({
+                    const reminderHasBeenUpdated =
+                        reminder &&
+                        (reminder.translatorMessage !== reminderObj.translatorMessage ||
+                            reminder.claimantMessage !== reminderObj.claimantMessage ||
+                            reminder.cronSchedule !== reminderObj.cronSchedule);
+
+                    if (!reminder && reminderObj.createReminder) {
+                        console.log('createReminder');
+                        return createReminder({
                             input: {
                                 assignmentId: id,
+                                ...(updateReminderVariables as Pick<Reminder, 'translatorMessage' | 'claimantMessage' | 'cronSchedule'>),
+                            },
+                        }).then((createReminderRes) => {
+                            if ('data' in createReminderRes && createReminderRes.data.createReminder) {
+                                enqueueSnackbar('Reminder created', { variant: 'success' });
+                                onSuccess();
+                            } else if ('error' in createReminderRes) {
+                                enqueueSnackbar('Failed to create reminder', {
+                                    variant: 'error',
+                                });
+                            }
+                        });
+                    } else if (reminderHasBeenUpdated && reminderObj.createReminder)
+                        return updateReminder({
+                            input: {
+                                id: reminder.id,
                                 ...updateReminderVariables,
                             },
-                        }).then((res) => {
-                            if ('data' in res && res.data.updateReminder) {
+                        }).then((updateReminderRes) => {
+                            if ('data' in updateReminderRes && updateReminderRes.data.updateReminder) {
                                 enqueueSnackbar('Reminder updated', { variant: 'success' });
                                 onSuccess();
-                            } else if ('error' in res) {
+                            } else if ('error' in updateReminderRes) {
                                 enqueueSnackbar('Failed to update reminder', {
                                     variant: 'error',
                                 });
                             }
+                        });
+                } else if (reminder && !reminderObj.createReminder) {
+                    return deleteReminder({
+                        input: {
+                            id: reminder.id,
+                        },
+                    })
+                        .then((deleteReminderRes) => {
+                            console.log('deleteReminder res', 'data' in deleteReminderRes && deleteReminderRes?.data?.data?.response?.data?.deleteReminder);
+                            if ('data' in deleteReminderRes && deleteReminderRes.data.deleteReminder) {
+                                enqueueSnackbar('Reminder deleted', { variant: 'success' });
+                                onSuccess();
+                            } else if ('error' in deleteReminderRes) {
+                                console.error('deleteReminder error', deleteReminderRes.error);
+                                enqueueSnackbar('Failed to delete reminder', {
+                                    variant: 'error',
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            console.error('deleteReminder error', err);
                         });
                 }
 
@@ -125,32 +171,6 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
             }
         });
     };
-
-    useEffect(() => {
-        if (assignedTo) {
-            setTranslatorObj(assignedTo);
-        }
-
-        if (address) {
-            setAddressObj(address);
-        }
-
-        if (dateTime) {
-            setDateTimeObj(new Date(dateTime));
-        }
-
-        if (reminder) {
-            setReminderObj(defaultReminderObj);
-        }
-
-        if (isComplete !== undefined || translatorNoShow !== undefined || claimantNoShow !== undefined) {
-            setAssignmentCompletion({
-                isComplete,
-                translatorNoShow,
-                claimantNoShow,
-            });
-        }
-    }, [assignedTo, address, dateTime, isComplete, translatorNoShow, claimantNoShow, reminder, defaultReminderObj]);
 
     return (
         <>
@@ -272,7 +292,12 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                     <FlexCard>
                         <CardHeader title='Reminders' />
                         <FlexCardContent>
-                            <ReminderInfo reminderObj={reminderObj} />
+                            <ReminderInfo
+                                reminderObj={{
+                                    ...reminderObj,
+                                    cronSchedule: reminderObj.cronSchedule ? convertUTCCronExpressionToLocal(reminderObj.cronSchedule) : '',
+                                }}
+                            />
                         </FlexCardContent>
                         <CardActions>
                             <IconButton onClick={() => setEditReminderOpen(true)} disabled={isLoading}>
@@ -349,9 +374,12 @@ export const EditCalendarAssignment: React.FC<EditCalendarAssignmentProps> = ({
                     <DialogContent>
                         <ReminderForm
                             defaultValue={reminderObj}
+                            assignmentDate={dateTimeObj || undefined}
                             assignmentAddress={addressObj || address}
                             onSuccess={(data) => {
                                 if (data) {
+                                    if (data.cronSchedule) data.cronSchedule = convertCronExpressionToUTC(data.cronSchedule);
+
                                     setReminderObj(data);
                                     setEditReminderOpen(false);
                                 }

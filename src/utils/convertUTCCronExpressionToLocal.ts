@@ -34,10 +34,11 @@ const convertUTCCronExpressionToLocal = (cronExpression: string): string => {
         +minute < 10 ? `0${minute}` : minute
     }:00`;
 
-    const utcDate = new Date(isoString);
+    const utcDate = moment.utc(isoString); //new Date(isoString);
 
-    const localDate = moment(utcDate).local();
-    const finalDayOfWeek = adjustDayOfWeekForLocal(dayOfWeek, utcDate, localDate.toDate());
+    const localDate = utcDate.local();
+
+    const finalDayOfWeek = adjustDayOfWeekForLocal(dayOfWeek, utcDate.toDate(), localDate.toDate());
 
     const finalMonth = month === '?' || month === '*' ? month : localDate.month() + 1;
     const finalDate = day === '?' || day === '*' ? day : localDate.date();
