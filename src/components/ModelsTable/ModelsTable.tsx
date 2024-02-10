@@ -67,6 +67,7 @@ export const ModelsTable = <T extends {}>({
     const showExpandedObjects = expandObjects && depth < expandObjectDepth;
 
     const stickyHeader = depth === 0 ? true : false;
+    console.log(columns, data);
 
     return (
         <Paper sx={{ maxHeight: '100%', height: '100%' }}>

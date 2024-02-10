@@ -3,13 +3,14 @@ import { GetTranslatorsInput, AddAndCreateTranslatorInput } from '../../types/In
 import { GetById } from '../../types/InputTypes';
 import { GetTranslatorResponse } from '../../types/ResponseTypes';
 import { AddAndCreateTranslatorResponse, GetTranslatorsResponse } from '../../types/ResponseTypes/Translator';
+import { GetTranslatorQuery, GetTranslatorsQueryVariables } from '../graphql/codegen/types/graphql';
 import { addAndCreateTranslator } from '../graphql/mutations/addAndCreateTranslator';
 import { getTranslator } from '../graphql/queries/getTranslator';
 import { getTranslators } from '../graphql/queries/getTranslators';
 
 export const translators = api.injectEndpoints({
     endpoints: (builder) => ({
-        getTranslators: builder.query<GetTranslatorsResponse, GetTranslatorsInput>({
+        getTranslators: builder.query<GetTranslatorQuery, GetTranslatorsQueryVariables>({
             query: (vars) => ({
                 document: getTranslators,
                 variables: {

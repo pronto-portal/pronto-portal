@@ -9,13 +9,13 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { UpdateAssignmentInput } from '../../redux/graphql/codegen/types/graphql';
 import { useUpdateAssignmentMutation } from '../../redux/reducers';
-import { UpdateAssignment } from '../../types/InputTypes';
 
 interface EditAssignmentFormProps {
     id: string;
     onSubmit: () => void;
-    defaultValues?: Partial<UpdateAssignment>;
+    defaultValues?: Partial<UpdateAssignmentInput>;
     open: boolean;
     handleClose: () => void;
 }
@@ -33,14 +33,14 @@ export const EditAssignmentForm: React.FC<EditAssignmentFormProps> = ({ id, onSu
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<UpdateAssignment>({
+    } = useForm<UpdateAssignmentInput>({
         defaultValues,
     });
 
     const { enqueueSnackbar } = useSnackbar();
     const [updateAssignment] = useUpdateAssignmentMutation();
 
-    const onSubmitHandler: SubmitHandler<UpdateAssignment> = async (data) => {
+    const onSubmitHandler: SubmitHandler<UpdateAssignmentInput> = async (data) => {
         await updateAssignment({ input: { ...data, id: id } }).then((data) => {
             if ('data' in data && data.data.updateAssignment) {
                 enqueueSnackbar('Successfully updated assignment', {
@@ -69,8 +69,8 @@ export const EditAssignmentForm: React.FC<EditAssignmentFormProps> = ({ id, onSu
                                 render={({ field: { ref, value, onChange } }) => (
                                     <Checkbox
                                         ref={ref}
-                                        defaultChecked={defaultValues?.translatorNoShow}
-                                        checked={value}
+                                        defaultChecked={defaultValues?.translatorNoShow || undefined}
+                                        checked={value || undefined}
                                         onChange={(e, newValue) => {
                                             onChange(newValue);
                                         }}
@@ -88,8 +88,8 @@ export const EditAssignmentForm: React.FC<EditAssignmentFormProps> = ({ id, onSu
                                     return (
                                         <Checkbox
                                             ref={ref}
-                                            defaultChecked={defaultValues?.claimantNoShow}
-                                            checked={value}
+                                            defaultChecked={defaultValues?.claimantNoShow || undefined}
+                                            checked={value || undefined}
                                             onChange={(e, newValue) => {
                                                 onChange(newValue);
                                             }}
@@ -107,8 +107,8 @@ export const EditAssignmentForm: React.FC<EditAssignmentFormProps> = ({ id, onSu
                                 render={({ field: { ref, value, onChange } }) => (
                                     <Checkbox
                                         ref={ref}
-                                        defaultChecked={defaultValues?.isComplete}
-                                        checked={value}
+                                        defaultChecked={defaultValues?.isComplete || undefined}
+                                        checked={value || undefined}
                                         onChange={(e, newValue) => {
                                             onChange(newValue);
                                         }}
