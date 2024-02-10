@@ -10,6 +10,9 @@ const prepareHeaders = () => {
         headers.set(key, value);
     });
 
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    headers.set('X-Timezone', timezone);
+
     return headers;
 };
 
