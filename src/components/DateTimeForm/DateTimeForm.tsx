@@ -60,7 +60,7 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({ onSuccess, mode = 'cre
                 </Typography>
             </Grid>
             <Grid item xs={4}>
-                <Button variant={'contained'} onClick={handleOnSubmit} fullWidth disabled={date.isValid()}>
+                <Button variant={'contained'} onClick={handleOnSubmit} fullWidth disabled={!date.isValid()}>
                     Confirm
                 </Button>
             </Grid>
