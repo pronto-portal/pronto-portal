@@ -12,7 +12,6 @@ const prepareHeaders = () => {
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    console.log('Timezone ', timezone);
     headers.set('X-Timezone', timezone);
 
     return headers;
