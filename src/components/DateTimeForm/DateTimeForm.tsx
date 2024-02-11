@@ -24,7 +24,17 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({ onSuccess, mode = 'cre
             <Grid item xs={2}>
                 <Typography variant='h5'>Date and Time</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid
+                item
+                xs={4}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    spacing: '1rem',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}
+            >
                 <DateTimePicker
                     label='Date Time'
                     orientation='landscape'
@@ -37,9 +47,20 @@ export const DateTimeForm: React.FC<ModelForm<Date>> = ({ onSuccess, mode = 'cre
                         if (newValue) setDate(newValue);
                     }}
                 />
+
+                <Typography
+                    color='error.main'
+                    variant='subtitle2'
+                    textAlign='center'
+                    sx={{
+                        opacity: !date.isValid() ? 1 : 0,
+                    }}
+                >
+                    Invalid date
+                </Typography>
             </Grid>
             <Grid item xs={4}>
-                <Button variant={'contained'} onClick={handleOnSubmit} fullWidth>
+                <Button variant={'contained'} onClick={handleOnSubmit} fullWidth disabled={date.isValid()}>
                     Confirm
                 </Button>
             </Grid>
