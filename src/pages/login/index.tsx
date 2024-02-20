@@ -1,5 +1,6 @@
 import { Stack, Typography, Divider } from '@mui/material';
 import Box from '@mui/material/Box';
+import Link from 'next/link';
 import { GoogleLoginButton } from '../../components/GoogleLoginButton';
 
 export default function Login() {
@@ -29,9 +30,25 @@ export default function Login() {
                         Pronto Portal
                     </Typography>
                     <Divider sx={{ width: '75%' }} />
-                    <Box paddingTop={2}>
+                    <Box paddingTop={2} paddingBottom={2}>
                         <GoogleLoginButton />
                     </Box>
+                    <Typography
+                        textAlign='center'
+                        variant='subtitle2'
+                        width={{
+                            xs: '100%',
+                            sm: '75%',
+                            md: '50%',
+                            lg: '50%',
+                            xl: '50%',
+                        }}
+                    >
+                        By using our application, you agree to the following{' '}
+                        <Link href='/privacyPolicy'>
+                            <Typography color='primary.light'>Privacy Policy</Typography>
+                        </Link>
+                    </Typography>
                 </Stack>
             </Box>
             <Box

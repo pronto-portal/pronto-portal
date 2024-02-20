@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import BarChart from '@mui/icons-material/BarChart';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PolicyIcon from '@mui/icons-material/Policy';
 import ShopIcon from '@mui/icons-material/Shop';
 import { Typography, Box, Stack, Button, Menu, MenuItem, Tooltip, Avatar, SxProps, Theme } from '@mui/material';
 import Tab from '@mui/material/Tab';
@@ -11,6 +12,7 @@ import { useRouter } from 'next/router';
 import { useGetUserQuery } from '../../redux/reducers';
 import signOut from '../../utils/signOut';
 import { IconLabel } from '../IconLabel/IconLabel';
+import NavBarContainer from '../NavBarContainer';
 
 interface NavBarProps {
     sx?: SxProps<Theme>;
@@ -46,20 +48,12 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    if (!user || isError) return null;
+    const isPagePrivacyPolicy = router.pathname === '/privacyPolicy';
+
+    if (!user || isError || isPagePrivacyPolicy) return null;
 
     return (
-        <Box
-            sx={{
-                color: 'primary.main',
-                width: '100%',
-                position: 'static',
-                borderRadius: 0,
-                backgroundColor: '#fff',
-                borderBottom: 1,
-                borderColor: 'divider',
-            }}
-        >
+        <NavBarContainer>
             <Stack direction='row' justifyContent='space-between' alignItems='center' flexWrap='nowrap' flexGrow={1} padding={0}>
                 <Stack direction='row' flexWrap='nowrap' spacing={1} alignItems='center' justifyContent='flex-start' height='100%' padding={0}>
                     <Typography variant='h4' color='inherit' paddingLeft={1} fontWeight={100}>
@@ -119,6 +113,16 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                                 >
                                     <IconLabel text='Subscriptions' icon={<ShopIcon />} />
                                 </MenuItem>
+                                <MenuItem
+                                    LinkComponent={Link}
+                                    href='/privacyPolicy'
+                                    onClick={() => {
+                                        handleCloseUserMenu();
+                                        router.push('/privacyPolicy');
+                                    }}
+                                >
+                                    <IconLabel text='Privacy Policy' icon={<PolicyIcon />} />
+                                </MenuItem>
                                 <MenuItem onClick={handleCloseUserMenu}>
                                     <IconLabel
                                         text='Sign Out'
@@ -133,6 +137,6 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                     </Box>
                 </Stack>
             </Stack>
-        </Box>
+        </NavBarContainer>
     );
 };

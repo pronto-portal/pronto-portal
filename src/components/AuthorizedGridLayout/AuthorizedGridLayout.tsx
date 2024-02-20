@@ -8,11 +8,12 @@ import { User } from '../../types/ObjectTypes';
 import { Wrapper } from '../../types/PropTypes/Wrapper';
 import signOut from '../../utils/signOut';
 import { NavBar } from '../NavBar';
+
 export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
     const { data, error } = useGetUserQuery({});
     const router = useRouter();
 
-    const isOnLoginPage = router.pathname === '/login';
+    const isOnLoginPage = router.pathname === '/login' || router.pathname === '/privacyPolicy';
 
     useEffect(() => {
         if (!isOnLoginPage && error && 'status' in error && error.status === 401) {
@@ -55,12 +56,7 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
                 backgroundColor: '#fff',
             }}
         >
-            <NavBar
-                sx={{
-                    height: '8vh',
-                    width: '100%',
-                }}
-            />
+            <NavBar />
             <Box
                 sx={{
                     width: '100%',
