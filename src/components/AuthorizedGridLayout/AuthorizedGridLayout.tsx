@@ -13,7 +13,7 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
     const { data, error } = useGetUserQuery({});
     const router = useRouter();
 
-    const isOnLoginPage = router.pathname === '/login' || router.pathname === '/privacyPolicy';
+    const isOnLoginPage = router.pathname === '/login' || router.pathname === '/privacyPolicy' || router.pathname === '/';
 
     useEffect(() => {
         if (!isOnLoginPage && error && 'status' in error && error.status === 401) {
