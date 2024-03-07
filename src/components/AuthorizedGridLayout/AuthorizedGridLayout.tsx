@@ -60,7 +60,7 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
             <Box
                 sx={{
                     width: '100%',
-                    height: '92vh',
+                    height: '100%',
                     overflowY: 'auto',
                     borderRadius: 0,
                 }}

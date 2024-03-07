@@ -37,9 +37,9 @@ export const Footer: React.FC = () => {
                                 },
                             }}
                         >
-                            <Link href='/'>
+                            {/* <Link href='/'>
                                 <Typography color={'white'}>About Us</Typography>
-                            </Link>
+                            </Link> */}
                             <Link href='/privacyPolicy'>
                                 <Typography color={'white'}>Privacy Policy</Typography>
                             </Link>

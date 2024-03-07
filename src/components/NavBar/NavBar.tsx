@@ -52,20 +52,16 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
     const isPagePrivacyPolicy = router.pathname === '/privacyPolicy';
 
     if (!user || isError || isPagePrivacyPolicy) {
-        if (!user)
+        if (!user && router.pathname !== '/login')
             return (
-                <NavBarContainer>
-                    <Stack direction='row' justifyContent='flex-end' alignItems='center' flexWrap='nowrap' flexGrow={1} padding={0} paddingRight={2}>
-                        <Button href='/login' LinkComponent={Link}>
-                            <Stack direction='row' spacing={1} alignItems='center'>
-                                <LoginIcon />
-                                <Typography color='inherit' paddingLeft={1} fontWeight={100}>
-                                    <b>Sign in</b>
-                                </Typography>
-                            </Stack>
-                        </Button>
+                <Button href='/login' LinkComponent={Link} variant='contained' sx={{ position: 'absolute', top: 0, right: 0, zIndex: 2000, margin: '0.5rem' }}>
+                    <Stack direction='row' spacing={1} alignItems='center'>
+                        <LoginIcon />
+                        <Typography color='inherit' paddingLeft={1} fontWeight={100}>
+                            <b>Sign in</b>
+                        </Typography>
                     </Stack>
-                </NavBarContainer>
+                </Button>
             );
 
         return null;

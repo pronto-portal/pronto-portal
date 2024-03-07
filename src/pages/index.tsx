@@ -27,8 +27,8 @@ export default function Home() {
                 <Typography variant='h1' color={'white'} sx={{ textShadow: '2px 2px 8px rgba(0,0,0,1.2)' }}>
                     Pronto Portal
                 </Typography>
-                <Typography variant='h6' sx={{ textAlign: 'center', maxWidth: '600px', color: 'white', textShadow: '2px 2px 8px rgba(0,0,0,1)' }}>
-                    The Translator of Relationships
+                <Typography variant='h5' sx={{ textAlign: 'center', maxWidth: '600px', color: 'white', textShadow: '2px 2px 8px rgba(0,0,0,1)' }}>
+                    Manage your network and stay organized with automated notifications.
                 </Typography>
                 <Button variant='contained' component={Link} href='/login' sx={{ margin: 4, padding: 3, textShadow: '2px 2px 8px rgba(0,0,0,0.4)' }}>
                     <Typography variant='h5' color={'white'}>
@@ -47,7 +47,7 @@ export default function Home() {
                 }}
             >
                 <FeatureCard IconComponent={CalendarMonthIcon} title='Stay Organized' />
-                <FeatureCard IconComponent={PeopleIcon} title='Track Relationships' />
+                <FeatureCard IconComponent={PeopleIcon} title='Track assignments' />
                 <FeatureCard IconComponent={NotificationsActiveIcon} title='Automated Notifications' />
             </Box>
             <Footer />
