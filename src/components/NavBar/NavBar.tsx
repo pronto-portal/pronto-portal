@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import BarChart from '@mui/icons-material/BarChart';
+import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PolicyIcon from '@mui/icons-material/Policy';
 import ShopIcon from '@mui/icons-material/Shop';
@@ -50,7 +51,21 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
 
     const isPagePrivacyPolicy = router.pathname === '/privacyPolicy';
 
-    if (!user || isError || isPagePrivacyPolicy) return null;
+    if (!user || isError || isPagePrivacyPolicy) {
+        if (!user && router.pathname !== '/login')
+            return (
+                <Button href='/login' LinkComponent={Link} variant='contained' sx={{ position: 'absolute', top: 0, right: 0, zIndex: 2000, margin: '0.5rem' }}>
+                    <Stack direction='row' spacing={1} alignItems='center'>
+                        <LoginIcon />
+                        <Typography color='inherit' paddingLeft={1} fontWeight={100}>
+                            <b>Sign in</b>
+                        </Typography>
+                    </Stack>
+                </Button>
+            );
+
+        return null;
+    }
 
     return (
         <NavBarContainer>
@@ -61,7 +76,7 @@ export const NavBar: React.FC<NavBarProps> = ({ sx }) => {
                     </Typography>
                     {user.isProfileComplete ? (
                         <Tabs value={path.toLowerCase()} sx={{ height: '100%', padding: 0 }}>
-                            <Tab label='Translators' value='' LinkComponent={Link} href='/' sx={sxTabStyling} />
+                            <Tab label='Translators' value='translators' LinkComponent={Link} href='/translators' sx={sxTabStyling} />
                             <Tab label='Assignments' value='assignments' LinkComponent={Link} href='/assignments' sx={sxTabStyling} />
                             <Tab label='Claimants' value='claimants' LinkComponent={Link} href='/claimants' sx={sxTabStyling} />
                             <Tab icon={<BarChart />} value='analytics' LinkComponent={Link} href='/analytics' sx={sxTabStyling} />

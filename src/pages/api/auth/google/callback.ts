@@ -75,7 +75,9 @@ const GoogleOauthCallback = (req: NextApiRequest, res: NextApiResponse) => {
 
                                     res.redirect(
                                         302,
-                                        process.env.NODE_ENV === 'production' ? 'https://prontotranslationservices.com/' : 'http://localhost:3000/'
+                                        process.env.NODE_ENV === 'production'
+                                            ? 'https://prontotranslationservices.com/translators'
+                                            : 'http://localhost:3000/translators'
                                     );
                                 }
                             });

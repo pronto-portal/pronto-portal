@@ -6,7 +6,6 @@ export const NavBarContainer = styled(Box)`
     width: 100%;
     position: static;
     borderradius: 0;
-    backgroundcolor: '#fff';
     borderbottom: 1;
     bordercolor: 'divider';
 `;

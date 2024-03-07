@@ -30,6 +30,7 @@ export const baseQuery =
             return { data: result };
         } catch (error) {
             const errorStr = String(error);
+            // console.log(errorStr);
             const errorObj = extractJsonObjectFromString(errorStr) as ClientError;
 
             return { error: { status: errorObj.response.status, data: errorObj } };
