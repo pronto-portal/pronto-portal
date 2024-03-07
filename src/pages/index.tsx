@@ -47,7 +47,7 @@ export default function Home() {
                 }}
             >
                 <FeatureCard IconComponent={CalendarMonthIcon} title='Stay Organized' />
-                <FeatureCard IconComponent={PeopleIcon} title='Track assignments' />
+                <FeatureCard IconComponent={PeopleIcon} title='Track Assignments' />
                 <FeatureCard IconComponent={NotificationsActiveIcon} title='Automated Notifications' />
             </Box>
             <Footer />
