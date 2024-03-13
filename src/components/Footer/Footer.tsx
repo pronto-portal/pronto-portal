@@ -7,63 +7,61 @@ import Link from 'next/link';
 
 export const Footer: React.FC = () => {
     return (
-        <footer style={{ width: '100%' }}>
-            <Box
-                sx={{
-                    backgroundColor: '#D3D3D3',
-                    color: 'white',
-                    padding: 3,
-                    textAlign: 'center',
-                    width: '100%',
-                    marginTop: 6,
-                }}
-            >
-                <Grid container spacing={3} justifyContent='center'>
-                    <Grid item xs={12} sm={4}>
-                        <Typography mb={'10px'} variant='body1'>
-                            Useful Links:
-                        </Typography>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                '& p': {
-                                    color: 'white',
-                                    textDecoration: 'none',
-                                    '&:hover': {
-                                        textDecoration: 'underline',
-                                    },
+        <Box
+            sx={{
+                backgroundColor: '#D3D3D3',
+                color: 'white',
+                padding: 3,
+                textAlign: 'center',
+                width: '100%',
+                marginTop: 6,
+            }}
+        >
+            <Grid container spacing={3} justifyContent='center'>
+                <Grid item xs={12} sm={4}>
+                    <Typography mb={'10px'} variant='body1'>
+                        Useful Links:
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            '& p': {
+                                color: 'white',
+                                textDecoration: 'none',
+                                '&:hover': {
+                                    textDecoration: 'underline',
                                 },
-                            }}
-                        >
-                            {/* <Link href='/'>
+                            },
+                        }}
+                    >
+                        {/* <Link href='/'>
                                 <Typography color={'white'}>About Us</Typography>
                             </Link> */}
-                            <Link href='/privacyPolicy'>
-                                <Typography color={'white'}>Privacy Policy</Typography>
-                            </Link>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Typography mb={'10px'} variant='body1'>
-                            Follow Us:
-                        </Typography>
-                        <Box>
-                            <IconButton color='inherit' href='https://facebook.com'>
-                                <FacebookIcon />
-                            </IconButton>
-                            <IconButton color='inherit' href='https://twitter.com'>
-                                <TwitterIcon />
-                            </IconButton>
-                            <IconButton color='inherit' href='https://instagram.com'>
-                                <InstagramIcon />
-                            </IconButton>
-                        </Box>
-                    </Grid>
+                        <Link href='/privacyPolicy'>
+                            <Typography color={'white'}>Privacy Policy</Typography>
+                        </Link>
+                    </Box>
                 </Grid>
-                <Typography sx={{ mt: 2 }}>© {new Date().getFullYear()} Cipher Codex LLC. All rights reserved.</Typography>
-            </Box>
-        </footer>
+                <Grid item xs={12} sm={4}>
+                    <Typography mb={'10px'} variant='body1'>
+                        Follow Us:
+                    </Typography>
+                    <Box>
+                        <IconButton color='inherit' href='https://facebook.com'>
+                            <FacebookIcon />
+                        </IconButton>
+                        <IconButton color='inherit' href='https://twitter.com'>
+                            <TwitterIcon />
+                        </IconButton>
+                        <IconButton color='inherit' href='https://instagram.com'>
+                            <InstagramIcon />
+                        </IconButton>
+                    </Box>
+                </Grid>
+            </Grid>
+            <Typography sx={{ mt: 2 }}>© {new Date().getFullYear()} Cipher Codex LLC. All rights reserved.</Typography>
+        </Box>
     );
 };

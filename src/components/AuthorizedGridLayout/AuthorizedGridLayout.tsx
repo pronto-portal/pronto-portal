@@ -48,6 +48,10 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
         };
     }, [router]);
 
+    console.log('AuthorizedGridLayout', router.pathname === '/');
+
+    const pageScrollableStyleObj = router.pathname !== '/' ? { overflowY: 'auto' } : {};
+
     return (
         <Stack
             sx={{
@@ -61,8 +65,8 @@ export const AuthorizedGridLayout: React.FC<Wrapper> = ({ children }) => {
                 sx={{
                     width: '100%',
                     height: '100%',
-                    overflowY: 'auto',
                     borderRadius: 0,
+                    ...pageScrollableStyleObj,
                 }}
             >
                 <Box width='100%' height='100%'>
