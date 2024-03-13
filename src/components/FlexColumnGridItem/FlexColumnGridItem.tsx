@@ -2,21 +2,18 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/system';
 
-export const FlexRowGridItem = styled(Grid)({
+export const FlexColumnGridItem = styled(Grid)({
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     width: '100%',
     flex: 1,
     rowGap: 10,
     columnGap: 10,
-    '&.MuiGrid-root,.MuiGrid-item': {
-        padding: 0,
-    },
 });
 
-FlexRowGridItem.defaultProps = {
-    ...FlexRowGridItem.defaultProps,
+FlexColumnGridItem.defaultProps = {
+    ...FlexColumnGridItem.defaultProps,
     item: true,
 };
